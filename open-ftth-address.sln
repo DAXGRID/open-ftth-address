@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{F487C277-35BB-4DB3-AC21-1E9149C7A9A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenFTTH.Address.Tests", "test\OpenFTTH.Address.Tests\OpenFTTH.Address.Tests.csproj", "{F2CD44BC-D4C9-4DA2-B61D-B1C996CD6DCA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A8716983-0A26-4869-89C0-0BC55B48C182}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenFTTH.Address.Business", "src\OpenFTTH.Address.Business\OpenFTTH.Address.Business.csproj", "{9B30CB80-83AE-4BE2-B9AD-CDC5A45D9A13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenFTTH.Address.API", "src\OpenFTTH.Address.API\OpenFTTH.Address.API.csproj", "{ADBB6B6C-44C5-4BF1-9A73-E8E0B2DA3342}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F2CD44BC-D4C9-4DA2-B61D-B1C996CD6DCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2CD44BC-D4C9-4DA2-B61D-B1C996CD6DCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2CD44BC-D4C9-4DA2-B61D-B1C996CD6DCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2CD44BC-D4C9-4DA2-B61D-B1C996CD6DCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B30CB80-83AE-4BE2-B9AD-CDC5A45D9A13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B30CB80-83AE-4BE2-B9AD-CDC5A45D9A13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B30CB80-83AE-4BE2-B9AD-CDC5A45D9A13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B30CB80-83AE-4BE2-B9AD-CDC5A45D9A13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADBB6B6C-44C5-4BF1-9A73-E8E0B2DA3342}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADBB6B6C-44C5-4BF1-9A73-E8E0B2DA3342}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADBB6B6C-44C5-4BF1-9A73-E8E0B2DA3342}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADBB6B6C-44C5-4BF1-9A73-E8E0B2DA3342}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F2CD44BC-D4C9-4DA2-B61D-B1C996CD6DCA} = {F487C277-35BB-4DB3-AC21-1E9149C7A9A8}
+		{9B30CB80-83AE-4BE2-B9AD-CDC5A45D9A13} = {A8716983-0A26-4869-89C0-0BC55B48C182}
+		{ADBB6B6C-44C5-4BF1-9A73-E8E0B2DA3342} = {A8716983-0A26-4869-89C0-0BC55B48C182}
+	EndGlobalSection
+EndGlobal
