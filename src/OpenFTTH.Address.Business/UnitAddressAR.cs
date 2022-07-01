@@ -32,20 +32,26 @@ public class UnitAddressAR : AggregateBase
     {
         if (id == Guid.Empty)
         {
-            return Result.Fail(new AddressError(AddressErrorCodes.UNIT_ADDRESS_ID_CANNOT_BE_NULL_OR_EMPTY,
-                                 "Invalid work project id. Cannot be null or empty."));
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID,
+                    "{nameof(id)} cannot be empty guid."));
         }
 
-        if (id == Guid.Empty)
+        if (accessAddressId == Guid.Empty)
         {
-            return Result.Fail(new AddressError(AddressErrorCodes.UNIT_ADDRESS_ID_CANNOT_BE_NULL_OR_EMPTY,
-                                 "Invalid work project id. Cannot be null or empty."));
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCodes.ACCESS_ADDRES_ID_CANNOT_BE_EMPTY_GUID,
+                    $"{nameof(accessAddressId)} cannot be empty guid."));
         }
 
         if (Created == new DateTime())
         {
-            return Result.Fail(new AddressError(AddressErrorCodes.UNIT_ADDRESS_CREATED_CANNOT_BE_DEFAULT_DATE,
-                                 $"{nameof(created)}, being default date, is invalid."));
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCodes.CREATED_CANNOT_BE_DEFAULT_DATE,
+                    $"{nameof(created)} being default date is invalid."));
         }
 
         Id = id;
@@ -71,22 +77,16 @@ public class UnitAddressAR : AggregateBase
         string? suitName,
         DateTime updated)
     {
-        if (officialId == Guid.Empty)
-        {
-            return Result.Fail(
-                new AddressError(AddressErrorCodes.UNIT_ADDRESS_ID_CANNOT_BE_NULL_OR_EMPTY,
-                                 "Invalid work project id. Cannot be null or empty."));
-        }
-
         if (updated == new DateTime())
         {
             return Result.Fail(
-                new AddressError(AddressErrorCodes.UNIT_ADDRESS_CREATED_CANNOT_BE_DEFAULT_DATE,
-                                 $"{nameof(updated)}, being default date, is invalid."));
+                new UnitAddressError(
+                    UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
+                    $"{nameof(updated)} being default date is invalid."));
         }
 
         RaiseEvent(new UnitAddressUpdated(
-                       id: this.Id,
+                       id: Id,
                        officialAddressId: officialId,
                        accessAddressId: accessAddressId,
                        status: status,

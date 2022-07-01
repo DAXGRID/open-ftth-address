@@ -1,4 +1,4 @@
-namespace OpenFTTH.Address.API.Model;
+namespace OpenFTTH.Address.Business;
 
 public record UnitAddress
 {

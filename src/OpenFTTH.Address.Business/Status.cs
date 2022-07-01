@@ -1,4 +1,4 @@
-namespace OpenFTTH.Address.Business.Events;
+namespace OpenFTTH.Address.Business;
 
 public enum Status
 {

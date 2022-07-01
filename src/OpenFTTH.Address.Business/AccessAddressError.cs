@@ -2,11 +2,11 @@ using FluentResults;
 
 namespace OpenFTTH.Address.Business;
 
-public class AddressError : Error
+public class AccessAddressError : Error
 {
-    public AddressErrorCodes Code { get; init; }
+    public AccessAddressErrorCodes Code { get; init; }
 
-    public AddressError(AddressErrorCodes errorCode, string errorMsg)
+    public AccessAddressError(AccessAddressErrorCodes errorCode, string errorMsg)
         : base(errorCode.ToString() + ": " + errorMsg)
     {
         Code = errorCode;

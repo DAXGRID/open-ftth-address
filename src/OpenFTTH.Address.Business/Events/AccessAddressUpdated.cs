@@ -1,10 +1,9 @@
-namespace OpenFTTH.Address.API.Model;
+namespace OpenFTTH.Address.Business.Events;
 
-public record AccessAddress
+public record AccessAddressUpdated
 {
     public Guid Id { get; init; }
     public Guid? OfficialId { get; init; }
-    public DateTime Created { get; init; }
     public DateTime Updated { get; init; }
     public string MunicipalCode { get; init; }
     public Status Status { get; init; }
@@ -18,10 +17,9 @@ public record AccessAddress
     public string? PlotId { get; init; }
     public Guid RoadId { get; init; }
 
-    public AccessAddress(
+    public AccessAddressUpdated(
         Guid id,
         Guid? officialId,
-        DateTime created,
         DateTime updated,
         string municipalCode,
         Status status,
@@ -36,7 +34,7 @@ public record AccessAddress
         Guid roadId)
     {
         Id = id;
-        Created = created;
+        OfficialId = officialId;
         Updated = updated;
         MunicipalCode = municipalCode;
         Status = status;
