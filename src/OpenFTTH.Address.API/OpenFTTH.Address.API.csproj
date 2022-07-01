@@ -10,4 +10,8 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FluentResults" Version="3.7.0" />
+  </ItemGroup>
+
 </Project>

@@ -1,3 +1,6 @@
 [*.cs]
 # CA1014: Mark assemblies with CLSCompliantAttribute (we don't need this)
 dotnet_diagnostic.CA1014.severity = none
+
+# CA1707: Identifiers should not contain underscores
+dotnet_diagnostic.CA1707.severity = none

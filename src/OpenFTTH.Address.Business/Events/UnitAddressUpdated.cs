@@ -1,0 +1,30 @@
+namespace OpenFTTH.Address.Business.Events;
+
+public record UnitAddressUpdated
+{
+    public Guid Id { get; init; }
+    public Guid? OfficialId { get; init; }
+    public Guid AccessAddressId { get; init; }
+    public Status Status { get; init; }
+    public string? FloorName { get; init; }
+    public string? SuitName { get; init; }
+    public DateTime Updated { get; init; }
+
+    public UnitAddressUpdated(
+        Guid id,
+        Guid? officialAddressId,
+        Guid accessAddressId,
+        Status status,
+        string? floorName,
+        string? suitName,
+        DateTime updated)
+    {
+        Id = id;
+        OfficialId = officialAddressId;
+        AccessAddressId = accessAddressId;
+        Status = status;
+        FloorName = floorName;
+        SuitName = suitName;
+        Updated = updated;
+    }
+}
