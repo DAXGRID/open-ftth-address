@@ -6,7 +6,7 @@ namespace OpenFTTH.Address.Business;
 
 public class UnitAddressAR : AggregateBase
 {
-    public Guid? OfficialAddressId { get; private set; }
+    public Guid? OfficialId { get; private set; }
     public Guid AccessAddressId { get; private set; }
     public Status Status { get; private set; }
     public string? FloorName { get; private set; }
@@ -16,7 +16,8 @@ public class UnitAddressAR : AggregateBase
 
     public UnitAddressAR()
     {
-        // Register<UnitAddressCreated>(Apply);
+        Register<UnitAddressCreated>(Apply);
+        Register<UnitAddressUpdated>(Apply);
     }
 
     public Result Create(
@@ -31,22 +32,19 @@ public class UnitAddressAR : AggregateBase
     {
         if (id == Guid.Empty)
         {
-            return Result.Fail(
-                new AddressError(AddressErrorCodes.UNIT_ADDRESS_ID_CANNOT_BE_NULL_OR_EMPTY,
+            return Result.Fail(new AddressError(AddressErrorCodes.UNIT_ADDRESS_ID_CANNOT_BE_NULL_OR_EMPTY,
                                  "Invalid work project id. Cannot be null or empty."));
         }
 
         if (id == Guid.Empty)
         {
-            return Result.Fail(
-                new AddressError(AddressErrorCodes.UNIT_ADDRESS_ID_CANNOT_BE_NULL_OR_EMPTY,
+            return Result.Fail(new AddressError(AddressErrorCodes.UNIT_ADDRESS_ID_CANNOT_BE_NULL_OR_EMPTY,
                                  "Invalid work project id. Cannot be null or empty."));
         }
 
         if (Created == new DateTime())
         {
-            return Result.Fail(
-                new AddressError(AddressErrorCodes.UNIT_ADDRESS_CREATED_CANNOT_BE_DEFAULT_DATE,
+            return Result.Fail(new AddressError(AddressErrorCodes.UNIT_ADDRESS_CREATED_CANNOT_BE_DEFAULT_DATE,
                                  $"{nameof(created)}, being default date, is invalid."));
         }
 
@@ -97,5 +95,27 @@ public class UnitAddressAR : AggregateBase
                        updated: updated));
 
         return Result.Ok();
+    }
+
+    private void Apply(UnitAddressCreated unitAddressCreated)
+    {
+        Id = unitAddressCreated.Id;
+        OfficialId = unitAddressCreated.OfficialId;
+        AccessAddressId = unitAddressCreated.AccessAddressId;
+        Status = unitAddressCreated.Status;
+        FloorName = unitAddressCreated.FloorName;
+        SuitName = unitAddressCreated.SuitName;
+        Created = unitAddressCreated.Created;
+        Updated = unitAddressCreated.Updated;
+    }
+
+    private void Apply(UnitAddressUpdated unitAddressCreated)
+    {
+        OfficialId = unitAddressCreated.OfficialId;
+        AccessAddressId = unitAddressCreated.AccessAddressId;
+        Status = unitAddressCreated.Status;
+        FloorName = unitAddressCreated.FloorName;
+        SuitName = unitAddressCreated.SuitName;
+        Updated = unitAddressCreated.Updated;
     }
 }
