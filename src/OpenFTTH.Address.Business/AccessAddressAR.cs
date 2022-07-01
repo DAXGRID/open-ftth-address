@@ -21,6 +21,12 @@ public class AccessAddressAR : AggregateBase
     public string? PlotId { get; private set; }
     public Guid RoadId { get; private set; }
 
+    public AccessAddressAR()
+    {
+        Register<AccessAddressCreated>(Apply);
+        Register<AccessAddressUpdated>(Apply);
+    }
+
     public Result Create(
         Guid id,
         Guid? officialId,
@@ -38,12 +44,12 @@ public class AccessAddressAR : AggregateBase
         string? plotId,
         Guid roadId)
     {
-        if (officialId == Guid.Empty)
+        if (id == Guid.Empty)
         {
             return Result.Fail(
                 new AccessAddressError(
                     AccessAddressErrorCodes.ID_CANNOT_BE_NULL_OR_EMPTY,
-                    "Invalid work project id. Cannot be null or empty."));
+                    "I"));
         }
 
         if (updated == new DateTime())
@@ -75,5 +81,84 @@ public class AccessAddressAR : AggregateBase
                 roadId: roadId));
 
         return Result.Ok();
+    }
+
+    public Result Update(
+        Guid? officialId,
+        DateTime updated,
+        string municipalCode,
+        Status status,
+        string roadCode,
+        string houseNumber,
+        string postDistrictCode,
+        double eastCoordinate,
+        double northCoordinate,
+        DateTime? locationUpdated,
+        string? townName,
+        string? plotId,
+        Guid roadId)
+    {
+        if (updated == new DateTime())
+        {
+            return Result.Fail(
+                new AccessAddressError(
+                    AccessAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
+                    $"{nameof(updated)}, being default date, is invalid."));
+        }
+
+        RaiseEvent(
+            new AccessAddressUpdated(
+                id: Id,
+                officialId: officialId,
+                updated: updated,
+                municipalCode: municipalCode,
+                status: status,
+                roadCode: roadCode,
+                houseNumber: houseNumber,
+                postDistrictCode: postDistrictCode,
+                eastCoordinate: eastCoordinate,
+                northCoordinate: northCoordinate,
+                locationUpdated: locationUpdated,
+                townName: townName,
+                plotId: plotId,
+                roadId: roadId));
+
+        return Result.Ok();
+    }
+
+    private void Apply(AccessAddressCreated accessAddressCreated)
+    {
+        Id = accessAddressCreated.Id;
+        OfficialId = accessAddressCreated.OfficialId;
+        Created = accessAddressCreated.Created;
+        Updated = accessAddressCreated.Updated;
+        MunicipalCode = accessAddressCreated.MunicipalCode;
+        Status = accessAddressCreated.Status;
+        RoadCode = accessAddressCreated.RoadCode;
+        HouseNumber = accessAddressCreated.HouseNumber;
+        PostDistrictCode = accessAddressCreated.PostDistrictCode;
+        EastCoordinate = accessAddressCreated.EastCoordinate;
+        NorthCoordinate = accessAddressCreated.NorthCoordinate;
+        LocationUpdated = accessAddressCreated.LocationUpdated;
+        TownName = accessAddressCreated.TownName;
+        PlotId = accessAddressCreated.PlotId;
+        RoadId = accessAddressCreated.RoadId;
+    }
+
+    private void Apply(AccessAddressUpdated accessAddressUpdated)
+    {
+        OfficialId = accessAddressUpdated.OfficialId;
+        Updated = accessAddressUpdated.Updated;
+        MunicipalCode = accessAddressUpdated.MunicipalCode;
+        Status = accessAddressUpdated.Status;
+        RoadCode = accessAddressUpdated.RoadCode;
+        HouseNumber = accessAddressUpdated.HouseNumber;
+        PostDistrictCode = accessAddressUpdated.PostDistrictCode;
+        EastCoordinate = accessAddressUpdated.EastCoordinate;
+        NorthCoordinate = accessAddressUpdated.NorthCoordinate;
+        LocationUpdated = accessAddressUpdated.LocationUpdated;
+        TownName = accessAddressUpdated.TownName;
+        PlotId = accessAddressUpdated.PlotId;
+        RoadId = accessAddressUpdated.RoadId;
     }
 }

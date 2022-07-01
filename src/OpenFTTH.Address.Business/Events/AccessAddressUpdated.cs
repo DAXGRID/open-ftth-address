@@ -19,7 +19,7 @@ public record AccessAddressUpdated
 
     public AccessAddressUpdated(
         Guid id,
-        Guid officialId,
+        Guid? officialId,
         DateTime updated,
         string municipalCode,
         Status status,

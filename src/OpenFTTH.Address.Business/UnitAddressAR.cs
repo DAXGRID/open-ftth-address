@@ -51,7 +51,7 @@ public class UnitAddressAR : AggregateBase
             return Result.Fail(
                 new UnitAddressError(
                     UnitAddressErrorCodes.CREATED_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(created)}, being default date, is invalid."));
+                    $"{nameof(created)} being default date is invalid."));
         }
 
         Id = id;
@@ -77,24 +77,16 @@ public class UnitAddressAR : AggregateBase
         string? suitName,
         DateTime updated)
     {
-        if (officialId == Guid.Empty)
-        {
-            return Result.Fail(
-                new UnitAddressError(
-                    UnitAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID,
-                    "Invalid work project id. Cannot be null or empty."));
-        }
-
         if (updated == new DateTime())
         {
             return Result.Fail(
                 new UnitAddressError(
                     UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(updated)}, being default date, is invalid."));
+                    $"{nameof(updated)} being default date is invalid."));
         }
 
         RaiseEvent(new UnitAddressUpdated(
-                       id: this.Id,
+                       id: Id,
                        officialAddressId: officialId,
                        accessAddressId: accessAddressId,
                        status: status,
