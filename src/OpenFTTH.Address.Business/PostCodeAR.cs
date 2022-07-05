@@ -52,6 +52,15 @@ public class PostCodeAR : AggregateBase
 
     public Result Update(string name)
     {
+        if (Id == Guid.Empty)
+        {
+            return Result.Fail(
+                new PostCodeError(
+                    PostCodeErrorCodes.ID_CANNOT_BE_EMPTY_GUID,
+                    @$"{nameof(Id)}, being default guid is not valid,
+ the AR has most likely not being created yet."));
+        }
+
         if (String.IsNullOrWhiteSpace(name))
         {
             return Result.Fail(
