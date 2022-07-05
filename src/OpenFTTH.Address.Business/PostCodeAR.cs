@@ -11,6 +11,7 @@ public class PostCodeAR : AggregateBase
     public PostCodeAR()
     {
         Register<PostCodeCreated>(Apply);
+        Register<PostCodeUpdated>(Apply);
     }
 
     public Result Create(Guid id, string number, string name)
@@ -49,10 +50,30 @@ public class PostCodeAR : AggregateBase
         return Result.Ok();
     }
 
+    public Result Update(string name)
+    {
+        if (String.IsNullOrWhiteSpace(name))
+        {
+            return Result.Fail(
+                new PostCodeError(
+                    PostCodeErrorCodes.CANNOT_BE_EMPTY_NULL_OR_WHITESPACE,
+                    $"{nameof(name)} cannot be null empty or whitespace."));
+        }
+
+        RaiseEvent(new PostCodeUpdated(id: this.Id, name: name));
+
+        return Result.Ok();
+    }
+
     private void Apply(PostCodeCreated postCodeCreated)
     {
         Id = postCodeCreated.Id;
         Number = postCodeCreated.Number;
         Name = postCodeCreated.Name;
+    }
+
+    private void Apply(PostCodeUpdated postCodeUpdated)
+    {
+        Name = postCodeUpdated.Name;
     }
 }

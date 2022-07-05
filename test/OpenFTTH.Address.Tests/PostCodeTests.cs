@@ -17,7 +17,7 @@ public class PostCodeTests
     [Fact, Order(1)]
     public void Create_ShouldSucceed()
     {
-        var id = Guid.NewGuid();
+        var id = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var number = "7000";
         var name = "Fredericia";
 
@@ -30,27 +30,21 @@ public class PostCodeTests
 
         _eventStore.Aggregates.Store(workProjectAR);
 
-        // Assert
         createWorkProjectResult.IsSuccess.Should().BeTrue();
     }
 
     [Fact, Order(2)]
     public void Update_ShouldSucceed()
     {
-        var id = Guid.NewGuid();
-        var number = "7000";
+        var id = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var name = "Fredericia";
 
-        var workProjectAR = new PostCodeAR();
+        var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
 
-        var createWorkProjectResult = workProjectAR.Create(
-            id: id,
-            number: number,
-            name: name);
+        var updatePostCodeResult = postCodeAR.Update(name: name);
 
-        _eventStore.Aggregates.Store(workProjectAR);
+        _eventStore.Aggregates.Store(postCodeAR);
 
-        // Assert
-        createWorkProjectResult.IsSuccess.Should().BeTrue();
+        updatePostCodeResult.IsSuccess.Should().BeTrue();
     }
 }
