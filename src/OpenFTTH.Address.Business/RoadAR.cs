@@ -30,9 +30,7 @@ public class RoadAR : AggregateBase
             return Result.Fail(
                 new RoadError(
                     RoadErrorCode.EXTERNAL_ID_CANNOT_BE_WHITE_SPACE_OR_NULL,
-                    $"{nameof(externalId)} is not allowed to be whitespace or null."
-                )
-            );
+                    $"{nameof(externalId)} is not allowed to be whitespace or null."));
         }
 
         if (String.IsNullOrWhiteSpace(name))
