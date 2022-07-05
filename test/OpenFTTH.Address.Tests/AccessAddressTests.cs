@@ -17,7 +17,7 @@ public class AcessAddressTests
     [Fact, Order(1)]
     public void Create_ShouldSucceed()
     {
-        var id = Guid.NewGuid();
+        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var officialId = Guid.NewGuid();
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
@@ -61,7 +61,7 @@ public class AcessAddressTests
     [Fact, Order(2)]
     public void Update_ShouldSucceed()
     {
-        var id = Guid.NewGuid();
+        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var officialId = Guid.NewGuid();
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
@@ -76,9 +76,9 @@ public class AcessAddressTests
         var plotId = "12455F";
         var roadId = Guid.NewGuid();
 
-        var workProjectAR = new AccessAddressAR();
+        var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
 
-        var updateAccessAddressResult = workProjectAR.Update(
+        var updateAccessAddressResult = accessAddressAR.Update(
             officialId: officialId,
             updated: updated,
             municipalCode: municipalCode,
@@ -93,7 +93,7 @@ public class AcessAddressTests
             plotId: plotId,
             roadId: roadId);
 
-        _eventStore.Aggregates.Store(workProjectAR);
+        _eventStore.Aggregates.Store(accessAddressAR);
 
         updateAccessAddressResult.IsSuccess.Should().BeTrue();
     }
