@@ -48,8 +48,8 @@ public class AccessAddressAR : AggregateBase
         {
             return Result.Fail(
                 new AccessAddressError(
-                    AccessAddressErrorCodes.ID_CANNOT_BE_NULL_OR_EMPTY,
-                    "I"));
+                    AccessAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID,
+                    $"{nameof(id)} cannot be empty guid."));
         }
 
         if (updated == new DateTime())
