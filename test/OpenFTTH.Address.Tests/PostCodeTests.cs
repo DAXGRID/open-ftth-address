@@ -21,23 +21,27 @@ public class PostCodeTests
         var number = "7000";
         var name = "Fredericia";
 
-        var workProjectAR = new PostCodeAR();
+        var postCodeAR = new PostCodeAR();
 
-        var createWorkProjectResult = workProjectAR.Create(
+        var createPostCodeResult = postCodeAR.Create(
             id: id,
             number: number,
             name: name);
 
-        _eventStore.Aggregates.Store(workProjectAR);
+        _eventStore.Aggregates.Store(postCodeAR);
 
-        createWorkProjectResult.IsSuccess.Should().BeTrue();
+        createPostCodeResult.IsSuccess.Should().BeTrue();
+        postCodeAR.Id.Should().Be(id);
+        postCodeAR.Number.Should().Be(number);
+        postCodeAR.Name.Should().Be(name);
     }
 
     [Fact, Order(2)]
     public void Update_ShouldSucceed()
     {
         var id = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
-        var name = "Fredericia";
+        var number = "7000";
+        var name = "New Fredericia";
 
         var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
 
@@ -46,5 +50,8 @@ public class PostCodeTests
         _eventStore.Aggregates.Store(postCodeAR);
 
         updatePostCodeResult.IsSuccess.Should().BeTrue();
+        postCodeAR.Id.Should().Be(id);
+        postCodeAR.Name.Should().Be(name);
+        postCodeAR.Number.Should().Be(number);
     }
 }
