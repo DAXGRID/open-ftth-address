@@ -52,11 +52,19 @@ public class AccessAddressAR : AggregateBase
                     $"{nameof(id)} cannot be empty guid."));
         }
 
+        if (created == new DateTime())
+        {
+            return Result.Fail(
+                new AccessAddressError(
+                    AccessAddressErrorCodes.CANNOT_BE_DEFAULT_DATE,
+                    $"{nameof(created)}, being default date, is invalid."));
+        }
+
         if (updated == new DateTime())
         {
             return Result.Fail(
                 new AccessAddressError(
-                    AccessAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
+                    AccessAddressErrorCodes.CANNOT_BE_DEFAULT_DATE,
                     $"{nameof(updated)}, being default date, is invalid."));
         }
 
@@ -111,7 +119,7 @@ public class AccessAddressAR : AggregateBase
         {
             return Result.Fail(
                 new AccessAddressError(
-                    AccessAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
+                    AccessAddressErrorCodes.CANNOT_BE_DEFAULT_DATE,
                     $"{nameof(updated)}, being default date, is invalid."));
         }
 

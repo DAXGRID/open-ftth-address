@@ -34,7 +34,7 @@ public class UnitAddressAR : AggregateBase
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID,
+                    UnitAddressErrorCodes.CANNOT_BE_EMPTY_GUID,
                     "{nameof(id)} cannot be empty guid."));
         }
 
@@ -42,15 +42,15 @@ public class UnitAddressAR : AggregateBase
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.ACCESS_ADDRES_ID_CANNOT_BE_EMPTY_GUID,
+                    UnitAddressErrorCodes.CANNOT_BE_EMPTY_GUID,
                     $"{nameof(accessAddressId)} cannot be empty guid."));
         }
 
-        if (Created == new DateTime())
+        if (created == new DateTime())
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.CREATED_CANNOT_BE_DEFAULT_DATE,
+                    UnitAddressErrorCodes.CANNOT_BE_DEFAULT_DATE,
                     $"{nameof(created)} being default date is invalid."));
         }
 
@@ -81,7 +81,7 @@ public class UnitAddressAR : AggregateBase
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID,
+                    UnitAddressErrorCodes.CANNOT_BE_EMPTY_GUID,
                     @$"{nameof(Id)}, being default guid is not valid,
  the AR has most likely not being created yet."));
         }
@@ -90,7 +90,7 @@ public class UnitAddressAR : AggregateBase
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
+                    UnitAddressErrorCodes.CANNOT_BE_DEFAULT_DATE,
                     $"{nameof(updated)} being default date is invalid."));
         }
 

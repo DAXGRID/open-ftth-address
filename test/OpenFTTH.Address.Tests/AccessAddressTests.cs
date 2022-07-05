@@ -18,7 +18,7 @@ public class AcessAddressTests
     public void Create_ShouldSucceed()
     {
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = Guid.NewGuid();
+        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
@@ -31,7 +31,7 @@ public class AcessAddressTests
         var locationUpdated = DateTime.UtcNow;
         var townName = "Fredericia";
         var plotId = "12455F";
-        var roadId = Guid.NewGuid();
+        var roadId = Guid.Parse("5a4532f5-9355-49e3-9e1a-8cc62c843f9a");
 
         var workProjectAR = new AccessAddressAR();
 
@@ -54,7 +54,6 @@ public class AcessAddressTests
 
         _eventStore.Aggregates.Store(workProjectAR);
 
-        // Assert
         createWorkProjectResult.IsSuccess.Should().BeTrue();
     }
 
@@ -62,7 +61,7 @@ public class AcessAddressTests
     public void Update_ShouldSucceed()
     {
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = Guid.NewGuid();
+        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
         var status = Status.Active;
@@ -74,7 +73,7 @@ public class AcessAddressTests
         var locationUpdated = DateTime.UtcNow;
         var townName = "Fredericia";
         var plotId = "12455F";
-        var roadId = Guid.NewGuid();
+        var roadId = Guid.Parse("5a4532f5-9355-49e3-9e1a-8cc62c843f9a");
 
         var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
 
