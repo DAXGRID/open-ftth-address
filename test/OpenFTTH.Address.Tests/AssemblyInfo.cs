@@ -1,3 +1,4 @@
+[assembly: CLSCompliant(false)]
 //Optional
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 //Optional
