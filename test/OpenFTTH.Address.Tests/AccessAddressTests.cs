@@ -72,6 +72,138 @@ public class AcessAddressTests
         accessAddressAR.RoadId.Should().Be(roadId);
     }
 
+    [Fact, Order(1)]
+    public void Create_is_invalid_id_empty()
+    {
+        var id = Guid.Empty;
+        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var created = DateTime.UtcNow;
+        var updated = DateTime.UtcNow;
+        var municipalCode = "D1234";
+        var status = Status.Active;
+        var roadCode = "D12";
+        var houseNumber = "12F";
+        var postDistrictCode = "7000";
+        var eastCoordinate = 10.20;
+        var northCoordinate = 20.10;
+        var locationUpdated = DateTime.UtcNow;
+        var townName = "Fredericia";
+        var plotId = "12455F";
+        var roadId = Guid.Parse("5a4532f5-9355-49e3-9e1a-8cc62c843f9a");
+
+        var accessAddressAR = new AccessAddressAR();
+
+        var createAccessAddressResult = accessAddressAR.Create(
+            id: id,
+            officialId: officialId,
+            created: created,
+            updated: updated,
+            municipalCode: municipalCode,
+            status: status,
+            roadCode: roadCode,
+            houseNumber: houseNumber,
+            postDistrictCode: postDistrictCode,
+            eastCoordinate: eastCoordinate,
+            northCoordinate: northCoordinate,
+            locationUpdated: locationUpdated,
+            townName: townName,
+            plotId: plotId,
+            roadId: roadId);
+
+        createAccessAddressResult.IsSuccess.Should().BeFalse();
+        createAccessAddressResult.Errors.Count.Should().Be(1);
+        ((AccessAddressError)createAccessAddressResult.Errors.First())
+           .Code.Should().Be(AccessAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID);
+    }
+
+    [Fact, Order(1)]
+    public void Create_created_date_is_default()
+    {
+        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var created = new DateTime();
+        var updated = DateTime.UtcNow;
+        var municipalCode = "D1234";
+        var status = Status.Active;
+        var roadCode = "D12";
+        var houseNumber = "12F";
+        var postDistrictCode = "7000";
+        var eastCoordinate = 10.20;
+        var northCoordinate = 20.10;
+        var locationUpdated = DateTime.UtcNow;
+        var townName = "Fredericia";
+        var plotId = "12455F";
+        var roadId = Guid.Parse("5a4532f5-9355-49e3-9e1a-8cc62c843f9a");
+
+        var accessAddressAR = new AccessAddressAR();
+
+        var createAccessAddressResult = accessAddressAR.Create(
+            id: id,
+            officialId: officialId,
+            created: created,
+            updated: updated,
+            municipalCode: municipalCode,
+            status: status,
+            roadCode: roadCode,
+            houseNumber: houseNumber,
+            postDistrictCode: postDistrictCode,
+            eastCoordinate: eastCoordinate,
+            northCoordinate: northCoordinate,
+            locationUpdated: locationUpdated,
+            townName: townName,
+            plotId: plotId,
+            roadId: roadId);
+
+        createAccessAddressResult.IsSuccess.Should().BeFalse();
+        createAccessAddressResult.Errors.Count.Should().Be(1);
+        ((AccessAddressError)createAccessAddressResult.Errors.First())
+            .Code.Should().Be(AccessAddressErrorCodes.CREATED_CANNOT_BE_DEFAULT_DATE);
+    }
+
+    [Fact, Order(1)]
+    public void Create_updated_date_is_default()
+    {
+        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var created = DateTime.UtcNow;
+        var updated = new DateTime();
+        var municipalCode = "D1234";
+        var status = Status.Active;
+        var roadCode = "D12";
+        var houseNumber = "12F";
+        var postDistrictCode = "7000";
+        var eastCoordinate = 10.20;
+        var northCoordinate = 20.10;
+        var locationUpdated = DateTime.UtcNow;
+        var townName = "Fredericia";
+        var plotId = "12455F";
+        var roadId = Guid.Parse("5a4532f5-9355-49e3-9e1a-8cc62c843f9a");
+
+        var accessAddressAR = new AccessAddressAR();
+
+        var createAccessAddressResult = accessAddressAR.Create(
+            id: id,
+            officialId: officialId,
+            created: created,
+            updated: updated,
+            municipalCode: municipalCode,
+            status: status,
+            roadCode: roadCode,
+            houseNumber: houseNumber,
+            postDistrictCode: postDistrictCode,
+            eastCoordinate: eastCoordinate,
+            northCoordinate: northCoordinate,
+            locationUpdated: locationUpdated,
+            townName: townName,
+            plotId: plotId,
+            roadId: roadId);
+
+        createAccessAddressResult.IsSuccess.Should().BeFalse();
+        createAccessAddressResult.Errors.Count.Should().Be(1);
+        ((AccessAddressError)createAccessAddressResult.Errors.First())
+            .Code.Should().Be(AccessAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE);
+    }
+
     [Fact, Order(2)]
     public void Update_is_success()
     {
