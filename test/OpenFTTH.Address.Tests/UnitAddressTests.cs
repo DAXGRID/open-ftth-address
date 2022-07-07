@@ -186,4 +186,84 @@ public class UnitAddressTests
         unitAddressAR.SuitName.Should().Be(suitName);
         unitAddressAR.Updated.Should().Be(updated);
     }
+
+    [Fact, Order(2)]
+    public void Update_before_created_is_invalid()
+    {
+        var officialId = Guid.Parse("89852ac6-254f-4938-aec8-4fac7cb72901");
+        var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var status = Status.Pending;
+        string? floorName = null;
+        string? suitName = null;
+        var updated = DateTime.UtcNow;
+
+        var unitAddressAR = new UnitAddressAR();
+
+        var updateUnitAddressResult = unitAddressAR.Update(
+            officialId: officialId,
+            accessAddressId: accessAddressId,
+            status: status,
+            floorName: floorName,
+            suitName: suitName,
+            updated: updated);
+
+        updateUnitAddressResult.IsSuccess.Should().BeFalse();
+        updateUnitAddressResult.Errors.Should().HaveCount(1);
+        ((UnitAddressError)updateUnitAddressResult.Errors.First())
+            .Code.Should().Be(UnitAddressErrorCodes.ID_NOT_SET);
+    }
+
+    [Fact, Order(2)]
+    public void Update_access_address_id_being_default_guid_is_invalid()
+    {
+        var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
+        var officialId = Guid.Parse("89852ac6-254f-4938-aec8-4fac7cb72901");
+        var accessAddressId = Guid.Empty;
+        var status = Status.Pending;
+        string? floorName = null;
+        string? suitName = null;
+        var updated = DateTime.UtcNow;
+
+        var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
+
+        var updateUnitAddressResult = unitAddressAR.Update(
+            officialId: officialId,
+            accessAddressId: accessAddressId,
+            status: status,
+            floorName: floorName,
+            suitName: suitName,
+            updated: updated);
+
+        updateUnitAddressResult.IsSuccess.Should().BeFalse();
+        updateUnitAddressResult.Errors.Should().HaveCount(1);
+        ((UnitAddressError)updateUnitAddressResult.Errors.First())
+            .Code.Should().Be(UnitAddressErrorCodes.ACCESS_ADDRESS_ID_CANNOT_BE_EMPTY_GUID);
+    }
+
+    [Fact, Order(2)]
+    public void Update_updated_being_default_is_invalid()
+    {
+        var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
+        var officialId = Guid.Parse("89852ac6-254f-4938-aec8-4fac7cb72901");
+        var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var status = Status.Pending;
+        string? floorName = null;
+        string? suitName = null;
+        var updated = new DateTime();
+
+        var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
+
+        var updateUnitAddressResult = unitAddressAR.Update(
+            officialId: officialId,
+            accessAddressId: accessAddressId,
+            status: status,
+            floorName: floorName,
+            suitName: suitName,
+            updated: updated);
+
+        updateUnitAddressResult.IsSuccess.Should().BeFalse();
+        updateUnitAddressResult.Errors.Should().HaveCount(1);
+        ((UnitAddressError)updateUnitAddressResult.Errors.First())
+            .Code.Should().Be(UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE);
+    }
 }
