@@ -9,7 +9,7 @@ public record UnitAddressCreated
     public string? FloorName { get; init; }
     public string? SuitName { get; init; }
     public DateTime Created { get; init; }
-    public DateTime? Updated { get; init; }
+    public DateTime Updated { get; init; }
 
     public UnitAddressCreated(
         Guid id,
@@ -19,7 +19,7 @@ public record UnitAddressCreated
         string? floorName,
         string? suitName,
         DateTime created,
-        DateTime? updated)
+        DateTime updated)
     {
         Id = id;
         OfficialId = officialId;

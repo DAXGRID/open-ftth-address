@@ -28,7 +28,7 @@ public class UnitAddressAR : AggregateBase
         string? floorName,
         string? suitName,
         DateTime created,
-        DateTime? updated)
+        DateTime updated)
     {
         if (id == Guid.Empty)
         {
@@ -52,6 +52,14 @@ public class UnitAddressAR : AggregateBase
                 new UnitAddressError(
                     UnitAddressErrorCodes.CREATED_CANNOT_BE_DEFAULT_DATE,
                     $"{nameof(created)} being default date is invalid."));
+        }
+
+        if (updated == new DateTime())
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
+                    $"{nameof(updated)} being default date is invalid."));
         }
 
         Id = id;
