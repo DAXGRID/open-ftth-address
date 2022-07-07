@@ -52,7 +52,7 @@ public class AccessAddressAR : AggregateBase
                     $"{nameof(id)} cannot be empty guid."));
         }
 
-        if (created == new DateTime())
+        if (created == default)
         {
             return Result.Fail(
                 new AccessAddressError(
@@ -60,7 +60,7 @@ public class AccessAddressAR : AggregateBase
                     $"{nameof(created)}, being default date, is invalid."));
         }
 
-        if (updated == new DateTime())
+        if (updated == default)
         {
             return Result.Fail(
                 new AccessAddressError(
@@ -115,7 +115,7 @@ public class AccessAddressAR : AggregateBase
  the AR has most likely not being created yet."));
         }
 
-        if (updated == new DateTime())
+        if (updated == default)
         {
             return Result.Fail(
                 new AccessAddressError(

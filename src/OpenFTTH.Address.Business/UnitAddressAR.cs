@@ -46,7 +46,7 @@ public class UnitAddressAR : AggregateBase
                     $"{nameof(accessAddressId)} cannot be empty guid."));
         }
 
-        if (created == new DateTime())
+        if (created == default)
         {
             return Result.Fail(
                 new UnitAddressError(
@@ -54,7 +54,7 @@ public class UnitAddressAR : AggregateBase
                     $"{nameof(created)} being default date is invalid."));
         }
 
-        if (updated == new DateTime())
+        if (updated == default)
         {
             return Result.Fail(
                 new UnitAddressError(
@@ -102,7 +102,7 @@ public class UnitAddressAR : AggregateBase
                     $"{nameof(accessAddressId)} cannot be empty guid."));
         }
 
-        if (updated == new DateTime())
+        if (updated == default)
         {
             return Result.Fail(
                 new UnitAddressError(
