@@ -15,7 +15,7 @@ public class AcessAddressTests
     }
 
     [Fact, Order(1)]
-    public void Create_ShouldSucceed()
+    public void Create_is_success()
     {
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
@@ -73,7 +73,7 @@ public class AcessAddressTests
     }
 
     [Fact, Order(2)]
-    public void Update_ShouldSucceed()
+    public void Update_is_success()
     {
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
