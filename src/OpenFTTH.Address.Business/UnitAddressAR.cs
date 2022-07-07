@@ -34,7 +34,7 @@ public class UnitAddressAR : AggregateBase
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.CANNOT_BE_EMPTY_GUID,
+                    UnitAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID,
                     "{nameof(id)} cannot be empty guid."));
         }
 
@@ -42,7 +42,7 @@ public class UnitAddressAR : AggregateBase
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.CANNOT_BE_EMPTY_GUID,
+                    UnitAddressErrorCodes.ACCESS_ADDRESS_ID_CANNOT_BE_EMPTY_GUID,
                     $"{nameof(accessAddressId)} cannot be empty guid."));
         }
 
@@ -50,7 +50,7 @@ public class UnitAddressAR : AggregateBase
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.CANNOT_BE_DEFAULT_DATE,
+                    UnitAddressErrorCodes.CREATED_CANNOT_BE_DEFAULT_DATE,
                     $"{nameof(created)} being default date is invalid."));
         }
 
@@ -81,16 +81,24 @@ public class UnitAddressAR : AggregateBase
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.CANNOT_BE_EMPTY_GUID,
+                    UnitAddressErrorCodes.ID_NOT_SET,
                     @$"{nameof(Id)}, being default guid is not valid,
  the AR has most likely not being created yet."));
+        }
+
+        if (accessAddressId == Guid.Empty)
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCodes.ACCESS_ADDRESS_ID_CANNOT_BE_EMPTY_GUID,
+                    $"{nameof(accessAddressId)} cannot be empty guid."));
         }
 
         if (updated == new DateTime())
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.CANNOT_BE_DEFAULT_DATE,
+                    UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
                     $"{nameof(updated)} being default date is invalid."));
         }
 
