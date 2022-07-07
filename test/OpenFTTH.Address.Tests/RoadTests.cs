@@ -128,7 +128,7 @@ public class RoadTests
             .Be(RoadErrorCode.ID_CANNOT_BE_EMPTY_GUID);
     }
 
-    [Theory, Order(1)]
+    [Theory, Order(2)]
     [InlineData("")]
     [InlineData(" ")]
     [InlineData("  ")]
