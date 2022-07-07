@@ -119,7 +119,7 @@ public class AccessAddressAR : AggregateBase
         {
             return Result.Fail(
                 new AccessAddressError(
-                    AccessAddressErrorCodes.CANNOT_BE_DEFAULT_DATE,
+                    AccessAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
                     $"{nameof(updated)}, being default date, is invalid."));
         }
 
