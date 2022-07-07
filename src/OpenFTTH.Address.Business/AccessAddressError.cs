@@ -6,7 +6,7 @@ public enum AccessAddressErrorCodes
 {
     ID_CANNOT_BE_EMPTY_GUID,
     CREATED_CANNOT_BE_DEFAULT_DATE,
-    CANNOT_BE_DEFAULT_DATE,
+    UPDATED_CANNOT_BE_DEFAULT_DATE,
 }
 
 public class AccessAddressError : Error
