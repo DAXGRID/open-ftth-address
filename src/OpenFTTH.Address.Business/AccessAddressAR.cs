@@ -43,7 +43,8 @@ public class AccessAddressAR : AggregateBase
         string? supplementaryTownName,
         string? plotId,
         Guid roadId,
-        HashSet<Guid> existingRoadIds)
+        HashSet<Guid> existingRoadIds,
+        HashSet<Guid> existingPostCodeIds)
     {
         if (id == Guid.Empty)
         {
@@ -74,7 +75,15 @@ public class AccessAddressAR : AggregateBase
             return Result.Fail(
                 new AccessAddressError(
                     AccessAddressErrorCodes.ROAD_DOES_NOT_EXIST,
-                    @$"No roads exist with id '{roadId}'."));
+                    $"No roads exist with id '{roadId}'."));
+        }
+
+        if (existingPostCodeIds is null || !existingPostCodeIds.Contains(postCodeId))
+        {
+            return Result.Fail(
+                new AccessAddressError(
+                    AccessAddressErrorCodes.POST_CODE_DOES_NOT_EXIST,
+                    $"No postcode wxists with id '{postCodeId}'."));
         }
 
         Id = id;
@@ -114,7 +123,8 @@ public class AccessAddressAR : AggregateBase
         string? supplementaryTownName,
         string? plotId,
         Guid roadId,
-        HashSet<Guid> existingRoadIds)
+        HashSet<Guid> existingRoadIds,
+        HashSet<Guid> existingPostCodeIds)
     {
         if (Id == Guid.Empty)
         {
@@ -139,6 +149,14 @@ public class AccessAddressAR : AggregateBase
                 new AccessAddressError(
                     AccessAddressErrorCodes.ROAD_DOES_NOT_EXIST,
                     @$"No roads exist with id '{roadId}'."));
+        }
+
+        if (existingPostCodeIds is null || !existingPostCodeIds.Contains(postCodeId))
+        {
+            return Result.Fail(
+                new AccessAddressError(
+                    AccessAddressErrorCodes.POST_CODE_DOES_NOT_EXIST,
+                    $"No postcode exists with id '{postCodeId}'."));
         }
 
         RaiseEvent(

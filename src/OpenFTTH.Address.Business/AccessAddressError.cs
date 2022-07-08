@@ -8,6 +8,7 @@ public enum AccessAddressErrorCodes
     CREATED_CANNOT_BE_DEFAULT_DATE,
     UPDATED_CANNOT_BE_DEFAULT_DATE,
     ROAD_DOES_NOT_EXIST,
+    POST_CODE_DOES_NOT_EXIST,
 }
 
 public class AccessAddressError : Error
