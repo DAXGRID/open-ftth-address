@@ -7,6 +7,7 @@ public class AddressProjection : ProjectionBase
 {
     public HashSet<Guid> AccessAddressIds { get; } = new();
     public HashSet<Guid> RoadIds { get; } = new();
+    public HashSet<Guid> PostCodeIds { get; } = new();
 
     public AddressProjection()
     {
@@ -22,6 +23,13 @@ public class AddressProjection : ProjectionBase
             {
                 var roadCreated = (RoadCreated)@event.Data;
                 RoadIds.Add(roadCreated.Id);
+            });
+
+        ProjectEvent<PostCodeCreated>(
+            (@event) =>
+            {
+                var postCodeCreated = (PostCodeCreated)@event.Data;
+                PostCodeIds.Add(postCodeCreated.Id);
             });
     }
 }
