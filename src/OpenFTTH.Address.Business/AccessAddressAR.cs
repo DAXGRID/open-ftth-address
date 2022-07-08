@@ -42,7 +42,8 @@ public class AccessAddressAR : AggregateBase
         DateTime? locationUpdated,
         string? townName,
         string? plotId,
-        Guid roadId)
+        Guid roadId,
+        HashSet<Guid> existingRoadIds)
     {
         if (id == Guid.Empty)
         {
@@ -66,6 +67,14 @@ public class AccessAddressAR : AggregateBase
                 new AccessAddressError(
                     AccessAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
                     $"{nameof(updated)}, being default date, is invalid."));
+        }
+
+        if (existingRoadIds is null || !existingRoadIds.Contains(roadId))
+        {
+            return Result.Fail(
+                new AccessAddressError(
+                    AccessAddressErrorCodes.ROAD_DOES_NOT_EXIST,
+                    @$"No roads exist with id '{roadId}'."));
         }
 
         Id = id;
@@ -104,7 +113,8 @@ public class AccessAddressAR : AggregateBase
         DateTime? locationUpdated,
         string? townName,
         string? plotId,
-        Guid roadId)
+        Guid roadId,
+        HashSet<Guid> existingRoadIds)
     {
         if (Id == Guid.Empty)
         {
@@ -121,6 +131,14 @@ public class AccessAddressAR : AggregateBase
                 new AccessAddressError(
                     AccessAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
                     $"{nameof(updated)}, being default date, is invalid."));
+        }
+
+        if (existingRoadIds is null || !existingRoadIds.Contains(roadId))
+        {
+            return Result.Fail(
+                new AccessAddressError(
+                    AccessAddressErrorCodes.ROAD_DOES_NOT_EXIST,
+                    @$"No roads exist with id '{roadId}'."));
         }
 
         RaiseEvent(
