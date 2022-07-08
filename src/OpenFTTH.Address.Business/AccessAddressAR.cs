@@ -17,7 +17,7 @@ public class AccessAddressAR : AggregateBase
     public double EastCoordinate { get; private set; }
     public double NorthCoordinate { get; private set; }
     public DateTime? LocationUpdated { get; private set; }
-    public string? TownName { get; private set; }
+    public string? SupplementaryTownName { get; private set; }
     public string? PlotId { get; private set; }
     public Guid RoadId { get; private set; }
 
@@ -40,7 +40,7 @@ public class AccessAddressAR : AggregateBase
         double eastCoordinate,
         double northCoordinate,
         DateTime? locationUpdated,
-        string? townName,
+        string? supplementaryTownName,
         string? plotId,
         Guid roadId,
         HashSet<Guid> existingRoadIds)
@@ -93,7 +93,7 @@ public class AccessAddressAR : AggregateBase
                 eastCoordinate: eastCoordinate,
                 northCoordinate: northCoordinate,
                 locationUpdated: locationUpdated,
-                townName: townName,
+                townName: supplementaryTownName,
                 plotId: plotId,
                 roadId: roadId));
 
@@ -111,7 +111,7 @@ public class AccessAddressAR : AggregateBase
         double eastCoordinate,
         double northCoordinate,
         DateTime? locationUpdated,
-        string? townName,
+        string? supplementaryTownName,
         string? plotId,
         Guid roadId,
         HashSet<Guid> existingRoadIds)
@@ -154,7 +154,7 @@ public class AccessAddressAR : AggregateBase
                 eastCoordinate: eastCoordinate,
                 northCoordinate: northCoordinate,
                 locationUpdated: locationUpdated,
-                townName: townName,
+                townName: supplementaryTownName,
                 plotId: plotId,
                 roadId: roadId));
 
@@ -175,7 +175,7 @@ public class AccessAddressAR : AggregateBase
         EastCoordinate = accessAddressCreated.EastCoordinate;
         NorthCoordinate = accessAddressCreated.NorthCoordinate;
         LocationUpdated = accessAddressCreated.LocationUpdated;
-        TownName = accessAddressCreated.TownName;
+        SupplementaryTownName = accessAddressCreated.TownName;
         PlotId = accessAddressCreated.PlotId;
         RoadId = accessAddressCreated.RoadId;
     }
@@ -192,7 +192,7 @@ public class AccessAddressAR : AggregateBase
         EastCoordinate = accessAddressUpdated.EastCoordinate;
         NorthCoordinate = accessAddressUpdated.NorthCoordinate;
         LocationUpdated = accessAddressUpdated.LocationUpdated;
-        TownName = accessAddressUpdated.TownName;
+        SupplementaryTownName = accessAddressUpdated.TownName;
         PlotId = accessAddressUpdated.PlotId;
         RoadId = accessAddressUpdated.RoadId;
     }

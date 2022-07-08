@@ -31,7 +31,7 @@ public class AcessAddressTests
         var eastCoordinate = 10.20;
         var northCoordinate = 20.10;
         var locationUpdated = DateTime.UtcNow;
-        var townName = "Fredericia";
+        var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
         var existingRoadIds = addressProjection.RoadIds;
@@ -51,7 +51,7 @@ public class AcessAddressTests
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
-            townName: townName,
+            supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
             existingRoadIds: existingRoadIds);
@@ -71,7 +71,7 @@ public class AcessAddressTests
         accessAddressAR.EastCoordinate.Should().Be(eastCoordinate);
         accessAddressAR.NorthCoordinate.Should().Be(northCoordinate);
         accessAddressAR.LocationUpdated.Should().Be(locationUpdated);
-        accessAddressAR.TownName.Should().Be(townName);
+        accessAddressAR.SupplementaryTownName.Should().Be(supplementaryTownName);
         accessAddressAR.PlotId.Should().Be(plotId);
         accessAddressAR.RoadId.Should().Be(roadId);
     }
@@ -93,7 +93,7 @@ public class AcessAddressTests
         var eastCoordinate = 10.20;
         var northCoordinate = 20.10;
         var locationUpdated = DateTime.UtcNow;
-        var townName = "Fredericia";
+        var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
         var existingRoadIds = addressProjection.RoadIds;
@@ -113,7 +113,7 @@ public class AcessAddressTests
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
-            townName: townName,
+            supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
             existingRoadIds: existingRoadIds);
@@ -141,7 +141,7 @@ public class AcessAddressTests
         var eastCoordinate = 10.20;
         var northCoordinate = 20.10;
         var locationUpdated = DateTime.UtcNow;
-        var townName = "Fredericia";
+        var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
         var existingRoadIds = addressProjection.RoadIds;
@@ -161,7 +161,7 @@ public class AcessAddressTests
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
-            townName: townName,
+            supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
             existingRoadIds: existingRoadIds);
@@ -189,7 +189,7 @@ public class AcessAddressTests
         var eastCoordinate = 10.20;
         var northCoordinate = 20.10;
         var locationUpdated = DateTime.UtcNow;
-        var townName = "Fredericia";
+        var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
         var existingRoadIds = addressProjection.RoadIds;
@@ -209,7 +209,7 @@ public class AcessAddressTests
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
-            townName: townName,
+            supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
             existingRoadIds: existingRoadIds);
@@ -237,7 +237,7 @@ public class AcessAddressTests
         var eastCoordinate = 10.20;
         var northCoordinate = 20.10;
         var locationUpdated = DateTime.UtcNow;
-        var townName = "Fredericia";
+        var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("e138802a-1717-49d6-9281-9a13dff2fdb9");
         var existingRoadIds = addressProjection.RoadIds;
@@ -257,7 +257,7 @@ public class AcessAddressTests
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
-            townName: townName,
+            supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
             existingRoadIds: existingRoadIds);
@@ -284,7 +284,7 @@ public class AcessAddressTests
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
         var locationUpdated = DateTime.UtcNow;
-        var townName = "Kolding";
+        var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
         var existingRoadIds = addressProjection.RoadIds;
@@ -302,7 +302,7 @@ public class AcessAddressTests
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
-            townName: townName,
+            supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
             existingRoadIds: existingRoadIds);
@@ -321,7 +321,7 @@ public class AcessAddressTests
         accessAddressAR.EastCoordinate.Should().Be(eastCoordinate);
         accessAddressAR.NorthCoordinate.Should().Be(northCoordinate);
         accessAddressAR.LocationUpdated.Should().Be(locationUpdated);
-        accessAddressAR.TownName.Should().Be(townName);
+        accessAddressAR.SupplementaryTownName.Should().Be(supplementaryTownName);
         accessAddressAR.PlotId.Should().Be(plotId);
         accessAddressAR.RoadId.Should().Be(roadId);
     }
@@ -341,7 +341,7 @@ public class AcessAddressTests
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
         var locationUpdated = DateTime.UtcNow;
-        var townName = "Kolding";
+        var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
         var existingRoadIds = addressProjection.AccessAddressIds;
@@ -359,7 +359,7 @@ public class AcessAddressTests
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
-            townName: townName,
+            supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
             existingRoadIds: existingRoadIds);
@@ -386,7 +386,7 @@ public class AcessAddressTests
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
         var locationUpdated = DateTime.UtcNow;
-        var townName = "Kolding";
+        var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
         var existingRoadIds = addressProjection.RoadIds;
@@ -404,7 +404,7 @@ public class AcessAddressTests
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
-            townName: townName,
+            supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
             existingRoadIds: existingRoadIds);
@@ -431,7 +431,7 @@ public class AcessAddressTests
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
         var locationUpdated = DateTime.UtcNow;
-        var townName = "Kolding";
+        var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("4d137186-56b7-4753-80b8-b9785104868a");
         var existingRoadIds = addressProjection.RoadIds;
@@ -449,7 +449,7 @@ public class AcessAddressTests
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
-            townName: townName,
+            supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
             existingRoadIds: existingRoadIds);
@@ -476,7 +476,7 @@ public class AcessAddressTests
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
         var locationUpdated = DateTime.UtcNow;
-        var townName = "Kolding";
+        var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("41264dd3-0c44-49c4-ba91-7262e53deea1");
         var existingRoadIds = addressProjection.RoadIds;
@@ -494,7 +494,7 @@ public class AcessAddressTests
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
-            townName: townName,
+            supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
             existingRoadIds: existingRoadIds);
