@@ -4,7 +4,7 @@ using Xunit.Extensions.Ordering;
 
 namespace OpenFTTH.Address.Tests;
 
-[Order(10)]
+[Order(0)]
 public class PostCodeTests
 {
     private readonly IEventStore _eventStore;

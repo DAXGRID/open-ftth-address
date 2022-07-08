@@ -7,6 +7,7 @@ public enum AccessAddressErrorCodes
     ID_CANNOT_BE_EMPTY_GUID,
     CREATED_CANNOT_BE_DEFAULT_DATE,
     UPDATED_CANNOT_BE_DEFAULT_DATE,
+    ROAD_DOES_NOT_EXIST,
 }
 
 public class AccessAddressError : Error

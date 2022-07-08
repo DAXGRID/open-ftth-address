@@ -5,8 +5,8 @@ namespace OpenFTTH.Address.Business;
 
 public class AddressProjection : ProjectionBase
 {
-    private readonly HashSet<Guid> _accessAddressIds = new();
-    public HashSet<Guid> AccessAddressIds => _accessAddressIds;
+    public HashSet<Guid> AccessAddressIds { get; } = new();
+    public HashSet<Guid> RoadIds { get; } = new();
 
     public AddressProjection()
     {
@@ -15,6 +15,13 @@ public class AddressProjection : ProjectionBase
             {
                 var accessAddressCreated = (AccessAddressCreated)@event.Data;
                 AccessAddressIds.Add(accessAddressCreated.Id);
+            });
+
+        ProjectEvent<RoadCreated>(
+            (@event) =>
+            {
+                var roadCreated = (RoadCreated)@event.Data;
+                RoadIds.Add(roadCreated.Id);
             });
     }
 }
