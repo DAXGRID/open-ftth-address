@@ -28,7 +28,8 @@ public class UnitAddressAR : AggregateBase
         string? floorName,
         string? suitName,
         DateTime created,
-        DateTime updated)
+        DateTime updated,
+        HashSet<Guid> accessAddressIds)
     {
         if (id == Guid.Empty)
         {
@@ -60,6 +61,14 @@ public class UnitAddressAR : AggregateBase
                 new UnitAddressError(
                     UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
                     $"{nameof(updated)} being default date is invalid."));
+        }
+
+        if (accessAddressIds is null || !accessAddressIds.Contains(accessAddressId))
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCodes.ACCESS_ADDRESS_DOES_NOT_EXISTS,
+                    @$" Cannot reference to a {nameof(AccessAddress)} that does not exists ('{accessAddressId}')."));
         }
 
         Id = id;

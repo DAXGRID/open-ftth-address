@@ -17,6 +17,8 @@ public class UnitAddressTests
     [Fact, Order(1)]
     public void Create_is_success()
     {
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var officialId = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
@@ -25,6 +27,7 @@ public class UnitAddressTests
         string? suitName = null;
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
+        var accessAddressIds = addressProjection.AccessAddressIds;
 
         var unitAddressAR = new UnitAddressAR();
 
@@ -36,7 +39,8 @@ public class UnitAddressTests
             floorName: floorName,
             suitName: suitName,
             created: created,
-            updated: updated);
+            updated: updated,
+            accessAddressIds);
 
         _eventStore.Aggregates.Store(unitAddressAR);
 
@@ -54,6 +58,8 @@ public class UnitAddressTests
     [Fact, Order(1)]
     public void Create_default_id_is_invalid()
     {
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
         var id = Guid.Empty;
         var officialId = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
@@ -62,6 +68,7 @@ public class UnitAddressTests
         string? suitName = null;
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
+        var accessAddressIds = addressProjection.AccessAddressIds;
 
         var unitAddressAR = new UnitAddressAR();
 
@@ -73,7 +80,8 @@ public class UnitAddressTests
             floorName: floorName,
             suitName: suitName,
             created: created,
-            updated: updated);
+            updated: updated,
+            accessAddressIds);
 
         _eventStore.Aggregates.Store(unitAddressAR);
 
@@ -89,6 +97,8 @@ public class UnitAddressTests
     [Fact, Order(1)]
     public void Create_access_address_default_id_is_invalid()
     {
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var officialId = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var accessAddressId = Guid.Empty;
@@ -97,6 +107,7 @@ public class UnitAddressTests
         string? suitName = null;
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
+        var accessAddressIds = addressProjection.AccessAddressIds;
 
         var unitAddressAR = new UnitAddressAR();
 
@@ -108,7 +119,8 @@ public class UnitAddressTests
             floorName: floorName,
             suitName: suitName,
             created: created,
-            updated: updated);
+            updated: updated,
+            accessAddressIds);
 
         createUnitAddressResult.IsSuccess.Should().BeFalse();
         createUnitAddressResult.Errors.Should().HaveCount(1);
@@ -121,6 +133,8 @@ public class UnitAddressTests
     [Fact, Order(1)]
     public void Create_default_created_date_is_invalid()
     {
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var officialId = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
@@ -129,6 +143,7 @@ public class UnitAddressTests
         string? suitName = null;
         var created = new DateTime();
         var updated = DateTime.UtcNow;
+        var accessAddressIds = addressProjection.AccessAddressIds;
 
         var unitAddressAR = new UnitAddressAR();
 
@@ -140,7 +155,8 @@ public class UnitAddressTests
             floorName: floorName,
             suitName: suitName,
             created: created,
-            updated: updated);
+            updated: updated,
+            accessAddressIds);
 
         createUnitAddressResult.IsSuccess.Should().BeFalse();
         createUnitAddressResult.Errors.Should().HaveCount(1);
@@ -153,6 +169,8 @@ public class UnitAddressTests
     [Fact, Order(1)]
     public void Create_default_updated_date_is_invalid()
     {
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var officialId = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
@@ -161,6 +179,7 @@ public class UnitAddressTests
         string? suitName = null;
         var created = DateTime.UtcNow;
         var updated = new DateTime();
+        var accessAddressIds = addressProjection.AccessAddressIds;
 
         var unitAddressAR = new UnitAddressAR();
 
@@ -172,7 +191,8 @@ public class UnitAddressTests
             floorName: floorName,
             suitName: suitName,
             created: created,
-            updated: updated);
+            updated: updated,
+            accessAddressIds);
 
         createUnitAddressResult.IsSuccess.Should().BeFalse();
         createUnitAddressResult.Errors.Should().HaveCount(1);
@@ -180,6 +200,42 @@ public class UnitAddressTests
             .Code
             .Should()
             .Be(UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE);
+    }
+
+    [Fact, Order(1)]
+    public void Create_could_not_find_access_address_on_id()
+    {
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
+        var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
+        var officialId = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
+        var accessAddressId = Guid.Parse("042cc296-ab4b-4cc1-8eed-f021361df6c3");
+        var status = Status.Active;
+        string? floorName = null;
+        string? suitName = null;
+        var created = DateTime.UtcNow;
+        var updated = DateTime.UtcNow;
+        var accessAddressIds = addressProjection.AccessAddressIds;
+
+        var unitAddressAR = new UnitAddressAR();
+
+        var createUnitAddressResult = unitAddressAR.Create(
+            id: id,
+            officialId: officialId,
+            accessAddressId: accessAddressId,
+            status: status,
+            floorName: floorName,
+            suitName: suitName,
+            created: created,
+            updated: updated,
+            accessAddressIds);
+
+        createUnitAddressResult.IsSuccess.Should().BeFalse();
+        createUnitAddressResult.Errors.Should().HaveCount(1);
+        ((UnitAddressError)createUnitAddressResult.Errors.First())
+            .Code
+            .Should()
+            .Be(UnitAddressErrorCodes.ACCESS_ADDRESS_DOES_NOT_EXISTS);
     }
 
     [Fact, Order(2)]

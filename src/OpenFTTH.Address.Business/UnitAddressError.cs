@@ -9,6 +9,7 @@ public enum UnitAddressErrorCodes
     CREATED_CANNOT_BE_DEFAULT_DATE,
     UPDATED_CANNOT_BE_DEFAULT_DATE,
     ID_NOT_SET,
+    ACCESS_ADDRESS_DOES_NOT_EXISTS,
 }
 
 public class UnitAddressError : Error
