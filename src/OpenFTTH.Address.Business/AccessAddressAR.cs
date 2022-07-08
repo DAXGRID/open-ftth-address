@@ -13,7 +13,7 @@ public class AccessAddressAR : AggregateBase
     public Status Status { get; private set; }
     public string? RoadCode { get; private set; }
     public string? HouseNumber { get; private set; }
-    public string? PostDistrictCode { get; private set; }
+    public Guid PostCodeId { get; private set; }
     public double EastCoordinate { get; private set; }
     public double NorthCoordinate { get; private set; }
     public DateTime? LocationUpdated { get; private set; }
@@ -36,7 +36,7 @@ public class AccessAddressAR : AggregateBase
         Status status,
         string roadCode,
         string houseNumber,
-        string postDistrictCode,
+        Guid postCodeId,
         double eastCoordinate,
         double northCoordinate,
         DateTime? locationUpdated,
@@ -89,7 +89,7 @@ public class AccessAddressAR : AggregateBase
                 status: status,
                 roadCode: roadCode,
                 houseNumber: houseNumber,
-                postDistrictCode: postDistrictCode,
+                postCodeId: postCodeId,
                 eastCoordinate: eastCoordinate,
                 northCoordinate: northCoordinate,
                 locationUpdated: locationUpdated,
@@ -107,7 +107,7 @@ public class AccessAddressAR : AggregateBase
         Status status,
         string roadCode,
         string houseNumber,
-        string postDistrictCode,
+        Guid postCodeId,
         double eastCoordinate,
         double northCoordinate,
         DateTime? locationUpdated,
@@ -150,7 +150,7 @@ public class AccessAddressAR : AggregateBase
                 status: status,
                 roadCode: roadCode,
                 houseNumber: houseNumber,
-                postDistrictCode: postDistrictCode,
+                postCodeId: postCodeId,
                 eastCoordinate: eastCoordinate,
                 northCoordinate: northCoordinate,
                 locationUpdated: locationUpdated,
@@ -171,7 +171,7 @@ public class AccessAddressAR : AggregateBase
         Status = accessAddressCreated.Status;
         RoadCode = accessAddressCreated.RoadCode;
         HouseNumber = accessAddressCreated.HouseNumber;
-        PostDistrictCode = accessAddressCreated.PostDistrictCode;
+        PostCodeId = accessAddressCreated.PostCodeId;
         EastCoordinate = accessAddressCreated.EastCoordinate;
         NorthCoordinate = accessAddressCreated.NorthCoordinate;
         LocationUpdated = accessAddressCreated.LocationUpdated;
@@ -188,7 +188,7 @@ public class AccessAddressAR : AggregateBase
         Status = accessAddressUpdated.Status;
         RoadCode = accessAddressUpdated.RoadCode;
         HouseNumber = accessAddressUpdated.HouseNumber;
-        PostDistrictCode = accessAddressUpdated.PostDistrictCode;
+        PostCodeId = accessAddressUpdated.PostCodeId;
         EastCoordinate = accessAddressUpdated.EastCoordinate;
         NorthCoordinate = accessAddressUpdated.NorthCoordinate;
         LocationUpdated = accessAddressUpdated.LocationUpdated;
