@@ -9,7 +9,7 @@ public record AccessAddressUpdated
     public Status Status { get; init; }
     public string RoadCode { get; init; }
     public string HouseNumber { get; init; }
-    public string PostDistrictCode { get; init; }
+    public Guid PostCodeId { get; init; }
     public double EastCoordinate { get; init; }
     public double NorthCoordinate { get; init; }
     public DateTime? LocationUpdated { get; init; }
@@ -25,7 +25,7 @@ public record AccessAddressUpdated
         Status status,
         string roadCode,
         string houseNumber,
-        string postDistrictCode,
+        Guid postCodeId,
         double eastCoordinate,
         double northCoordinate,
         DateTime? locationUpdated,
@@ -40,7 +40,7 @@ public record AccessAddressUpdated
         Status = status;
         RoadCode = roadCode;
         HouseNumber = houseNumber;
-        PostDistrictCode = postDistrictCode;
+        PostCodeId = postCodeId;
         EastCoordinate = eastCoordinate;
         NorthCoordinate = northCoordinate;
         LocationUpdated = locationUpdated;

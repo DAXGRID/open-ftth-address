@@ -69,7 +69,7 @@ public class UnitAddressAR : AggregateBase
             return Result.Fail(
                 new UnitAddressError(
                     UnitAddressErrorCodes.ACCESS_ADDRESS_DOES_NOT_EXISTS,
-                    @$" Cannot reference to a {nameof(AccessAddress)} that does not exist ('{accessAddressId}')."));
+                    @$" Cannot reference to a access-address that does not exist ('{accessAddressId}')."));
         }
 
         Id = id;
@@ -127,7 +127,7 @@ public class UnitAddressAR : AggregateBase
             return Result.Fail(
                 new UnitAddressError(
                     UnitAddressErrorCodes.ACCESS_ADDRESS_DOES_NOT_EXISTS,
-                    @$" Cannot reference to a {nameof(AccessAddress)} that does not exist ('{accessAddressId}')."));
+                    @$" Cannot reference to a access-address that does not exist ('{accessAddressId}')."));
         }
 
 

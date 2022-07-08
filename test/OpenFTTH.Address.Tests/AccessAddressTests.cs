@@ -27,7 +27,7 @@ public class AcessAddressTests
         var status = Status.Active;
         var roadCode = "D12";
         var houseNumber = "12F";
-        var postDistrictCode = "7000";
+        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 10.20;
         var northCoordinate = 20.10;
         var locationUpdated = DateTime.UtcNow;
@@ -47,7 +47,7 @@ public class AcessAddressTests
             status: status,
             roadCode: roadCode,
             houseNumber: houseNumber,
-            postDistrictCode: postDistrictCode,
+            postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
@@ -67,7 +67,7 @@ public class AcessAddressTests
         accessAddressAR.Status.Should().Be(status);
         accessAddressAR.RoadCode.Should().Be(roadCode);
         accessAddressAR.HouseNumber.Should().Be(houseNumber);
-        accessAddressAR.PostDistrictCode.Should().Be(postDistrictCode);
+        accessAddressAR.PostCodeId.Should().Be(postCodeId);
         accessAddressAR.EastCoordinate.Should().Be(eastCoordinate);
         accessAddressAR.NorthCoordinate.Should().Be(northCoordinate);
         accessAddressAR.LocationUpdated.Should().Be(locationUpdated);
@@ -89,7 +89,7 @@ public class AcessAddressTests
         var status = Status.Active;
         var roadCode = "D12";
         var houseNumber = "12F";
-        var postDistrictCode = "7000";
+        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 10.20;
         var northCoordinate = 20.10;
         var locationUpdated = DateTime.UtcNow;
@@ -109,7 +109,7 @@ public class AcessAddressTests
             status: status,
             roadCode: roadCode,
             houseNumber: houseNumber,
-            postDistrictCode: postDistrictCode,
+            postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
@@ -137,7 +137,7 @@ public class AcessAddressTests
         var status = Status.Active;
         var roadCode = "D12";
         var houseNumber = "12F";
-        var postDistrictCode = "7000";
+        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 10.20;
         var northCoordinate = 20.10;
         var locationUpdated = DateTime.UtcNow;
@@ -157,7 +157,7 @@ public class AcessAddressTests
             status: status,
             roadCode: roadCode,
             houseNumber: houseNumber,
-            postDistrictCode: postDistrictCode,
+            postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
@@ -185,7 +185,7 @@ public class AcessAddressTests
         var status = Status.Active;
         var roadCode = "D12";
         var houseNumber = "12F";
-        var postDistrictCode = "7000";
+        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 10.20;
         var northCoordinate = 20.10;
         var locationUpdated = DateTime.UtcNow;
@@ -205,7 +205,7 @@ public class AcessAddressTests
             status: status,
             roadCode: roadCode,
             houseNumber: houseNumber,
-            postDistrictCode: postDistrictCode,
+            postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
@@ -233,7 +233,7 @@ public class AcessAddressTests
         var status = Status.Active;
         var roadCode = "D12";
         var houseNumber = "12F";
-        var postDistrictCode = "7000";
+        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 10.20;
         var northCoordinate = 20.10;
         var locationUpdated = DateTime.UtcNow;
@@ -253,7 +253,7 @@ public class AcessAddressTests
             status: status,
             roadCode: roadCode,
             houseNumber: houseNumber,
-            postDistrictCode: postDistrictCode,
+            postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
@@ -280,7 +280,7 @@ public class AcessAddressTests
         var status = Status.Discontinued;
         var roadCode = "F12";
         var houseNumber = "10F";
-        var postDistrictCode = "6000";
+        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
         var locationUpdated = DateTime.UtcNow;
@@ -298,7 +298,7 @@ public class AcessAddressTests
             status: status,
             roadCode: roadCode,
             houseNumber: houseNumber,
-            postDistrictCode: postDistrictCode,
+            postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
@@ -317,7 +317,7 @@ public class AcessAddressTests
         accessAddressAR.Status.Should().Be(status);
         accessAddressAR.RoadCode.Should().Be(roadCode);
         accessAddressAR.HouseNumber.Should().Be(houseNumber);
-        accessAddressAR.PostDistrictCode.Should().Be(postDistrictCode);
+        accessAddressAR.PostCodeId.Should().Be(postCodeId);
         accessAddressAR.EastCoordinate.Should().Be(eastCoordinate);
         accessAddressAR.NorthCoordinate.Should().Be(northCoordinate);
         accessAddressAR.LocationUpdated.Should().Be(locationUpdated);
@@ -337,7 +337,7 @@ public class AcessAddressTests
         var status = Status.Discontinued;
         var roadCode = "F12";
         var houseNumber = "10F";
-        var postDistrictCode = "6000";
+        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
         var locationUpdated = DateTime.UtcNow;
@@ -355,7 +355,7 @@ public class AcessAddressTests
             status: status,
             roadCode: roadCode,
             houseNumber: houseNumber,
-            postDistrictCode: postDistrictCode,
+            postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
@@ -382,7 +382,7 @@ public class AcessAddressTests
         var status = Status.Discontinued;
         var roadCode = "F12";
         var houseNumber = "10F";
-        var postDistrictCode = "6000";
+        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
         var locationUpdated = DateTime.UtcNow;
@@ -400,7 +400,7 @@ public class AcessAddressTests
             status: status,
             roadCode: roadCode,
             houseNumber: houseNumber,
-            postDistrictCode: postDistrictCode,
+            postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
@@ -427,7 +427,7 @@ public class AcessAddressTests
         var status = Status.Discontinued;
         var roadCode = "F12";
         var houseNumber = "10F";
-        var postDistrictCode = "6000";
+        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
         var locationUpdated = DateTime.UtcNow;
@@ -445,7 +445,52 @@ public class AcessAddressTests
             status: status,
             roadCode: roadCode,
             houseNumber: houseNumber,
-            postDistrictCode: postDistrictCode,
+            postCodeId: postCodeId,
+            eastCoordinate: eastCoordinate,
+            northCoordinate: northCoordinate,
+            locationUpdated: locationUpdated,
+            townName: townName,
+            plotId: plotId,
+            roadId: roadId,
+            existingRoadIds: existingRoadIds);
+
+        updateAccessAddressResult.IsSuccess.Should().BeFalse();
+        updateAccessAddressResult.Errors.Count.Should().Be(1);
+        ((AccessAddressError)updateAccessAddressResult.Errors.First())
+            .Code.Should().Be(AccessAddressErrorCodes.ROAD_DOES_NOT_EXIST);
+    }
+
+    [Fact, Order(2)]
+    public void Update_road_does_not_exist_is_invalid()
+    {
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
+        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var updated = DateTime.UtcNow;
+        var municipalCode = "F1234";
+        var status = Status.Discontinued;
+        var roadCode = "F12";
+        var houseNumber = "10F";
+        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
+        var eastCoordinate = 50.20;
+        var northCoordinate = 50.10;
+        var locationUpdated = DateTime.UtcNow;
+        var townName = "Kolding";
+        var plotId = "12445F";
+        var roadId = Guid.Parse("41264dd3-0c44-49c4-ba91-7262e53deea1");
+        var existingRoadIds = addressProjection.RoadIds;
+
+        var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
+
+        var updateAccessAddressResult = accessAddressAR.Update(
+            officialId: officialId,
+            updated: updated,
+            municipalCode: municipalCode,
+            status: status,
+            roadCode: roadCode,
+            houseNumber: houseNumber,
+            postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
             locationUpdated: locationUpdated,
