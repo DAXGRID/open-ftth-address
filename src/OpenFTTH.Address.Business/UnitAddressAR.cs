@@ -29,7 +29,7 @@ public class UnitAddressAR : AggregateBase
         string? suitName,
         DateTime created,
         DateTime updated,
-        HashSet<Guid> accessAddressIds)
+        HashSet<Guid> existingAccessAddressIds)
     {
         if (id == Guid.Empty)
         {
@@ -63,12 +63,13 @@ public class UnitAddressAR : AggregateBase
                     $"{nameof(updated)} being default date is invalid."));
         }
 
-        if (accessAddressIds is null || !accessAddressIds.Contains(accessAddressId))
+        if (existingAccessAddressIds is null
+            || !existingAccessAddressIds.Contains(accessAddressId))
         {
             return Result.Fail(
                 new UnitAddressError(
                     UnitAddressErrorCodes.ACCESS_ADDRESS_DOES_NOT_EXISTS,
-                    @$" Cannot reference to a {nameof(AccessAddress)} that does not exists ('{accessAddressId}')."));
+                    @$" Cannot reference to a {nameof(AccessAddress)} that does not exist ('{accessAddressId}')."));
         }
 
         Id = id;
@@ -92,7 +93,8 @@ public class UnitAddressAR : AggregateBase
         Status status,
         string? floorName,
         string? suitName,
-        DateTime updated)
+        DateTime updated,
+        HashSet<Guid> existingAccessAddressIds)
     {
         if (Id == Guid.Empty)
         {
@@ -118,6 +120,16 @@ public class UnitAddressAR : AggregateBase
                     UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
                     $"{nameof(updated)} being default date is invalid."));
         }
+
+        if (existingAccessAddressIds is null ||
+            !existingAccessAddressIds.Contains(accessAddressId))
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCodes.ACCESS_ADDRESS_DOES_NOT_EXISTS,
+                    @$" Cannot reference to a {nameof(AccessAddress)} that does not exist ('{accessAddressId}')."));
+        }
+
 
         RaiseEvent(new UnitAddressUpdated(
                        id: Id,
