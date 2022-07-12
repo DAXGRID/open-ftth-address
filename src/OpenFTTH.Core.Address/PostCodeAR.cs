@@ -1,7 +1,8 @@
 using FluentResults;
+using OpenFTTH.Core.Address.Events;
 using OpenFTTH.EventSourcing;
 
-namespace OpenFTTH.Address.Business;
+namespace OpenFTTH.Core.Address;
 
 public class PostCodeAR : AggregateBase
 {

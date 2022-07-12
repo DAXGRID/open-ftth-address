@@ -1,11 +1,11 @@
-namespace OpenFTTH.Address.Business;
+namespace OpenFTTH.Core.Address.Events;
 
-public record PostCodeUpdated
+public record RoadUpdated
 {
     public Guid Id { get; init; }
     public string Name { get; init; }
 
-    public PostCodeUpdated(Guid id, string name)
+    public RoadUpdated(Guid id, string name)
     {
         Id = id;
         Name = name;

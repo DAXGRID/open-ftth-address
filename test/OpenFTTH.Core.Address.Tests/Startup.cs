@@ -4,7 +4,7 @@ using OpenFTTH.EventSourcing;
 using OpenFTTH.EventSourcing.InMem;
 using System.Reflection;
 
-namespace OpenFTTH.Address.Tests;
+namespace OpenFTTH.Core.Address.Tests;
 
 public static class Startup
 {
@@ -13,7 +13,7 @@ public static class Startup
         services.AddSingleton<IEventStore, InMemEventStore>();
         {
             var businessAssemblies = new Assembly[] {
-                AppDomain.CurrentDomain.Load("OpenFTTH.Address.Business"),
+                AppDomain.CurrentDomain.Load("OpenFTTH.Core.Address"),
             };
 
             services.AddProjections(businessAssemblies);
