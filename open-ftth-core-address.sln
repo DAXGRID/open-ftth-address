@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B515228A-D84A-40F5-8FB6-B9C29AF4C9DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenFTTH.Core.Address", "src\OpenFTTH.Core.Address\OpenFTTH.Core.Address.csproj", "{7E14141E-A5A3-4C5C-8CD2-1C31CC7C2E53}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{95701F10-9B0C-46FF-AD60-022A1137F777}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenFTTH.Core.Address.Tests", "test\OpenFTTH.Core.Address.Tests\OpenFTTH.Core.Address.Tests.csproj", "{6D0AE867-BFE9-48B2-A986-0744FC525C6F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7E14141E-A5A3-4C5C-8CD2-1C31CC7C2E53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E14141E-A5A3-4C5C-8CD2-1C31CC7C2E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E14141E-A5A3-4C5C-8CD2-1C31CC7C2E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E14141E-A5A3-4C5C-8CD2-1C31CC7C2E53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D0AE867-BFE9-48B2-A986-0744FC525C6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D0AE867-BFE9-48B2-A986-0744FC525C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D0AE867-BFE9-48B2-A986-0744FC525C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D0AE867-BFE9-48B2-A986-0744FC525C6F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7E14141E-A5A3-4C5C-8CD2-1C31CC7C2E53} = {B515228A-D84A-40F5-8FB6-B9C29AF4C9DF}
+		{6D0AE867-BFE9-48B2-A986-0744FC525C6F} = {95701F10-9B0C-46FF-AD60-022A1137F777}
+	EndGlobalSection
+EndGlobal
