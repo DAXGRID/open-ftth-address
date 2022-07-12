@@ -5,7 +5,8 @@ namespace OpenFTTH.Address.Business;
 public enum PostCodeErrorCodes
 {
     ID_CANNOT_BE_EMPTY_GUID,
-    CANNOT_BE_EMPTY_NULL_OR_WHITESPACE,
+    NUMBER_CANNOT_BE_EMPTY_NULL_OR_WHITESPACE,
+    NAME_CANNOT_BE_EMPTY_NULL_OR_WHITESPACE,
 }
 
 public class PostCodeError : Error
