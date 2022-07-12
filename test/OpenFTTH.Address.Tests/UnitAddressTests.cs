@@ -1,8 +1,7 @@
-using OpenFTTH.Address.Business;
 using OpenFTTH.EventSourcing;
 using Xunit.Extensions.Ordering;
 
-namespace OpenFTTH.Address.Tests;
+namespace OpenFTTH.Core.Address.Tests;
 
 [Order(20)]
 public class UnitAddressTests

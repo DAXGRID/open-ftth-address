@@ -1,4 +1,4 @@
-namespace OpenFTTH.Address.Business.Events;
+namespace OpenFTTH.Core.Address.Events;
 
 public record RoadCreated
 {

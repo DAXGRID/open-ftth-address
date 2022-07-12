@@ -1,6 +1,6 @@
 using FluentResults;
 
-namespace OpenFTTH.Address.Business;
+namespace OpenFTTH.Core.Address;
 
 public enum RoadErrorCode
 {

@@ -4,7 +4,7 @@ using OpenFTTH.EventSourcing;
 using OpenFTTH.EventSourcing.InMem;
 using System.Reflection;
 
-namespace OpenFTTH.Address.Tests;
+namespace OpenFTTH.Core.Address.Tests;
 
 public static class Startup
 {
