@@ -28,7 +28,7 @@ public class PostCodeAR : AggregateBase
         {
             return Result.Fail(
                 new PostCodeError(
-                    PostCodeErrorCodes.CANNOT_BE_EMPTY_NULL_OR_WHITESPACE,
+                    PostCodeErrorCodes.NUMBER_CANNOT_BE_EMPTY_NULL_OR_WHITESPACE,
                     $"{nameof(number)} cannot be null empty or whitespace."));
         }
 
@@ -36,7 +36,7 @@ public class PostCodeAR : AggregateBase
         {
             return Result.Fail(
                 new PostCodeError(
-                    PostCodeErrorCodes.CANNOT_BE_EMPTY_NULL_OR_WHITESPACE,
+                    PostCodeErrorCodes.NAME_CANNOT_BE_EMPTY_NULL_OR_WHITESPACE,
                     $"{nameof(name)} cannot be null empty or whitespace."));
         }
 
@@ -65,7 +65,7 @@ public class PostCodeAR : AggregateBase
         {
             return Result.Fail(
                 new PostCodeError(
-                    PostCodeErrorCodes.CANNOT_BE_EMPTY_NULL_OR_WHITESPACE,
+                    PostCodeErrorCodes.NAME_CANNOT_BE_EMPTY_NULL_OR_WHITESPACE,
                     $"{nameof(name)} cannot be null empty or whitespace."));
         }
 
