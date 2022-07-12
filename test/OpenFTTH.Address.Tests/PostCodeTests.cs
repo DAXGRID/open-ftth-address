@@ -109,7 +109,7 @@ public class PostCodeTests
     }
 
     [Fact, Order(2)]
-    public void Update_ShouldSucceed()
+    public void Update_is_success()
     {
         var id = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var number = "7000";
@@ -125,5 +125,39 @@ public class PostCodeTests
         postCodeAR.Id.Should().Be(id);
         postCodeAR.Name.Should().Be(name);
         postCodeAR.Number.Should().Be(number);
+    }
+
+    [Fact, Order(2)]
+    public void Update_guid_is_empty_is_invalid()
+    {
+        var name = "New Fredericia";
+        var postCodeAR = new PostCodeAR();
+
+        var updatePostCodeResult = postCodeAR.Update(name: name);
+
+        updatePostCodeResult.IsSuccess.Should().BeFalse();
+        updatePostCodeResult.Errors.Should().HaveCount(1);
+        ((PostCodeError)updatePostCodeResult.Errors.First())
+            .Code
+            .Should()
+            .Be(PostCodeErrorCodes.ID_CANNOT_BE_EMPTY_GUID);
+    }
+
+    [Fact, Order(2)]
+    public void Update_name_is_empty_null_or_whitespace_is_invalid()
+    {
+        var id = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
+        var name = String.Empty;
+
+        var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
+
+        var updatePostCodeResult = postCodeAR.Update(name: name);
+
+        updatePostCodeResult.IsSuccess.Should().BeFalse();
+        updatePostCodeResult.Errors.Should().HaveCount(1);
+        ((PostCodeError)updatePostCodeResult.Errors.First())
+            .Code
+            .Should()
+            .Be(PostCodeErrorCodes.NAME_CANNOT_BE_EMPTY_NULL_OR_WHITESPACE);
     }
 }
