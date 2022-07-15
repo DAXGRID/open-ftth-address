@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using OpenFTTH.CQRS;
 using OpenFTTH.EventSourcing;
 using OpenFTTH.EventSourcing.InMem;
 using System.Reflection;
@@ -17,9 +16,6 @@ public static class Startup
             };
 
             services.AddProjections(businessAssemblies);
-            services.AddSingleton<IQueryDispatcher, QueryDispatcher>();
-            services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
-            services.AddCQRS(businessAssemblies);
         }
     }
 }
