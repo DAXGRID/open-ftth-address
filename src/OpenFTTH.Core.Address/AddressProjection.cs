@@ -6,9 +6,12 @@ namespace OpenFTTH.Core.Address;
 public class AddressProjection : ProjectionBase
 {
     public HashSet<Guid> AccessAddressIds { get; } = new();
-    public HashSet<Guid> RoadIds { get; } = new();
-    public HashSet<Guid> PostCodeIds => PostCodeNumberToId.Values.ToHashSet();
+
+    public Dictionary<string, Guid> RoadExternalIdToId { get; } = new();
+    public HashSet<Guid> RoadIds => RoadExternalIdToId.Values.ToHashSet();
+
     public Dictionary<string, Guid> PostCodeNumberToId { get; } = new();
+    public HashSet<Guid> PostCodeIds => PostCodeNumberToId.Values.ToHashSet();
 
     public AddressProjection()
     {
@@ -23,7 +26,7 @@ public class AddressProjection : ProjectionBase
             (@event) =>
             {
                 var roadCreated = (RoadCreated)@event.Data;
-                RoadIds.Add(roadCreated.Id);
+                RoadExternalIdToId.Add(roadCreated.ExternalId, roadCreated.Id);
             });
 
         ProjectEvent<PostCodeCreated>(
