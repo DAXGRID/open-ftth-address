@@ -70,26 +70,6 @@ public class RoadTests
             .Be(RoadErrorCode.EXTERNAL_ID_CANNOT_BE_WHITE_SPACE_OR_NULL);
     }
 
-    [Theory, Order(1)]
-    [InlineData("")]
-    [InlineData(" ")]
-    [InlineData("  ")]
-    [InlineData(null)]
-    public void Create_name_whitespace_or_null_is_invalid(string name)
-    {
-        var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var externalId = "F12345";
-        var roadAR = new RoadAR();
-        var createRoadResult = roadAR.Create(id: id, externalId: externalId, name: name);
-
-        createRoadResult.IsFailed.Should().BeTrue();
-        createRoadResult.Errors.Should().HaveCount(1);
-        ((RoadError)createRoadResult.Errors.First())
-            .Code
-            .Should()
-            .Be(RoadErrorCode.NAME_CANNOT_BE_WHITE_SPACE_OR_NULL);
-    }
-
     [Fact, Order(2)]
     public void Update_is_success()
     {
@@ -125,26 +105,5 @@ public class RoadTests
             .Code
             .Should()
             .Be(RoadErrorCode.ID_CANNOT_BE_EMPTY_GUID);
-    }
-
-    [Theory, Order(2)]
-    [InlineData("")]
-    [InlineData(" ")]
-    [InlineData("  ")]
-    [InlineData(null)]
-    public void Update_name_whitespace_or_null_is_invalid(string name)
-    {
-        var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var externalId = "F12345";
-
-        var roadAR = new RoadAR();
-        var updateRoadResult = roadAR.Create(id: id, externalId: externalId, name: name);
-
-        updateRoadResult.IsFailed.Should().BeTrue();
-        updateRoadResult.Errors.Should().HaveCount(1);
-        ((RoadError)updateRoadResult.Errors.First())
-            .Code
-            .Should()
-            .Be(RoadErrorCode.NAME_CANNOT_BE_WHITE_SPACE_OR_NULL);
     }
 }
