@@ -7,7 +7,8 @@ public class AddressProjection : ProjectionBase
 {
     public HashSet<Guid> AccessAddressIds { get; } = new();
     public HashSet<Guid> RoadIds { get; } = new();
-    public HashSet<Guid> PostCodeIds { get; } = new();
+    public HashSet<Guid> PostCodeIds => PostCodeNumberToId.Values.ToHashSet();
+    public Dictionary<string, Guid> PostCodeNumberToId { get; } = new();
 
     public AddressProjection()
     {
@@ -29,7 +30,7 @@ public class AddressProjection : ProjectionBase
             (@event) =>
             {
                 var postCodeCreated = (PostCodeCreated)@event.Data;
-                PostCodeIds.Add(postCodeCreated.Id);
+                PostCodeNumberToId.Add(postCodeCreated.Number, postCodeCreated.Id);
             });
     }
 }
