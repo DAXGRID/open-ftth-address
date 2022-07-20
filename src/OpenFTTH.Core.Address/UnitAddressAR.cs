@@ -6,7 +6,7 @@ namespace OpenFTTH.Core.Address;
 
 public class UnitAddressAR : AggregateBase
 {
-    public Guid? OfficialId { get; private set; }
+    public string? OfficialId { get; private set; }
     public Guid AccessAddressId { get; private set; }
     public Status Status { get; private set; }
     public string? FloorName { get; private set; }
@@ -22,7 +22,7 @@ public class UnitAddressAR : AggregateBase
 
     public Result Create(
         Guid id,
-        Guid? officialId,
+        string? officialId,
         Guid accessAddressId,
         Status status,
         string? floorName,
@@ -88,7 +88,7 @@ public class UnitAddressAR : AggregateBase
     }
 
     public Result Update(
-        Guid? officialId,
+        string? officialId,
         Guid accessAddressId,
         Status status,
         string? floorName,
