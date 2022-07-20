@@ -3,7 +3,7 @@ namespace OpenFTTH.Core.Address.Events;
 public record UnitAddressCreated
 {
     public Guid Id { get; init; }
-    public Guid? OfficialId { get; init; }
+    public string? OfficialId { get; init; }
     public Guid AccessAddressId { get; init; }
     public Status Status { get; init; }
     public string? FloorName { get; init; }
@@ -13,7 +13,7 @@ public record UnitAddressCreated
 
     public UnitAddressCreated(
         Guid id,
-        Guid? officialId,
+        string? officialId,
         Guid accessAddressId,
         Status status,
         string? floorName,

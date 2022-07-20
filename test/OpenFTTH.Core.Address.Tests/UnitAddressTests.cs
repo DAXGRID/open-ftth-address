@@ -19,7 +19,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
+        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var status = Status.Active;
         string? floorName = null;
@@ -60,7 +60,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Empty;
-        var officialId = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
+        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var status = Status.Active;
         string? floorName = null;
@@ -99,7 +99,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
+        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Empty;
         var status = Status.Active;
         string? floorName = null;
@@ -135,7 +135,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
+        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var status = Status.Active;
         string? floorName = null;
@@ -171,7 +171,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
+        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var status = Status.Active;
         string? floorName = null;
@@ -207,7 +207,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
+        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("042cc296-ab4b-4cc1-8eed-f021361df6c3");
         var status = Status.Active;
         string? floorName = null;
@@ -243,7 +243,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
+        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var status = Status.Discontinued;
         string? floorName = null;
@@ -279,7 +279,7 @@ public class UnitAddressTests
     {
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
-        var officialId = Guid.Parse("89852ac6-254f-4938-aec8-4fac7cb72901");
+        var officialId = "89852ac6-254f-4938-aec8-4fac7cb72901";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var status = Status.Pending;
         string? floorName = null;
@@ -310,7 +310,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = Guid.Parse("89852ac6-254f-4938-aec8-4fac7cb72901");
+        var officialId = "89852ac6-254f-4938-aec8-4fac7cb72901";
         var accessAddressId = Guid.Empty;
         var status = Status.Pending;
         string? floorName = null;
@@ -341,7 +341,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = Guid.Parse("89852ac6-254f-4938-aec8-4fac7cb72901");
+        var officialId = "89852ac6-254f-4938-aec8-4fac7cb72901";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var status = Status.Pending;
         string? floorName = null;
@@ -372,7 +372,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = Guid.Parse("89852ac6-254f-4938-aec8-4fac7cb72901");
+        var officialId = "89852ac6-254f-4938-aec8-4fac7cb72901";
         var accessAddressId = Guid.Parse("c00a5940-0184-4b79-baa9-d59290fac67d");
         var status = Status.Pending;
         string? floorName = null;
