@@ -7,8 +7,8 @@ public class AddressProjection : ProjectionBase
 {
     public HashSet<Guid> AccessAddressIds { get; } = new();
 
-    public Dictionary<string, Guid> RoadExternalIdToId { get; } = new();
-    public HashSet<Guid> RoadIds => RoadExternalIdToId.Values.ToHashSet();
+    public Dictionary<string, Guid> RoadOfficialIdIdToId { get; } = new();
+    public HashSet<Guid> RoadIds => RoadOfficialIdIdToId.Values.ToHashSet();
 
     public Dictionary<string, Guid> PostCodeNumberToId { get; } = new();
     public HashSet<Guid> PostCodeIds => PostCodeNumberToId.Values.ToHashSet();
@@ -26,7 +26,7 @@ public class AddressProjection : ProjectionBase
             (@event) =>
             {
                 var roadCreated = (RoadCreated)@event.Data;
-                RoadExternalIdToId.Add(roadCreated.ExternalId, roadCreated.Id);
+                RoadOfficialIdIdToId.Add(roadCreated.OfficialId, roadCreated.Id);
             });
 
         ProjectEvent<PostCodeCreated>(

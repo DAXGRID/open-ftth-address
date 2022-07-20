@@ -6,7 +6,7 @@ namespace OpenFTTH.Core.Address;
 
 public class RoadAR : AggregateBase
 {
-    public string? ExternalId { get; private set; }
+    public string? OfficialId { get; private set; }
     public string? Name { get; private set; }
 
     public RoadAR()
@@ -15,7 +15,7 @@ public class RoadAR : AggregateBase
         Register<RoadUpdated>(Apply);
     }
 
-    public Result Create(Guid id, string externalId, string name)
+    public Result Create(Guid id, string officialId, string name)
     {
         if (id == Guid.Empty)
         {
@@ -25,19 +25,19 @@ public class RoadAR : AggregateBase
                     $"{nameof(id)} cannot be empty guid."));
         }
 
-        if (String.IsNullOrWhiteSpace(externalId))
+        if (String.IsNullOrWhiteSpace(officialId))
         {
             return Result.Fail(
                 new RoadError(
-                    RoadErrorCode.EXTERNAL_ID_CANNOT_BE_WHITE_SPACE_OR_NULL,
-                    $"{nameof(externalId)} is not allowed to be whitespace or null."));
+                    RoadErrorCode.OFFICIAL_ID_CANNOT_BE_WHITE_SPACE_OR_NULL,
+                    $"{nameof(officialId)} is not allowed to be whitespace or null."));
         }
 
         Id = id;
 
         RaiseEvent(new RoadCreated(
             id: id,
-            externalId: externalId,
+            officialId: officialId,
             name: name));
 
         return Result.Ok();
@@ -60,7 +60,7 @@ public class RoadAR : AggregateBase
 
     private void Apply(RoadCreated roadCreated)
     {
-        ExternalId = roadCreated.ExternalId;
+        OfficialId = roadCreated.OfficialId;
         Name = roadCreated.Name;
     }
 

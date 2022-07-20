@@ -3,13 +3,13 @@ namespace OpenFTTH.Core.Address.Events;
 public record RoadCreated
 {
     public Guid Id { get; init; }
-    public string ExternalId { get; init; }
+    public string OfficialId { get; init; }
     public string Name { get; init; }
 
-    public RoadCreated(Guid id, string externalId, string name)
+    public RoadCreated(Guid id, string officialId, string name)
     {
         Id = id;
-        ExternalId = externalId;
+        OfficialId = officialId;
         Name = name;
     }
 }
