@@ -17,17 +17,17 @@ public class RoadTests
     public void Create_is_success()
     {
         var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var externalId = "F12345";
+        var officialId = "F12345";
         var name = "Pilevej";
 
         var roadAR = new RoadAR();
-        var createRoadResult = roadAR.Create(id: id, externalId: externalId, name: name);
+        var createRoadResult = roadAR.Create(id: id, officialId: officialId, name: name);
 
         _eventStore.Aggregates.Store(roadAR);
 
         createRoadResult.IsSuccess.Should().BeTrue();
         roadAR.Id.Should().Be(id);
-        roadAR.ExternalId.Should().Be(externalId);
+        roadAR.OfficialId.Should().Be(officialId);
         roadAR.Name.Should().Be(name);
     }
 
@@ -35,11 +35,11 @@ public class RoadTests
     public void Create_default_id_is_invalid()
     {
         var id = Guid.Empty;
-        var externalId = "F12345";
+        var officialId = "F12345";
         var name = "Pilevej";
 
         var roadAR = new RoadAR();
-        var createRoadResult = roadAR.Create(id: id, externalId: externalId, name: name);
+        var createRoadResult = roadAR.Create(id: id, officialId: officialId, name: name);
 
         createRoadResult.IsFailed.Should().BeTrue();
         createRoadResult.Errors.Should().HaveCount(1);
@@ -54,27 +54,27 @@ public class RoadTests
     [InlineData(" ")]
     [InlineData("  ")]
     [InlineData(null)]
-    public void Create_empty_or_whitespace_external_id_is_invalid(string externalId)
+    public void Create_empty_or_whitespace_official_id_is_invalid(string officialId)
     {
         var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
         var name = "Pilevej";
 
         var roadAR = new RoadAR();
-        var createRoadResult = roadAR.Create(id: id, externalId: externalId, name: name);
+        var createRoadResult = roadAR.Create(id: id, officialId: officialId, name: name);
 
         createRoadResult.IsFailed.Should().BeTrue();
         createRoadResult.Errors.Should().HaveCount(1);
         ((RoadError)createRoadResult.Errors.First())
             .Code
             .Should()
-            .Be(RoadErrorCode.EXTERNAL_ID_CANNOT_BE_WHITE_SPACE_OR_NULL);
+            .Be(RoadErrorCode.OFFICIAL_ID_CANNOT_BE_WHITE_SPACE_OR_NULL);
     }
 
     [Fact, Order(2)]
     public void Update_is_success()
     {
         var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var externalId = "F12345";
+        var officialId = "F12345";
         var name = "Kolding";
 
         var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
@@ -85,7 +85,7 @@ public class RoadTests
 
         updateRoadResult.IsSuccess.Should().BeTrue();
         roadAR.Id.Should().Be(id);
-        roadAR.ExternalId.Should().Be(externalId);
+        roadAR.OfficialId.Should().Be(officialId);
         roadAR.Name.Should().Be(name);
     }
 
