@@ -19,7 +19,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
@@ -83,7 +83,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Empty;
-        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
@@ -133,7 +133,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var created = new DateTime();
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
@@ -183,7 +183,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var created = DateTime.UtcNow;
         var updated = new DateTime();
         var municipalCode = "D1234";
@@ -233,7 +233,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
@@ -283,7 +283,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
@@ -333,7 +333,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = DateTime.UtcNow;
         var municipalCode = "F1234";
         var status = Status.Discontinued;
@@ -392,7 +392,7 @@ public class AcessAddressTests
     {
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
-        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = DateTime.UtcNow;
         var municipalCode = "F1234";
         var status = Status.Discontinued;
@@ -439,7 +439,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = new DateTime();
         var municipalCode = "F1234";
         var status = Status.Discontinued;
@@ -486,7 +486,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = DateTime.UtcNow;
         var municipalCode = "F1234";
         var status = Status.Discontinued;
@@ -533,7 +533,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = DateTime.UtcNow;
         var municipalCode = "F1234";
         var status = Status.Discontinued;
