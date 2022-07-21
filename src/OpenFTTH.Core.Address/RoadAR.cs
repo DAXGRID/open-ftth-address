@@ -13,6 +13,7 @@ public class RoadAR : AggregateBase
     {
         Register<RoadCreated>(Apply);
         Register<RoadUpdated>(Apply);
+        Register<RoadDeleted>(Apply);
     }
 
     public Result Create(Guid id, string officialId, string name)
@@ -58,6 +59,22 @@ public class RoadAR : AggregateBase
         return Result.Ok();
     }
 
+    public Result Delete()
+    {
+        if (Id == Guid.Empty)
+        {
+            return Result.Fail(
+                new RoadError(
+                    RoadErrorCode.ID_CANNOT_BE_EMPTY_GUID,
+                    @$"{nameof(Id)}, being default guid is not valid,
+ the AR has most likely not being created yet."));
+        }
+
+        RaiseEvent(new RoadDeleted(Id));
+
+        return Result.Ok();
+    }
+
     private void Apply(RoadCreated roadCreated)
     {
         OfficialId = roadCreated.OfficialId;
@@ -67,5 +84,10 @@ public class RoadAR : AggregateBase
     private void Apply(RoadUpdated roadUpdated)
     {
         Name = roadUpdated.Name;
+    }
+
+    private void Apply(RoadDeleted roadDeleted)
+    {
+        // Do nothing on deletes.
     }
 }

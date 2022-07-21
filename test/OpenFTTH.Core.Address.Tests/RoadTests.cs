@@ -106,4 +106,33 @@ public class RoadTests
             .Should()
             .Be(RoadErrorCode.ID_CANNOT_BE_EMPTY_GUID);
     }
+
+    [Fact, Order(3)]
+    public void Delete_is_invalid_not_created()
+    {
+        var id = Guid.NewGuid();
+
+        var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+
+        var updateRoadResult = roadAR.Delete();
+
+        updateRoadResult.IsFailed.Should().BeTrue();
+        updateRoadResult.Errors.Should().HaveCount(1);
+        ((RoadError)updateRoadResult.Errors.First())
+            .Code
+            .Should()
+            .Be(RoadErrorCode.ID_CANNOT_BE_EMPTY_GUID);
+    }
+
+    [Fact, Order(3)]
+    public void Delete_is_success()
+    {
+        var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
+
+        var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+
+        var updateRoadResult = roadAR.Delete();
+
+        updateRoadResult.IsSuccess.Should().BeTrue();
+    }
 }

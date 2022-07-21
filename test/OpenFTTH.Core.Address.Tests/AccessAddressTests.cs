@@ -33,7 +33,7 @@ public class AcessAddressTests
         var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var existingRoadIds = addressProjection.RoadIds;
+        var existingRoadIds = addressProjection.RoadIdToOfficalId.Keys.ToHashSet();
         var existingPostCodeIds = addressProjection.PostCodeIdToNumber.Keys.ToHashSet();
 
         var accessAddressAR = new AccessAddressAR();
@@ -97,7 +97,7 @@ public class AcessAddressTests
         var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var existingRoadIds = addressProjection.RoadIds;
+        var existingRoadIds = addressProjection.RoadIdToOfficalId.Keys.ToHashSet();
         var existingPostCodeIds = addressProjection.PostCodeIdToNumber.Keys.ToHashSet();
 
         var accessAddressAR = new AccessAddressAR();
@@ -147,7 +147,7 @@ public class AcessAddressTests
         var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var existingRoadIds = addressProjection.RoadIds;
+        var existingRoadIds = addressProjection.RoadIdToOfficalId.Keys.ToHashSet();
         var existingPostCodeIds = addressProjection.PostCodeIdToNumber.Keys.ToHashSet();
 
         var accessAddressAR = new AccessAddressAR();
@@ -197,7 +197,7 @@ public class AcessAddressTests
         var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var existingRoadIds = addressProjection.RoadIds;
+        var existingRoadIds = addressProjection.RoadIdToOfficalId.Keys.ToHashSet();
         var existingPostCodeIds = addressProjection.PostCodeIdToNumber.Keys.ToHashSet();
 
         var accessAddressAR = new AccessAddressAR();
@@ -247,7 +247,7 @@ public class AcessAddressTests
         var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("e138802a-1717-49d6-9281-9a13dff2fdb9");
-        var existingRoadIds = addressProjection.RoadIds;
+        var existingRoadIds = addressProjection.RoadIdToOfficalId.Keys.ToHashSet();
         var existingPostCodeIds = addressProjection.PostCodeIdToNumber.Keys.ToHashSet();
 
         var accessAddressAR = new AccessAddressAR();
@@ -297,7 +297,7 @@ public class AcessAddressTests
         var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var existingRoadIds = addressProjection.RoadIds;
+        var existingRoadIds = addressProjection.RoadIdToOfficalId.Keys.ToHashSet();
         var existingPostCodeIds = addressProjection.PostCodeIdToNumber.Keys.ToHashSet();
 
         var accessAddressAR = new AccessAddressAR();
@@ -346,7 +346,7 @@ public class AcessAddressTests
         var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var existingRoadIds = addressProjection.RoadIds;
+        var existingRoadIds = addressProjection.RoadIdToOfficalId.Keys.ToHashSet();
         var existingPostCodeIds = addressProjection.PostCodeIdToNumber.Keys.ToHashSet();
 
         var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
@@ -452,7 +452,7 @@ public class AcessAddressTests
         var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var existingRoadIds = addressProjection.RoadIds;
+        var existingRoadIds = addressProjection.RoadIdToOfficalId.Keys.ToHashSet();
         var existingPostCodeIds = addressProjection.PostCodeIdToNumber.Keys.ToHashSet();
 
         var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
@@ -499,7 +499,7 @@ public class AcessAddressTests
         var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("4d137186-56b7-4753-80b8-b9785104868a");
-        var existingRoadIds = addressProjection.RoadIds;
+        var existingRoadIds = addressProjection.RoadIdToOfficalId.Keys.ToHashSet();
         var existingPostCodeIds = addressProjection.PostCodeIdToNumber.Keys.ToHashSet();
 
         var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
@@ -546,7 +546,7 @@ public class AcessAddressTests
         var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var existingRoadIds = addressProjection.RoadIds;
+        var existingRoadIds = addressProjection.RoadIdToOfficalId.Keys.ToHashSet();
         var existingPostCodeIds = addressProjection.PostCodeIdToNumber.Keys.ToHashSet();
 
         var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
