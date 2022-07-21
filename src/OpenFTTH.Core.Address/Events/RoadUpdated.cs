@@ -1,6 +1,6 @@
 namespace OpenFTTH.Core.Address.Events;
 
-public record RoadUpdated
+public sealed record RoadUpdated
 {
     public Guid Id { get; init; }
     public string Name { get; init; }

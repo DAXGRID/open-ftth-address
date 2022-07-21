@@ -1,6 +1,6 @@
 namespace OpenFTTH.Core.Address.Events;
 
-public record UnitAddressUpdated
+public sealed record UnitAddressUpdated
 {
     public Guid Id { get; init; }
     public string? OfficialId { get; init; }

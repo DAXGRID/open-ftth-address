@@ -1,6 +1,6 @@
 namespace OpenFTTH.Core.Address.Events;
 
-public record PostCodeUpdated
+public sealed record PostCodeUpdated
 {
     public Guid Id { get; init; }
     public string Name { get; init; }
