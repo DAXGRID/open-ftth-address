@@ -9,7 +9,7 @@ public class AddressProjection : ProjectionBase
     public HashSet<Guid> AccessAddressIds { get; } = new();
 
     public Dictionary<string, Guid> RoadOfficialIdIdToId { get; } = new();
-    public HashSet<Guid> RoadIds => RoadOfficialIdIdToId.Values.ToHashSet();
+    public Dictionary<Guid, string> RoadIdToOfficalId { get; } = new();
 
     public Dictionary<string, Guid> PostCodeNumberToId { get; } = new();
     public Dictionary<Guid, string> PostCodeIdToNumber { get; } = new();
@@ -38,6 +38,15 @@ public class AddressProjection : ProjectionBase
             {
                 var roadCreated = (RoadCreated)@event.Data;
                 RoadOfficialIdIdToId.Add(roadCreated.OfficialId, roadCreated.Id);
+                RoadIdToOfficalId.Add(roadCreated.Id, roadCreated.OfficialId);
+            });
+
+        ProjectEvent<RoadDeleted>(
+            (@event) =>
+            {
+                var roadDeleted = (RoadDeleted)@event.Data;
+                RoadOfficialIdIdToId.Remove(RoadIdToOfficalId[roadDeleted.Id]);
+                RoadIdToOfficalId.Remove(roadDeleted.Id);
             });
 
         ProjectEvent<PostCodeCreated>(
@@ -52,12 +61,8 @@ public class AddressProjection : ProjectionBase
             (@event) =>
             {
                 var postCodeDeleted = (PostCodeDeleted)@event.Data;
-
-                var postCodeNumber = PostCodeIdToNumber[postCodeDeleted.Id];
-                var postCodeId = PostCodeNumberToId[postCodeNumber];
-
-                PostCodeNumberToId.Remove(postCodeNumber);
-                PostCodeIdToNumber.Remove(postCodeId);
+                PostCodeNumberToId.Remove(PostCodeIdToNumber[postCodeDeleted.Id]);
+                PostCodeIdToNumber.Remove(postCodeDeleted.Id);
             }
         );
     }
