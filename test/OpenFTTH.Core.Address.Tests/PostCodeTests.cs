@@ -159,4 +159,32 @@ public class PostCodeTests
             .Should()
             .Be(PostCodeErrorCodes.NAME_CANNOT_BE_EMPTY_NULL_OR_WHITESPACE);
     }
+
+    [Fact, Order(3)]
+    public void Cannot_delete_post_code_that_has_not_yet_been_created()
+    {
+        var id = Guid.Parse("53d46647-edb3-428e-8063-b25e1009029e");
+
+        var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
+        var deleteResult = postCodeAR.Delete();
+
+        deleteResult.IsSuccess.Should().BeFalse();
+        deleteResult.Errors.Should().HaveCount(1);
+        ((PostCodeError)deleteResult.Errors.First())
+            .Code
+            .Should()
+            .Be(PostCodeErrorCodes.ID_CANNOT_BE_EMPTY_GUID);
+    }
+
+    [Fact, Order(3)]
+    public void Delete_is_successful()
+    {
+        var id = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
+
+        var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
+
+        var deleteResult = postCodeAR.Delete();
+
+        deleteResult.IsSuccess.Should().BeTrue();
+    }
 }
