@@ -13,6 +13,7 @@ public class PostCodeAR : AggregateBase
     {
         Register<PostCodeCreated>(Apply);
         Register<PostCodeUpdated>(Apply);
+        Register<PostCodeDeleted>(Apply);
     }
 
     public Result Create(Guid id, string number, string name)
@@ -75,6 +76,22 @@ public class PostCodeAR : AggregateBase
         return Result.Ok();
     }
 
+    public Result Delete()
+    {
+        if (Id == Guid.Empty)
+        {
+            return Result.Fail(
+                new PostCodeError(
+                    PostCodeErrorCodes.ID_CANNOT_BE_EMPTY_GUID,
+                    @$"{nameof(Id)}, being default guid is not valid,
+ the AR has most likely not being created yet."));
+        }
+
+        RaiseEvent(new PostCodeDeleted(this.Id));
+
+        return Result.Ok();
+    }
+
     private void Apply(PostCodeCreated postCodeCreated)
     {
         Id = postCodeCreated.Id;
@@ -85,5 +102,10 @@ public class PostCodeAR : AggregateBase
     private void Apply(PostCodeUpdated postCodeUpdated)
     {
         Name = postCodeUpdated.Name;
+    }
+
+    private void Apply(PostCodeDeleted postCodeDeleted)
+    {
+        // Do nothing, no flags needs to be set for deletion.
     }
 }
