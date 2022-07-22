@@ -4,13 +4,21 @@ using OpenFTTH.EventSourcing;
 
 namespace OpenFTTH.Core.Address;
 
+public enum AccessAddressStatus
+{
+    Active,
+    Canceled,
+    Pending,
+    Discontinued
+}
+
 public class AccessAddressAR : AggregateBase
 {
     public string? OfficialId { get; private set; }
     public DateTime Created { get; private set; }
     public DateTime Updated { get; private set; }
     public string? MunicipalCode { get; private set; }
-    public AddressStatus Status { get; private set; }
+    public AccessAddressStatus Status { get; private set; }
     public string? RoadCode { get; private set; }
     public string? HouseNumber { get; private set; }
     public Guid PostCodeId { get; private set; }
@@ -33,7 +41,7 @@ public class AccessAddressAR : AggregateBase
         DateTime created,
         DateTime updated,
         string municipalCode,
-        AddressStatus status,
+        AccessAddressStatus status,
         string roadCode,
         string houseNumber,
         Guid postCodeId,
@@ -113,7 +121,7 @@ public class AccessAddressAR : AggregateBase
         string? officialId,
         DateTime updated,
         string municipalCode,
-        AddressStatus status,
+        AccessAddressStatus status,
         string roadCode,
         string houseNumber,
         Guid postCodeId,

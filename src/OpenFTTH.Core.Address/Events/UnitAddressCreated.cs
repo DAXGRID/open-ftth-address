@@ -5,7 +5,7 @@ public sealed record UnitAddressCreated
     public Guid Id { get; init; }
     public string? OfficialId { get; init; }
     public Guid AccessAddressId { get; init; }
-    public AddressStatus Status { get; init; }
+    public UnitAddressStatus Status { get; init; }
     public string? FloorName { get; init; }
     public string? SuitName { get; init; }
     public DateTime Created { get; init; }
@@ -15,7 +15,7 @@ public sealed record UnitAddressCreated
         Guid id,
         string? officialId,
         Guid accessAddressId,
-        AddressStatus status,
+        UnitAddressStatus status,
         string? floorName,
         string? suitName,
         DateTime created,
