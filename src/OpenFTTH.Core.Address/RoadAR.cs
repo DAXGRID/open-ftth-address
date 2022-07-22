@@ -4,10 +4,17 @@ using OpenFTTH.EventSourcing;
 
 namespace OpenFTTH.Core.Address;
 
+public enum RoadStatus
+{
+    Temporary,
+    Effective,
+}
+
 public class RoadAR : AggregateBase
 {
     public string? OfficialId { get; private set; }
     public string? Name { get; private set; }
+    public RoadStatus Status { get; private set; }
 
     public RoadAR()
     {
@@ -16,7 +23,7 @@ public class RoadAR : AggregateBase
         Register<RoadDeleted>(Apply);
     }
 
-    public Result Create(Guid id, string officialId, string name)
+    public Result Create(Guid id, string officialId, string name, RoadStatus status)
     {
         if (id == Guid.Empty)
         {
@@ -39,12 +46,13 @@ public class RoadAR : AggregateBase
         RaiseEvent(new RoadCreated(
             id: id,
             officialId: officialId,
-            name: name));
+            name: name,
+            status: status));
 
         return Result.Ok();
     }
 
-    public Result Update(string name)
+    public Result Update(string name, RoadStatus status)
     {
         if (Id == Guid.Empty)
         {
@@ -55,7 +63,7 @@ public class RoadAR : AggregateBase
  the AR has most likely not being created yet."));
         }
 
-        RaiseEvent(new RoadUpdated(Id, name));
+        RaiseEvent(new RoadUpdated(Id, name, status));
         return Result.Ok();
     }
 
@@ -79,11 +87,13 @@ public class RoadAR : AggregateBase
     {
         OfficialId = roadCreated.OfficialId;
         Name = roadCreated.Name;
+        Status = roadCreated.Status;
     }
 
     private void Apply(RoadUpdated roadUpdated)
     {
         Name = roadUpdated.Name;
+        Status = roadUpdated.Status;
     }
 
     private void Apply(RoadDeleted roadDeleted)

@@ -10,7 +10,7 @@ public class AccessAddressAR : AggregateBase
     public DateTime Created { get; private set; }
     public DateTime Updated { get; private set; }
     public string? MunicipalCode { get; private set; }
-    public Status Status { get; private set; }
+    public AddressStatus Status { get; private set; }
     public string? RoadCode { get; private set; }
     public string? HouseNumber { get; private set; }
     public Guid PostCodeId { get; private set; }
@@ -33,7 +33,7 @@ public class AccessAddressAR : AggregateBase
         DateTime created,
         DateTime updated,
         string municipalCode,
-        Status status,
+        AddressStatus status,
         string roadCode,
         string houseNumber,
         Guid postCodeId,
@@ -113,7 +113,7 @@ public class AccessAddressAR : AggregateBase
         string? officialId,
         DateTime updated,
         string municipalCode,
-        Status status,
+        AddressStatus status,
         string roadCode,
         string houseNumber,
         Guid postCodeId,

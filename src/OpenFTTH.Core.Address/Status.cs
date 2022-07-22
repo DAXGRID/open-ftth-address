@@ -1,6 +1,6 @@
 namespace OpenFTTH.Core.Address;
 
-public enum Status
+public enum AddressStatus
 {
     Active,
     Canceled,
