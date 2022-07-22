@@ -6,7 +6,7 @@ public sealed record AccessAddressUpdated
     public string? OfficialId { get; init; }
     public DateTime Updated { get; init; }
     public string MunicipalCode { get; init; }
-    public AddressStatus Status { get; init; }
+    public AccessAddressStatus Status { get; init; }
     public string RoadCode { get; init; }
     public string HouseNumber { get; init; }
     public Guid PostCodeId { get; init; }
@@ -22,7 +22,7 @@ public sealed record AccessAddressUpdated
         string? officialId,
         DateTime updated,
         string municipalCode,
-        AddressStatus status,
+        AccessAddressStatus status,
         string roadCode,
         string houseNumber,
         Guid postCodeId,

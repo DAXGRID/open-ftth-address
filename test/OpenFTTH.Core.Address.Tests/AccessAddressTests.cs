@@ -23,7 +23,7 @@ public class AcessAddressTests
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
-        var status = AddressStatus.Active;
+        var status = AccessAddressStatus.Active;
         var roadCode = "D12";
         var houseNumber = "12F";
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
@@ -87,7 +87,7 @@ public class AcessAddressTests
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
-        var status = AddressStatus.Active;
+        var status = AccessAddressStatus.Active;
         var roadCode = "D12";
         var houseNumber = "12F";
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
@@ -137,7 +137,7 @@ public class AcessAddressTests
         var created = new DateTime();
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
-        var status = AddressStatus.Active;
+        var status = AccessAddressStatus.Active;
         var roadCode = "D12";
         var houseNumber = "12F";
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
@@ -187,7 +187,7 @@ public class AcessAddressTests
         var created = DateTime.UtcNow;
         var updated = new DateTime();
         var municipalCode = "D1234";
-        var status = AddressStatus.Active;
+        var status = AccessAddressStatus.Active;
         var roadCode = "D12";
         var houseNumber = "12F";
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
@@ -237,7 +237,7 @@ public class AcessAddressTests
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
-        var status = AddressStatus.Active;
+        var status = AccessAddressStatus.Active;
         var roadCode = "D12";
         var houseNumber = "12F";
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
@@ -287,7 +287,7 @@ public class AcessAddressTests
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
-        var status = AddressStatus.Active;
+        var status = AccessAddressStatus.Active;
         var roadCode = "D12";
         var houseNumber = "12F";
         var postCodeId = Guid.Parse("082cb73e-caa8-4fff-9374-4f186567f719");
@@ -336,7 +336,7 @@ public class AcessAddressTests
         var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = DateTime.UtcNow;
         var municipalCode = "F1234";
-        var status = AddressStatus.Discontinued;
+        var status = AccessAddressStatus.Discontinued;
         var roadCode = "F12";
         var houseNumber = "10F";
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
@@ -395,7 +395,7 @@ public class AcessAddressTests
         var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = DateTime.UtcNow;
         var municipalCode = "F1234";
-        var status = AddressStatus.Discontinued;
+        var status = AccessAddressStatus.Discontinued;
         var roadCode = "F12";
         var houseNumber = "10F";
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
@@ -442,7 +442,7 @@ public class AcessAddressTests
         var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = new DateTime();
         var municipalCode = "F1234";
-        var status = AddressStatus.Discontinued;
+        var status = AccessAddressStatus.Discontinued;
         var roadCode = "F12";
         var houseNumber = "10F";
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
@@ -489,7 +489,7 @@ public class AcessAddressTests
         var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = DateTime.UtcNow;
         var municipalCode = "F1234";
-        var status = AddressStatus.Discontinued;
+        var status = AccessAddressStatus.Discontinued;
         var roadCode = "F12";
         var houseNumber = "10F";
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
@@ -536,7 +536,7 @@ public class AcessAddressTests
         var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = DateTime.UtcNow;
         var municipalCode = "F1234";
-        var status = AddressStatus.Discontinued;
+        var status = AccessAddressStatus.Discontinued;
         var roadCode = "F12";
         var houseNumber = "10F";
         var postCodeId = Guid.Parse("082cb73e-caa8-4fff-9374-4f186567f719");

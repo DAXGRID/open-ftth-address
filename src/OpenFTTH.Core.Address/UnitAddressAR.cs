@@ -4,11 +4,19 @@ using OpenFTTH.EventSourcing;
 
 namespace OpenFTTH.Core.Address;
 
+public enum UnitAddressStatus
+{
+    Active,
+    Canceled,
+    Pending,
+    Discontinued
+}
+
 public class UnitAddressAR : AggregateBase
 {
     public string? OfficialId { get; private set; }
     public Guid AccessAddressId { get; private set; }
-    public AddressStatus Status { get; private set; }
+    public UnitAddressStatus Status { get; private set; }
     public string? FloorName { get; private set; }
     public string? SuitName { get; private set; }
     public DateTime Created { get; private set; }
@@ -24,7 +32,7 @@ public class UnitAddressAR : AggregateBase
         Guid id,
         string? officialId,
         Guid accessAddressId,
-        AddressStatus status,
+        UnitAddressStatus status,
         string? floorName,
         string? suitName,
         DateTime created,
@@ -63,13 +71,14 @@ public class UnitAddressAR : AggregateBase
                     $"{nameof(updated)} being default date is invalid."));
         }
 
-        if (existingAccessAddressIds is null
-            || !existingAccessAddressIds.Contains(accessAddressId))
+        if (existingAccessAddressIds is null ||
+            !existingAccessAddressIds.Contains(accessAddressId))
         {
             return Result.Fail(
                 new UnitAddressError(
                     UnitAddressErrorCodes.ACCESS_ADDRESS_DOES_NOT_EXISTS,
-                    @$" Cannot reference to a access-address that does not exist ('{accessAddressId}')."));
+                    @$" Cannot reference to a access-address
+that does not exist ('{accessAddressId}')."));
         }
 
         Id = id;
@@ -90,7 +99,7 @@ public class UnitAddressAR : AggregateBase
     public Result Update(
         string? officialId,
         Guid accessAddressId,
-        AddressStatus status,
+        UnitAddressStatus status,
         string? floorName,
         string? suitName,
         DateTime updated,
@@ -127,7 +136,8 @@ public class UnitAddressAR : AggregateBase
             return Result.Fail(
                 new UnitAddressError(
                     UnitAddressErrorCodes.ACCESS_ADDRESS_DOES_NOT_EXISTS,
-                    @$" Cannot reference to a access-address that does not exist ('{accessAddressId}')."));
+                    @$" Cannot reference to a access-address
+that does not exist ('{accessAddressId}')."));
         }
 
         RaiseEvent(new UnitAddressUpdated(
