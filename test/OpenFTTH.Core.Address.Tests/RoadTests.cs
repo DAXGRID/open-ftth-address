@@ -19,9 +19,14 @@ public class RoadTests
         var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
         var officialId = "F12345";
         var name = "Pilevej";
+        var status = RoadStatus.Effective;
 
         var roadAR = new RoadAR();
-        var createRoadResult = roadAR.Create(id: id, officialId: officialId, name: name);
+        var createRoadResult = roadAR.Create(
+            id: id,
+            officialId: officialId,
+            name: name,
+            status: status);
 
         _eventStore.Aggregates.Store(roadAR);
 
@@ -29,6 +34,7 @@ public class RoadTests
         roadAR.Id.Should().Be(id);
         roadAR.OfficialId.Should().Be(officialId);
         roadAR.Name.Should().Be(name);
+        roadAR.Status.Should().Be(status);
     }
 
     [Fact, Order(1)]
@@ -37,9 +43,14 @@ public class RoadTests
         var id = Guid.Empty;
         var officialId = "F12345";
         var name = "Pilevej";
+        var status = RoadStatus.Effective;
 
         var roadAR = new RoadAR();
-        var createRoadResult = roadAR.Create(id: id, officialId: officialId, name: name);
+        var createRoadResult = roadAR.Create(
+            id: id,
+            officialId: officialId,
+            name: name,
+            status: status);
 
         createRoadResult.IsFailed.Should().BeTrue();
         createRoadResult.Errors.Should().HaveCount(1);
@@ -58,9 +69,14 @@ public class RoadTests
     {
         var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
         var name = "Pilevej";
+        var status = RoadStatus.Effective;
 
         var roadAR = new RoadAR();
-        var createRoadResult = roadAR.Create(id: id, officialId: officialId, name: name);
+        var createRoadResult = roadAR.Create(
+            id: id,
+            officialId: officialId,
+            name: name,
+            status: status);
 
         createRoadResult.IsFailed.Should().BeTrue();
         createRoadResult.Errors.Should().HaveCount(1);
@@ -76,10 +92,11 @@ public class RoadTests
         var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
         var officialId = "F12345";
         var name = "Kolding";
+        var status = RoadStatus.Effective;
 
         var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
 
-        var updateRoadResult = roadAR.Update(name);
+        var updateRoadResult = roadAR.Update(name: name, status: status);
 
         _eventStore.Aggregates.Store(roadAR);
 
@@ -87,6 +104,7 @@ public class RoadTests
         roadAR.Id.Should().Be(id);
         roadAR.OfficialId.Should().Be(officialId);
         roadAR.Name.Should().Be(name);
+        roadAR.Status.Should().Be(status);
     }
 
     [Fact, Order(2)]
@@ -94,10 +112,11 @@ public class RoadTests
     {
         var id = Guid.NewGuid(); // Random guid that is not created yet.
         var name = "Kolding";
+        var status = RoadStatus.Effective;
 
         var roadAR = new RoadAR();
 
-        var updateRoadResult = roadAR.Update(name);
+        var updateRoadResult = roadAR.Update(name: name, status: status);
 
         updateRoadResult.IsFailed.Should().BeTrue();
         updateRoadResult.Errors.Should().HaveCount(1);

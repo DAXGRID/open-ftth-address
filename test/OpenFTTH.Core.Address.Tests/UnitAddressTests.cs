@@ -21,7 +21,7 @@ public class UnitAddressTests
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var status = Status.Active;
+        var status = AddressStatus.Active;
         string? floorName = null;
         string? suitName = null;
         var created = DateTime.UtcNow;
@@ -62,7 +62,7 @@ public class UnitAddressTests
         var id = Guid.Empty;
         var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var status = Status.Active;
+        var status = AddressStatus.Active;
         string? floorName = null;
         string? suitName = null;
         var created = DateTime.UtcNow;
@@ -101,7 +101,7 @@ public class UnitAddressTests
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Empty;
-        var status = Status.Active;
+        var status = AddressStatus.Active;
         string? floorName = null;
         string? suitName = null;
         var created = DateTime.UtcNow;
@@ -137,7 +137,7 @@ public class UnitAddressTests
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var status = Status.Active;
+        var status = AddressStatus.Active;
         string? floorName = null;
         string? suitName = null;
         var created = new DateTime();
@@ -173,7 +173,7 @@ public class UnitAddressTests
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var status = Status.Active;
+        var status = AddressStatus.Active;
         string? floorName = null;
         string? suitName = null;
         var created = DateTime.UtcNow;
@@ -209,7 +209,7 @@ public class UnitAddressTests
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("042cc296-ab4b-4cc1-8eed-f021361df6c3");
-        var status = Status.Active;
+        var status = AddressStatus.Active;
         string? floorName = null;
         string? suitName = null;
         var created = DateTime.UtcNow;
@@ -245,7 +245,7 @@ public class UnitAddressTests
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var status = Status.Discontinued;
+        var status = AddressStatus.Discontinued;
         string? floorName = null;
         string? suitName = null;
         var updated = DateTime.UtcNow;
@@ -281,7 +281,7 @@ public class UnitAddressTests
 
         var officialId = "89852ac6-254f-4938-aec8-4fac7cb72901";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var status = Status.Pending;
+        var status = AddressStatus.Pending;
         string? floorName = null;
         string? suitName = null;
         var updated = DateTime.UtcNow;
@@ -312,7 +312,7 @@ public class UnitAddressTests
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var officialId = "89852ac6-254f-4938-aec8-4fac7cb72901";
         var accessAddressId = Guid.Empty;
-        var status = Status.Pending;
+        var status = AddressStatus.Pending;
         string? floorName = null;
         string? suitName = null;
         var updated = DateTime.UtcNow;
@@ -343,7 +343,7 @@ public class UnitAddressTests
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var officialId = "89852ac6-254f-4938-aec8-4fac7cb72901";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var status = Status.Pending;
+        var status = AddressStatus.Pending;
         string? floorName = null;
         string? suitName = null;
         var updated = new DateTime();
@@ -374,7 +374,7 @@ public class UnitAddressTests
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
         var officialId = "89852ac6-254f-4938-aec8-4fac7cb72901";
         var accessAddressId = Guid.Parse("c00a5940-0184-4b79-baa9-d59290fac67d");
-        var status = Status.Pending;
+        var status = AddressStatus.Pending;
         string? floorName = null;
         string? suitName = null;
         var updated = DateTime.UtcNow;

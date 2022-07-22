@@ -7,7 +7,7 @@ public sealed record AccessAddressCreated
     public DateTime Created { get; init; }
     public DateTime Updated { get; init; }
     public string MunicipalCode { get; init; }
-    public Status Status { get; init; }
+    public AddressStatus Status { get; init; }
     public string RoadCode { get; init; }
     public string HouseNumber { get; init; }
     public Guid PostCodeId { get; init; }
@@ -24,7 +24,7 @@ public sealed record AccessAddressCreated
         DateTime created,
         DateTime updated,
         string municipalCode,
-        Status status,
+        AddressStatus status,
         string roadCode,
         string houseNumber,
         Guid postCodeId,
