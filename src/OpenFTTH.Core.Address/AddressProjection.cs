@@ -5,14 +5,13 @@ namespace OpenFTTH.Core.Address;
 
 public class AddressProjection : ProjectionBase
 {
-    public Dictionary<string, Guid> AccessAddressOfficialIdToId { get; } = new();
     public HashSet<Guid> AccessAddressIds { get; } = new();
-
+    public Dictionary<string, Guid> AccessAddressOfficialIdToId { get; } = new();
     public Dictionary<string, Guid> RoadOfficialIdIdToId { get; } = new();
-    public Dictionary<Guid, string> RoadIdToOfficalId { get; } = new();
-
     public Dictionary<string, Guid> PostCodeNumberToId { get; } = new();
-    public Dictionary<Guid, string> PostCodeIdToNumber { get; } = new();
+
+    public HashSet<Guid> GetRoadIds() => RoadOfficialIdIdToId.Values.ToHashSet();
+    public HashSet<Guid> GetPostCodeIds() => PostCodeNumberToId.Values.ToHashSet();
 
     public AddressProjection()
     {
@@ -38,15 +37,6 @@ public class AddressProjection : ProjectionBase
             {
                 var roadCreated = (RoadCreated)@event.Data;
                 RoadOfficialIdIdToId.Add(roadCreated.OfficialId, roadCreated.Id);
-                RoadIdToOfficalId.Add(roadCreated.Id, roadCreated.OfficialId);
-            });
-
-        ProjectEvent<RoadDeleted>(
-            (@event) =>
-            {
-                var roadDeleted = (RoadDeleted)@event.Data;
-                RoadOfficialIdIdToId.Remove(RoadIdToOfficalId[roadDeleted.Id]);
-                RoadIdToOfficalId.Remove(roadDeleted.Id);
             });
 
         ProjectEvent<PostCodeCreated>(
@@ -54,15 +44,12 @@ public class AddressProjection : ProjectionBase
             {
                 var postCodeCreated = (PostCodeCreated)@event.Data;
                 PostCodeNumberToId.Add(postCodeCreated.Number, postCodeCreated.Id);
-                PostCodeIdToNumber.Add(postCodeCreated.Id, postCodeCreated.Number);
             });
 
         ProjectEvent<PostCodeDeleted>(
             (@event) =>
             {
                 var postCodeDeleted = (PostCodeDeleted)@event.Data;
-                PostCodeNumberToId.Remove(PostCodeIdToNumber[postCodeDeleted.Id]);
-                PostCodeIdToNumber.Remove(postCodeDeleted.Id);
             }
         );
     }

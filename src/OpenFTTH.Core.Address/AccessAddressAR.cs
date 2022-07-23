@@ -33,6 +33,7 @@ public class AccessAddressAR : AggregateBase
     {
         Register<AccessAddressCreated>(Apply);
         Register<AccessAddressUpdated>(Apply);
+        Register<AccessAddressDeleted>(Apply);
     }
 
     public Result Create(
@@ -187,6 +188,22 @@ public class AccessAddressAR : AggregateBase
         return Result.Ok();
     }
 
+    public Result Delete(AccessAddressStatus status)
+    {
+        if (Id == Guid.Empty)
+        {
+            return Result.Fail(
+                new AccessAddressError(
+                    AccessAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID,
+                    @$"{nameof(Id)}, being default guid is not valid,
+ the AR has most likely not being created yet."));
+        }
+
+        RaiseEvent(new AccessAddressDeleted(Id, status));
+
+        return Result.Ok();
+    }
+
     private void Apply(AccessAddressCreated accessAddressCreated)
     {
         Id = accessAddressCreated.Id;
@@ -221,5 +238,10 @@ public class AccessAddressAR : AggregateBase
         SupplementaryTownName = accessAddressUpdated.TownName;
         PlotId = accessAddressUpdated.PlotId;
         RoadId = accessAddressUpdated.RoadId;
+    }
+
+    private void Apply(AccessAddressDeleted accessAddressDeleted)
+    {
+        Status = accessAddressDeleted.Status;
     }
 }
