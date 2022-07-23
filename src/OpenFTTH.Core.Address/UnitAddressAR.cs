@@ -21,11 +21,13 @@ public class UnitAddressAR : AggregateBase
     public string? SuitName { get; private set; }
     public DateTime Created { get; private set; }
     public DateTime? Updated { get; private set; }
+    public bool Deleted { get; private set; }
 
     public UnitAddressAR()
     {
         Register<UnitAddressCreated>(Apply);
         Register<UnitAddressUpdated>(Apply);
+        Register<UnitAddressDeleted>(Apply);
     }
 
     public Result Create(
@@ -152,6 +154,22 @@ that does not exist ('{accessAddressId}')."));
         return Result.Ok();
     }
 
+    public Result Delete()
+    {
+        if (Id == Guid.Empty)
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCodes.ID_NOT_SET,
+                    @$"{nameof(Id)}, being default guid is not valid,
+ the AR has most likely not being created yet."));
+        }
+
+        RaiseEvent(new UnitAddressDeleted(Id));
+
+        return Result.Ok();
+    }
+
     private void Apply(UnitAddressCreated unitAddressCreated)
     {
         Id = unitAddressCreated.Id;
@@ -172,5 +190,10 @@ that does not exist ('{accessAddressId}')."));
         FloorName = unitAddressCreated.FloorName;
         SuitName = unitAddressCreated.SuitName;
         Updated = unitAddressCreated.Updated;
+    }
+
+    private void Apply(UnitAddressDeleted unitAddressDeleted)
+    {
+        Deleted = true;
     }
 }
