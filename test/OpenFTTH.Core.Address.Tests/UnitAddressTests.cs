@@ -394,6 +394,37 @@ public class UnitAddressTests
         updateUnitAddressResult.IsSuccess.Should().BeFalse();
         updateUnitAddressResult.Errors.Should().HaveCount(1);
         ((UnitAddressError)updateUnitAddressResult.Errors.First())
-            .Code.Should().Be(UnitAddressErrorCodes.ACCESS_ADDRESS_DOES_NOT_EXISTS);
+            .Code
+            .Should()
+            .Be(UnitAddressErrorCodes.ACCESS_ADDRESS_DOES_NOT_EXISTS);
+    }
+
+    [Fact, Order(3)]
+    public void Cannot_delete_when_it_not_been_created()
+    {
+        var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
+
+        var unitAddressAR = new UnitAddressAR();
+
+        var deleteResult = unitAddressAR.Delete();
+
+        deleteResult.Errors.Should().HaveCount(1);
+        ((UnitAddressError)(deleteResult.Errors.First()))
+            .Code
+            .Should()
+            .Be(UnitAddressErrorCodes.ID_NOT_SET);
+    }
+
+    [Fact, Order(3)]
+    public void Delete_is_success()
+    {
+        var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
+
+        var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
+
+        var deleteResult = unitAddressAR.Delete();
+
+        deleteResult.IsSuccess.Should().BeTrue();
+        unitAddressAR.Deleted.Should().BeTrue();
     }
 }

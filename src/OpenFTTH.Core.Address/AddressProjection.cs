@@ -7,6 +7,7 @@ public class AddressProjection : ProjectionBase
 {
     public HashSet<Guid> AccessAddressIds { get; } = new();
     public Dictionary<string, Guid> AccessAddressOfficialIdToId { get; } = new();
+    public Dictionary<string, Guid> UnitAddressOfficialIdToId { get; } = new();
     public Dictionary<string, Guid> RoadOfficialIdIdToId { get; } = new();
     public Dictionary<string, Guid> PostCodeNumberToId { get; } = new();
 
@@ -29,7 +30,19 @@ public class AddressProjection : ProjectionBase
                 // without 'officialIds' so we cannot use the values from the
                 // official id to project an internal id lookup table,
                 // so we have to keep a seperate lookup table in sync.
+                // This is needed so we can check if access address exists.
                 AccessAddressIds.Add(accessAddressCreated.Id);
+            });
+
+        ProjectEvent<UnitAddressCreated>(
+            (@event) =>
+            {
+                var unitAddressCreated = (UnitAddressCreated)@event.Data;
+                if (unitAddressCreated.OfficialId is not null)
+                {
+                    UnitAddressOfficialIdToId.Add(
+                        unitAddressCreated.OfficialId, unitAddressCreated.Id);
+                }
             });
 
         ProjectEvent<RoadCreated>(
@@ -45,12 +58,5 @@ public class AddressProjection : ProjectionBase
                 var postCodeCreated = (PostCodeCreated)@event.Data;
                 PostCodeNumberToId.Add(postCodeCreated.Number, postCodeCreated.Id);
             });
-
-        ProjectEvent<PostCodeDeleted>(
-            (@event) =>
-            {
-                var postCodeDeleted = (PostCodeDeleted)@event.Data;
-            }
-        );
     }
 }
