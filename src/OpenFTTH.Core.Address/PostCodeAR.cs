@@ -8,6 +8,7 @@ public class PostCodeAR : AggregateBase
 {
     public string? Number { get; private set; }
     public string? Name { get; private set; }
+    public bool Deleted { get; private set; }
 
     public PostCodeAR()
     {
@@ -106,6 +107,6 @@ public class PostCodeAR : AggregateBase
 
     private void Apply(PostCodeDeleted postCodeDeleted)
     {
-        // Do nothing, no flags needs to be set for deletion.
+        Deleted = true;
     }
 }
