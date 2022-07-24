@@ -578,28 +578,28 @@ public class AcessAddressTests
     public void Cannot_delete_accesss_address_that_has_not_been_created()
     {
         var id = Guid.NewGuid();
-        var status = AccessAddressStatus.Discontinued;
 
         var accessAddressAR = new AccessAddressAR();
 
-        var deleteResult = accessAddressAR.Delete(status);
+        var deleteResult = accessAddressAR.Delete();
 
         deleteResult.IsSuccess.Should().BeFalse();
         deleteResult.Errors.Count.Should().Be(1);
         ((AccessAddressError)deleteResult.Errors.First())
             .Code.Should().Be(AccessAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID);
+        accessAddressAR.Deleted.Should().BeFalse();
     }
 
     [Fact, Order(3)]
     public void Delete_is_success()
     {
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var status = AccessAddressStatus.Discontinued;
 
         var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
 
-        var deleteResult = accessAddressAR.Delete(status);
+        var deleteResult = accessAddressAR.Delete();
 
         deleteResult.IsSuccess.Should().BeTrue();
+        accessAddressAR.Deleted.Should().BeTrue();
     }
 }

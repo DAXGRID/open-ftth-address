@@ -28,6 +28,7 @@ public class AccessAddressAR : AggregateBase
     public string? SupplementaryTownName { get; private set; }
     public string? PlotId { get; private set; }
     public Guid RoadId { get; private set; }
+    public bool Deleted { get; private set; }
 
     public AccessAddressAR()
     {
@@ -188,7 +189,7 @@ public class AccessAddressAR : AggregateBase
         return Result.Ok();
     }
 
-    public Result Delete(AccessAddressStatus status)
+    public Result Delete()
     {
         if (Id == Guid.Empty)
         {
@@ -199,7 +200,7 @@ public class AccessAddressAR : AggregateBase
  the AR has most likely not being created yet."));
         }
 
-        RaiseEvent(new AccessAddressDeleted(Id, status));
+        RaiseEvent(new AccessAddressDeleted(Id));
 
         return Result.Ok();
     }
@@ -242,6 +243,6 @@ public class AccessAddressAR : AggregateBase
 
     private void Apply(AccessAddressDeleted accessAddressDeleted)
     {
-        Status = accessAddressDeleted.Status;
+        Deleted = true;
     }
 }
