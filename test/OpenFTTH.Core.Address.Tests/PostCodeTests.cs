@@ -174,6 +174,8 @@ public class PostCodeTests
             .Code
             .Should()
             .Be(PostCodeErrorCodes.ID_CANNOT_BE_EMPTY_GUID);
+
+        postCodeAR.Deleted.Should().BeFalse();
     }
 
     [Fact, Order(3)]
@@ -186,5 +188,6 @@ public class PostCodeTests
         var deleteResult = postCodeAR.Delete();
 
         deleteResult.IsSuccess.Should().BeTrue();
+        postCodeAR.Deleted.Should().BeTrue();
     }
 }
