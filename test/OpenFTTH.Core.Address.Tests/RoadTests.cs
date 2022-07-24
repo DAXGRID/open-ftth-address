@@ -141,6 +141,7 @@ public class RoadTests
             .Code
             .Should()
             .Be(RoadErrorCode.ID_CANNOT_BE_EMPTY_GUID);
+        roadAR.Deleted.Should().BeFalse();
     }
 
     [Fact, Order(3)]
@@ -153,5 +154,6 @@ public class RoadTests
         var updateRoadResult = roadAR.Delete();
 
         updateRoadResult.IsSuccess.Should().BeTrue();
+        roadAR.Deleted.Should().BeTrue();
     }
 }
