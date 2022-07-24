@@ -15,6 +15,7 @@ public class RoadAR : AggregateBase
     public string? OfficialId { get; private set; }
     public string? Name { get; private set; }
     public RoadStatus Status { get; private set; }
+    public bool Deleted { get; private set; }
 
     public RoadAR()
     {
@@ -98,6 +99,6 @@ public class RoadAR : AggregateBase
 
     private void Apply(RoadDeleted roadDeleted)
     {
-        // Do nothing on deletes.
+        Deleted = true;
     }
 }
