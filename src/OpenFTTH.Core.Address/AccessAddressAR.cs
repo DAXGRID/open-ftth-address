@@ -145,6 +145,14 @@ public class AccessAddressAR : AggregateBase
  the AR has most likely not being created yet."));
         }
 
+        if (Deleted)
+        {
+            return Result.Fail(
+                new AccessAddressError(
+                    AccessAddressErrorCodes.CANNOT_UPDATE_DELETED,
+                    @$"{nameof(Id)}, is deleted, cannot be updated."));
+        }
+
         if (updated == default)
         {
             return Result.Fail(
@@ -198,6 +206,14 @@ public class AccessAddressAR : AggregateBase
                     AccessAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID,
                     @$"{nameof(Id)}, being default guid is not valid,
  the AR has most likely not being created yet."));
+        }
+
+        if (Deleted)
+        {
+            return Result.Fail(
+                new AccessAddressError(
+                    AccessAddressErrorCodes.CANNOT_DELETE_ALREADY_DELETED,
+                    @$"{nameof(Id)}, is already deleted."));
         }
 
         RaiseEvent(new AccessAddressDeleted(Id));
