@@ -64,6 +64,14 @@ public class PostCodeAR : AggregateBase
  the AR has most likely not being created yet."));
         }
 
+        if (Deleted)
+        {
+            return Result.Fail(
+                new PostCodeError(
+                    PostCodeErrorCodes.CANNOT_UPDATE_DELETED,
+                    $"Id '{Id}': cannot update deleted."));
+        }
+
         if (String.IsNullOrWhiteSpace(name))
         {
             return Result.Fail(
@@ -86,6 +94,14 @@ public class PostCodeAR : AggregateBase
                     PostCodeErrorCodes.ID_CANNOT_BE_EMPTY_GUID,
                     @$"{nameof(Id)}, being default guid is not valid,
  the AR has most likely not being created yet."));
+        }
+
+        if (Deleted)
+        {
+            return Result.Fail(
+                new PostCodeError(
+                    PostCodeErrorCodes.CANNOT_DELETE_ALREADY_DELETED,
+                    @$"Id: '{Id}' is already deleted."));
         }
 
         RaiseEvent(new PostCodeDeleted(this.Id));
