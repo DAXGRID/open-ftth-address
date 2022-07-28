@@ -116,6 +116,14 @@ that does not exist ('{accessAddressId}')."));
  the AR has most likely not being created yet."));
         }
 
+        if (Deleted)
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCodes.CANNOT_UPDATE_DELETED,
+                    @$"Cannot update when deleted."));
+        }
+
         if (accessAddressId == Guid.Empty)
         {
             return Result.Fail(
@@ -163,6 +171,14 @@ that does not exist ('{accessAddressId}')."));
                     UnitAddressErrorCodes.ID_NOT_SET,
                     @$"{nameof(Id)}, being default guid is not valid,
  the AR has most likely not being created yet."));
+        }
+
+        if (Deleted)
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCodes.CANNOT_DELETE_ALREADY_DELETED,
+                    @$"Cannot delete already deleted."));
         }
 
         RaiseEvent(new UnitAddressDeleted(Id));

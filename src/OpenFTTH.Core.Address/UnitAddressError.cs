@@ -10,6 +10,8 @@ public enum UnitAddressErrorCodes
     UPDATED_CANNOT_BE_DEFAULT_DATE,
     ID_NOT_SET,
     ACCESS_ADDRESS_DOES_NOT_EXISTS,
+    CANNOT_UPDATE_DELETED,
+    CANNOT_DELETE_ALREADY_DELETED
 }
 
 public class UnitAddressError : Error
