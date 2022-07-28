@@ -3,6 +3,59 @@ using Xunit.Extensions.Ordering;
 
 namespace OpenFTTH.Core.Address.Tests;
 
+public record CreateExampleData
+{
+    public Guid Id { get; init; }
+    public string? OfficialId { get; init; }
+    public DateTime Created { get; init; }
+    public DateTime Updated { get; init; }
+    public string MunicipalCode { get; init; }
+    public AccessAddressStatus Status { get; init; }
+    public string RoadCode { get; init; }
+    public string HouseNumber { get; init; }
+    public Guid PostCodeId { get; init; }
+    public double EastCoordinate { get; init; }
+    public double NorthCoordinate { get; init; }
+    public DateTime? LocationUpdated { get; init; }
+    public string? SupplementaryTownName { get; init; }
+    public string? PlotId { get; init; }
+    public Guid RoadId { get; init; }
+
+    public CreateExampleData(
+        Guid id,
+        string? officialId,
+        DateTime created,
+        DateTime updated,
+        string municipalCode,
+        AccessAddressStatus status,
+        string roadCode,
+        string houseNumber,
+        Guid postCodeId,
+        double eastCoordinate,
+        double northCoordinate,
+        DateTime? locationUpdated,
+        string? supplementaryTownName,
+        string? plotId,
+        Guid roadId)
+    {
+        Id = id;
+        OfficialId = officialId;
+        Created = created;
+        Updated = updated;
+        MunicipalCode = municipalCode;
+        Status = status;
+        RoadCode = roadCode;
+        HouseNumber = houseNumber;
+        PostCodeId = postCodeId;
+        EastCoordinate = eastCoordinate;
+        NorthCoordinate = northCoordinate;
+        LocationUpdated = locationUpdated;
+        SupplementaryTownName = supplementaryTownName;
+        PlotId = plotId;
+        RoadId = roadId;
+    }
+}
+
 [Order(10)]
 public class AcessAddressTests
 {
@@ -13,68 +66,102 @@ public class AcessAddressTests
         _eventStore = eventStore;
     }
 
-    [Fact, Order(1)]
-    public void Create_is_success()
+    private static IEnumerable<object[]> ExampleCreateValues()
     {
+        yield return new object[]
+        {
+            new CreateExampleData(
+                id: Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc"),
+                officialId: "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc",
+                created: DateTime.UtcNow,
+                updated: DateTime.UtcNow,
+                municipalCode: "D1234",
+                status: AccessAddressStatus.Active,
+                roadCode: "D12",
+                houseNumber: "12F",
+                postCodeId: Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002"),
+                eastCoordinate: 10.20,
+                northCoordinate: 20.10,
+                locationUpdated: DateTime.UtcNow,
+                supplementaryTownName: "Fredericia",
+                plotId: "12455F",
+                roadId: Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5"))
+        };
+
+        yield return new object[]
+        {
+            new CreateExampleData(
+                id: Guid.Parse("94b1f97d-42df-49b3-90c6-74266a16661d"),
+                officialId: "476acb63-c29f-4d54-8f13-92a6b3022a0e",
+                created: DateTime.UtcNow,
+                updated: DateTime.UtcNow,
+                municipalCode: "F1234",
+                status: AccessAddressStatus.Active,
+                roadCode: "A12",
+                houseNumber: "20F",
+                postCodeId: Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002"),
+                eastCoordinate: 10.20,
+                northCoordinate: 20.10,
+                locationUpdated: DateTime.UtcNow,
+                supplementaryTownName: "Fredericia",
+                plotId: "455A",
+                roadId: Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5"))
+        };
+    }
+
+    [Theory, Order(1)]
+    [MemberData(nameof(ExampleCreateValues))]
+    public void Create_is_success_one(CreateExampleData createExampleData)
+    {
+        if (createExampleData is null)
+        {
+            throw new ArgumentNullException(nameof(createExampleData));
+        }
+
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
-        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
-        var created = DateTime.UtcNow;
-        var updated = DateTime.UtcNow;
-        var municipalCode = "D1234";
-        var status = AccessAddressStatus.Active;
-        var roadCode = "D12";
-        var houseNumber = "12F";
-        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
-        var eastCoordinate = 10.20;
-        var northCoordinate = 20.10;
-        var locationUpdated = DateTime.UtcNow;
-        var supplementaryTownName = "Fredericia";
-        var plotId = "12455F";
-        var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
         var existingRoadIds = addressProjection.GetRoadIds();
         var existingPostCodeIds = addressProjection.GetPostCodeIds();
 
         var accessAddressAR = new AccessAddressAR();
 
         var createAccessAddressResult = accessAddressAR.Create(
-            id: id,
-            officialId: officialId,
-            created: created,
-            updated: updated,
-            municipalCode: municipalCode,
-            status: status,
-            roadCode: roadCode,
-            houseNumber: houseNumber,
-            postCodeId: postCodeId,
-            eastCoordinate: eastCoordinate,
-            northCoordinate: northCoordinate,
-            locationUpdated: locationUpdated,
-            supplementaryTownName: supplementaryTownName,
-            plotId: plotId,
-            roadId: roadId,
+            id: createExampleData.Id,
+            officialId: createExampleData.OfficialId,
+            created: createExampleData.Created,
+            updated: createExampleData.Updated,
+            municipalCode: createExampleData.MunicipalCode,
+            status: createExampleData.Status,
+            roadCode: createExampleData.RoadCode,
+            houseNumber: createExampleData.HouseNumber,
+            postCodeId: createExampleData.PostCodeId,
+            eastCoordinate: createExampleData.EastCoordinate,
+            northCoordinate: createExampleData.NorthCoordinate,
+            locationUpdated: createExampleData.LocationUpdated,
+            supplementaryTownName: createExampleData.SupplementaryTownName,
+            plotId: createExampleData.PlotId,
+            roadId: createExampleData.RoadId,
             existingRoadIds: existingRoadIds,
             existingPostCodeIds: existingPostCodeIds);
 
         _eventStore.Aggregates.Store(accessAddressAR);
 
         createAccessAddressResult.IsSuccess.Should().BeTrue();
-        accessAddressAR.Id.Should().Be(id);
-        accessAddressAR.OfficialId.Should().Be(officialId);
-        accessAddressAR.Created.Should().Be(created);
-        accessAddressAR.Updated.Should().Be(updated);
-        accessAddressAR.MunicipalCode.Should().Be(municipalCode);
-        accessAddressAR.Status.Should().Be(status);
-        accessAddressAR.RoadCode.Should().Be(roadCode);
-        accessAddressAR.HouseNumber.Should().Be(houseNumber);
-        accessAddressAR.PostCodeId.Should().Be(postCodeId);
-        accessAddressAR.EastCoordinate.Should().Be(eastCoordinate);
-        accessAddressAR.NorthCoordinate.Should().Be(northCoordinate);
-        accessAddressAR.LocationUpdated.Should().Be(locationUpdated);
-        accessAddressAR.SupplementaryTownName.Should().Be(supplementaryTownName);
-        accessAddressAR.PlotId.Should().Be(plotId);
-        accessAddressAR.RoadId.Should().Be(roadId);
+        accessAddressAR.Id.Should().Be(createExampleData.Id);
+        accessAddressAR.OfficialId.Should().Be(createExampleData.OfficialId);
+        accessAddressAR.Created.Should().Be(createExampleData.Created);
+        accessAddressAR.Updated.Should().Be(createExampleData.Updated);
+        accessAddressAR.MunicipalCode.Should().Be(createExampleData.MunicipalCode);
+        accessAddressAR.Status.Should().Be(createExampleData.Status);
+        accessAddressAR.RoadCode.Should().Be(createExampleData.RoadCode);
+        accessAddressAR.HouseNumber.Should().Be(createExampleData.HouseNumber);
+        accessAddressAR.PostCodeId.Should().Be(createExampleData.PostCodeId);
+        accessAddressAR.EastCoordinate.Should().Be(createExampleData.EastCoordinate);
+        accessAddressAR.NorthCoordinate.Should().Be(createExampleData.NorthCoordinate);
+        accessAddressAR.LocationUpdated.Should().Be(createExampleData.LocationUpdated);
+        accessAddressAR.SupplementaryTownName.Should().Be(createExampleData.SupplementaryTownName);
+        accessAddressAR.PlotId.Should().Be(createExampleData.PlotId);
+        accessAddressAR.RoadId.Should().Be(createExampleData.RoadId);
     }
 
     [Fact, Order(1)]
@@ -178,7 +265,7 @@ public class AcessAddressTests
     }
 
     [Fact, Order(1)]
-    public void Create_updated_date_is_default()
+    public void Create_updated_date_is_default_is_invalid()
     {
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
@@ -593,13 +680,79 @@ public class AcessAddressTests
     [Fact, Order(3)]
     public void Delete_is_success()
     {
-        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var id = Guid.Parse("94b1f97d-42df-49b3-90c6-74266a16661d");
 
         var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
 
         var deleteResult = accessAddressAR.Delete();
 
+        _eventStore.Aggregates.Store(accessAddressAR);
+
         deleteResult.IsSuccess.Should().BeTrue();
         accessAddressAR.Deleted.Should().BeTrue();
+    }
+
+    [Fact, Order(4)]
+    public void Cannot_delete_already_deleted()
+    {
+        var id = Guid.Parse("94b1f97d-42df-49b3-90c6-74266a16661d");
+
+        var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
+
+        var deleteResult = accessAddressAR.Delete();
+
+        deleteResult.IsSuccess.Should().BeFalse();
+        deleteResult.Errors.Count.Should().Be(1);
+        ((AccessAddressError)deleteResult.Errors.First())
+            .Code.Should().Be(AccessAddressErrorCodes.CANNOT_DELETE_ALREADY_DELETED);
+        accessAddressAR.Deleted.Should().BeTrue();
+    }
+
+    [Fact, Order(4)]
+    public void Cannot_update_when_deleted()
+    {
+        var id = Guid.Parse("94b1f97d-42df-49b3-90c6-74266a16661d");
+
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
+        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
+        var updated = DateTime.UtcNow;
+        var municipalCode = "F1234";
+        var status = AccessAddressStatus.Discontinued;
+        var roadCode = "F12";
+        var houseNumber = "10F";
+        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
+        var eastCoordinate = 50.20;
+        var northCoordinate = 50.10;
+        var locationUpdated = DateTime.UtcNow;
+        var supplementaryTownName = "Kolding";
+        var plotId = "12445F";
+        var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
+        var existingRoadIds = addressProjection.GetRoadIds();
+        var existingPostCodeIds = addressProjection.GetPostCodeIds();
+
+        var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
+
+        var updateAccessAddressResult = accessAddressAR.Update(
+            officialId: officialId,
+            updated: updated,
+            municipalCode: municipalCode,
+            status: status,
+            roadCode: roadCode,
+            houseNumber: houseNumber,
+            postCodeId: postCodeId,
+            eastCoordinate: eastCoordinate,
+            northCoordinate: northCoordinate,
+            locationUpdated: locationUpdated,
+            supplementaryTownName: supplementaryTownName,
+            plotId: plotId,
+            roadId: roadId,
+            existingRoadIds: existingRoadIds,
+            existingPostCodeIds: existingPostCodeIds);
+
+        updateAccessAddressResult.IsSuccess.Should().BeFalse();
+        updateAccessAddressResult.Errors.Count.Should().Be(1);
+        ((AccessAddressError)updateAccessAddressResult.Errors.First())
+            .Code.Should().Be(AccessAddressErrorCodes.CANNOT_UPDATE_DELETED);
     }
 }
