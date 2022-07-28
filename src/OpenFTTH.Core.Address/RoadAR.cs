@@ -24,7 +24,7 @@ public class RoadAR : AggregateBase
         Register<RoadDeleted>(Apply);
     }
 
-    public Result Create(Guid id, string officialId, string name, RoadStatus status)
+    public Result Create(Guid id, string? officialId, string name, RoadStatus status)
     {
         if (id == Guid.Empty)
         {
@@ -53,7 +53,7 @@ public class RoadAR : AggregateBase
         return Result.Ok();
     }
 
-    public Result Update(string name, RoadStatus status)
+    public Result Update(string name, string officialId, RoadStatus status)
     {
         if (Id == Guid.Empty)
         {
@@ -64,7 +64,20 @@ public class RoadAR : AggregateBase
  the AR has most likely not being created yet."));
         }
 
-        RaiseEvent(new RoadUpdated(Id, name, status));
+        if (Deleted)
+        {
+            return Result.Fail(
+                new RoadError(
+                    RoadErrorCode.CANNOT_UPDATE_DELETED,
+                    @$"Cannot update deleted road with id: '{Id}'"));
+        }
+
+        RaiseEvent(new RoadUpdated(
+            id: Id,
+            officialId: officialId,
+            name: name,
+            status: status));
+
         return Result.Ok();
     }
 
@@ -77,6 +90,14 @@ public class RoadAR : AggregateBase
                     RoadErrorCode.ID_CANNOT_BE_EMPTY_GUID,
                     @$"{nameof(Id)}, being default guid is not valid,
  the AR has most likely not being created yet."));
+        }
+
+        if (Deleted)
+        {
+            return Result.Fail(
+                new RoadError(
+                    RoadErrorCode.CANNOT_DELETE_ALREADY_DELETED,
+                    $"Id: '{Id}' is already deleted."));
         }
 
         RaiseEvent(new RoadDeleted(Id));
@@ -93,6 +114,7 @@ public class RoadAR : AggregateBase
 
     private void Apply(RoadUpdated roadUpdated)
     {
+        OfficialId = roadUpdated.OfficialId;
         Name = roadUpdated.Name;
         Status = roadUpdated.Status;
     }

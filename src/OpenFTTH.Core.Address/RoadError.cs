@@ -6,6 +6,8 @@ public enum RoadErrorCode
 {
     ID_CANNOT_BE_EMPTY_GUID,
     OFFICIAL_ID_CANNOT_BE_WHITE_SPACE_OR_NULL,
+    CANNOT_UPDATE_DELETED,
+    CANNOT_DELETE_ALREADY_DELETED
 }
 
 public class RoadError : Error

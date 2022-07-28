@@ -3,7 +3,7 @@ using Xunit.Extensions.Ordering;
 
 namespace OpenFTTH.Core.Address.Tests;
 
-public record CreateExampleData
+public record CreateAccessAddressExampleData
 {
     public Guid Id { get; init; }
     public string? OfficialId { get; init; }
@@ -21,7 +21,7 @@ public record CreateExampleData
     public string? PlotId { get; init; }
     public Guid RoadId { get; init; }
 
-    public CreateExampleData(
+    public CreateAccessAddressExampleData(
         Guid id,
         string? officialId,
         DateTime created,
@@ -70,7 +70,7 @@ public class AcessAddressTests
     {
         yield return new object[]
         {
-            new CreateExampleData(
+            new CreateAccessAddressExampleData(
                 id: Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc"),
                 officialId: "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc",
                 created: DateTime.UtcNow,
@@ -90,7 +90,7 @@ public class AcessAddressTests
 
         yield return new object[]
         {
-            new CreateExampleData(
+            new CreateAccessAddressExampleData(
                 id: Guid.Parse("94b1f97d-42df-49b3-90c6-74266a16661d"),
                 officialId: "476acb63-c29f-4d54-8f13-92a6b3022a0e",
                 created: DateTime.UtcNow,
@@ -111,7 +111,7 @@ public class AcessAddressTests
 
     [Theory, Order(1)]
     [MemberData(nameof(ExampleCreateValues))]
-    public void Create_is_success_one(CreateExampleData createExampleData)
+    public void Create_is_success_one(CreateAccessAddressExampleData createExampleData)
     {
         if (createExampleData is null)
         {
