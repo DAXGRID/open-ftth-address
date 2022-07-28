@@ -3,6 +3,23 @@ using Xunit.Extensions.Ordering;
 
 namespace OpenFTTH.Core.Address.Tests;
 
+public record CreatePostCodeExampleData
+{
+    public Guid Id { get; init; }
+    public string Number { get; init; }
+    public string Name { get; init; }
+
+    public CreatePostCodeExampleData(
+        Guid id,
+        string number,
+        string name)
+    {
+        Id = id;
+        Number = number;
+        Name = name;
+    }
+}
+
 [Order(0)]
 public class PostCodeTests
 {
@@ -13,26 +30,47 @@ public class PostCodeTests
         _eventStore = eventStore;
     }
 
-    [Fact, Order(1)]
-    public void Create_is_success()
+    public static IEnumerable<object[]> ExamplePostCodeValues()
     {
-        var id = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
-        var number = "7000";
-        var name = "Fredericia";
+        yield return new object[]
+        {
+            new CreatePostCodeExampleData(
+                id: Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002"),
+                number: "7000",
+                name: "Fredericia")
+        };
+
+        yield return new object[]
+        {
+            new CreatePostCodeExampleData(
+                id: Guid.Parse("7460bb7e-9d72-45f0-a5fa-6a92b7bb30dc"),
+                number: "8660",
+                name: "Skanderborg")
+        };
+    }
+
+    [Theory, Order(1)]
+    [MemberData(nameof(ExamplePostCodeValues))]
+    public void Create_is_success(CreatePostCodeExampleData postCodeExampleData)
+    {
+        if (postCodeExampleData is null)
+        {
+            throw new ArgumentNullException(nameof(postCodeExampleData));
+        }
 
         var postCodeAR = new PostCodeAR();
 
         var createPostCodeResult = postCodeAR.Create(
-            id: id,
-            number: number,
-            name: name);
+            id: postCodeExampleData.Id,
+            number: postCodeExampleData.Number,
+            name: postCodeExampleData.Name);
 
         _eventStore.Aggregates.Store(postCodeAR);
 
         createPostCodeResult.IsSuccess.Should().BeTrue();
-        postCodeAR.Id.Should().Be(id);
-        postCodeAR.Number.Should().Be(number);
-        postCodeAR.Name.Should().Be(name);
+        postCodeAR.Id.Should().Be(postCodeExampleData.Id);
+        postCodeAR.Number.Should().Be(postCodeExampleData.Number);
+        postCodeAR.Name.Should().Be(postCodeExampleData.Name);
     }
 
     [Fact, Order(1)]
@@ -174,20 +212,58 @@ public class PostCodeTests
             .Code
             .Should()
             .Be(PostCodeErrorCodes.ID_CANNOT_BE_EMPTY_GUID);
-
         postCodeAR.Deleted.Should().BeFalse();
     }
 
     [Fact, Order(3)]
     public void Delete_is_successful()
     {
-        var id = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
+        var id = Guid.Parse("7460bb7e-9d72-45f0-a5fa-6a92b7bb30dc");
 
         var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
 
         var deleteResult = postCodeAR.Delete();
 
+        _eventStore.Aggregates.Store(postCodeAR);
+
         deleteResult.IsSuccess.Should().BeTrue();
+        postCodeAR.Deleted.Should().BeTrue();
+    }
+
+    [Fact, Order(4)]
+    public void Cannot_update_deleted()
+    {
+        var id = Guid.Parse("7460bb7e-9d72-45f0-a5fa-6a92b7bb30dc");
+        var name = "New Fredericia";
+
+        var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
+
+        var updateResult = postCodeAR.Update(name: name);
+
+        updateResult.IsSuccess.Should().BeFalse();
+        updateResult.Errors.Should().HaveCount(1);
+        ((PostCodeError)updateResult.Errors.First())
+            .Code
+            .Should()
+            .Be(PostCodeErrorCodes.CANNOT_UPDATE_DELETED);
+        postCodeAR.Deleted.Should().BeTrue();
+    }
+
+    [Fact, Order(4)]
+    public void Cannot_delete_when_already_deleted()
+    {
+        var id = Guid.Parse("7460bb7e-9d72-45f0-a5fa-6a92b7bb30dc");
+
+        var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
+
+        var deleteResult = postCodeAR.Delete();
+
+        deleteResult.IsSuccess.Should().BeFalse();
+        deleteResult.Errors.Should().HaveCount(1);
+        ((PostCodeError)deleteResult.Errors.First())
+            .Code
+            .Should()
+            .Be(PostCodeErrorCodes.CANNOT_DELETE_ALREADY_DELETED);
         postCodeAR.Deleted.Should().BeTrue();
     }
 }
