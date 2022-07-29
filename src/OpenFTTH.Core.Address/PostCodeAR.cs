@@ -80,6 +80,24 @@ public class PostCodeAR : AggregateBase
                     $"{nameof(name)} cannot be null empty or whitespace."));
         }
 
+        var hasChanges = () =>
+        {
+            if (Name != name)
+            {
+                return true;
+            }
+
+            return false;
+        };
+
+        if (!hasChanges())
+        {
+            return Result.Fail(
+                new PostCodeError(
+                    PostCodeErrorCodes.NO_CHANGES,
+                    "No changes to the AR doing update."));
+        }
+
         RaiseEvent(new PostCodeUpdated(id: this.Id, name: name));
 
         return Result.Ok();
