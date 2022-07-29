@@ -198,6 +198,24 @@ public class PostCodeTests
             .Be(PostCodeErrorCodes.NAME_CANNOT_BE_EMPTY_NULL_OR_WHITESPACE);
     }
 
+    [Fact, Order(2)]
+    public void Update_is_invalid_when_no_changes()
+    {
+        var id = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
+        var name = "New Fredericia";
+
+        var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
+
+        var updatePostCodeResult = postCodeAR.Update(name: name);
+
+        updatePostCodeResult.IsSuccess.Should().BeFalse();
+        updatePostCodeResult.Errors.Should().HaveCount(1);
+        ((PostCodeError)updatePostCodeResult.Errors.First())
+            .Code
+            .Should()
+            .Be(PostCodeErrorCodes.NO_CHANGES);
+    }
+
     [Fact, Order(3)]
     public void Cannot_delete_post_code_that_has_not_yet_been_created()
     {
