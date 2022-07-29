@@ -160,6 +160,29 @@ public class RoadTests
         var name = "Kolding 2";
         var status = RoadStatus.Temporary;
 
+        var roadAR = new RoadAR();
+
+        var updateRoadResult = roadAR.Update(
+            officialId: officialId,
+            name: name,
+            status: status);
+
+        updateRoadResult.IsFailed.Should().BeTrue();
+        updateRoadResult.Errors.Should().HaveCount(1);
+        ((RoadError)updateRoadResult.Errors.First())
+            .Code
+            .Should()
+            .Be(RoadErrorCode.ID_CANNOT_BE_EMPTY_GUID);
+    }
+
+    [Fact, Order(3)]
+    public void Update_is_invalid_when_no_changes()
+    {
+        var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
+        var officialId = "F123456";
+        var name = "Kolding 2";
+        var status = RoadStatus.Temporary;
+
         var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
 
         var updateRoadResult = roadAR.Update(
@@ -174,24 +197,6 @@ public class RoadTests
             .Should()
             .Be(RoadErrorCode.NO_CHANGES);
     }
-
-    [Fact, Order(3)]
-    public void Cannot_delete_post_code_that_has_not_yet_been_created()
-    {
-        var id = Guid.Parse("53d46647-edb3-428e-8063-b25e1009029e");
-
-        var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
-        var deleteResult = postCodeAR.Delete();
-
-        deleteResult.IsSuccess.Should().BeFalse();
-        deleteResult.Errors.Should().HaveCount(1);
-        ((PostCodeError)deleteResult.Errors.First())
-            .Code
-            .Should()
-            .Be(PostCodeErrorCodes.ID_CANNOT_BE_EMPTY_GUID);
-        postCodeAR.Deleted.Should().BeFalse();
-    }
-
 
     [Fact, Order(3)]
     public void Delete_is_invalid_not_created()
