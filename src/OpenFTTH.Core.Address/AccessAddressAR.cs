@@ -177,6 +177,68 @@ public class AccessAddressAR : AggregateBase
                     $"No postcode exists with id '{postCodeId}'."));
         }
 
+        var hasChanges = () =>
+        {
+            if (OfficialId != officialId)
+            {
+                return true;
+            }
+            if (Updated != updated)
+            {
+                return true;
+            }
+            if (MunicipalCode != municipalCode)
+            {
+                return true;
+            }
+            if (RoadCode != roadCode)
+            {
+                return true;
+            }
+            if (HouseNumber != houseNumber)
+            {
+                return true;
+            }
+            if (PostCodeId != postCodeId)
+            {
+                return true;
+            }
+            if (EastCoordinate != eastCoordinate)
+            {
+                return true;
+            }
+            if (NorthCoordinate != northCoordinate)
+            {
+                return true;
+            }
+            if (LocationUpdated != locationUpdated)
+            {
+                return true;
+            }
+            if (SupplementaryTownName != supplementaryTownName)
+            {
+                return true;
+            }
+            if (PlotId != plotId)
+            {
+                return true;
+            }
+            if (RoadId != roadId)
+            {
+                return true;
+            }
+
+            return false;
+        };
+
+        if (!hasChanges())
+        {
+            return Result.Fail(
+                new AccessAddressError(
+                    AccessAddressErrorCodes.NO_CHANGES,
+                    $"Cannot update access address, no changes for id '{Id}'."));
+        }
+
         RaiseEvent(
             new AccessAddressUpdated(
                 id: Id,
