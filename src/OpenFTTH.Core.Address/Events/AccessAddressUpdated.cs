@@ -12,7 +12,6 @@ public sealed record AccessAddressUpdated
     public Guid PostCodeId { get; init; }
     public double EastCoordinate { get; init; }
     public double NorthCoordinate { get; init; }
-    public DateTime? LocationUpdated { get; init; }
     public string? TownName { get; init; }
     public string? PlotId { get; init; }
     public Guid RoadId { get; init; }
@@ -28,7 +27,6 @@ public sealed record AccessAddressUpdated
         Guid postCodeId,
         double eastCoordinate,
         double northCoordinate,
-        DateTime? locationUpdated,
         string? townName,
         string? plotId,
         Guid roadId)
@@ -43,7 +41,6 @@ public sealed record AccessAddressUpdated
         PostCodeId = postCodeId;
         EastCoordinate = eastCoordinate;
         NorthCoordinate = northCoordinate;
-        LocationUpdated = locationUpdated;
         TownName = townName;
         PlotId = plotId;
         RoadId = roadId;

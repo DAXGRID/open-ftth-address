@@ -16,7 +16,6 @@ public record CreateAccessAddressExampleData
     public Guid PostCodeId { get; init; }
     public double EastCoordinate { get; init; }
     public double NorthCoordinate { get; init; }
-    public DateTime? LocationUpdated { get; init; }
     public string? SupplementaryTownName { get; init; }
     public string? PlotId { get; init; }
     public Guid RoadId { get; init; }
@@ -33,7 +32,6 @@ public record CreateAccessAddressExampleData
         Guid postCodeId,
         double eastCoordinate,
         double northCoordinate,
-        DateTime? locationUpdated,
         string? supplementaryTownName,
         string? plotId,
         Guid roadId)
@@ -49,7 +47,6 @@ public record CreateAccessAddressExampleData
         PostCodeId = postCodeId;
         EastCoordinate = eastCoordinate;
         NorthCoordinate = northCoordinate;
-        LocationUpdated = locationUpdated;
         SupplementaryTownName = supplementaryTownName;
         PlotId = plotId;
         RoadId = roadId;
@@ -82,7 +79,6 @@ public class AcessAddressTests
                 postCodeId: Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002"),
                 eastCoordinate: 10.20,
                 northCoordinate: 20.10,
-                locationUpdated: DateTime.UtcNow,
                 supplementaryTownName: "Fredericia",
                 plotId: "12455F",
                 roadId: Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5"))
@@ -102,7 +98,6 @@ public class AcessAddressTests
                 postCodeId: Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002"),
                 eastCoordinate: 10.20,
                 northCoordinate: 20.10,
-                locationUpdated: DateTime.UtcNow,
                 supplementaryTownName: "Fredericia",
                 plotId: "455A",
                 roadId: Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5"))
@@ -137,7 +132,6 @@ public class AcessAddressTests
             postCodeId: createExampleData.PostCodeId,
             eastCoordinate: createExampleData.EastCoordinate,
             northCoordinate: createExampleData.NorthCoordinate,
-            locationUpdated: createExampleData.LocationUpdated,
             supplementaryTownName: createExampleData.SupplementaryTownName,
             plotId: createExampleData.PlotId,
             roadId: createExampleData.RoadId,
@@ -158,7 +152,6 @@ public class AcessAddressTests
         accessAddressAR.PostCodeId.Should().Be(createExampleData.PostCodeId);
         accessAddressAR.EastCoordinate.Should().Be(createExampleData.EastCoordinate);
         accessAddressAR.NorthCoordinate.Should().Be(createExampleData.NorthCoordinate);
-        accessAddressAR.LocationUpdated.Should().Be(createExampleData.LocationUpdated);
         accessAddressAR.SupplementaryTownName.Should().Be(createExampleData.SupplementaryTownName);
         accessAddressAR.PlotId.Should().Be(createExampleData.PlotId);
         accessAddressAR.RoadId.Should().Be(createExampleData.RoadId);
@@ -180,7 +173,6 @@ public class AcessAddressTests
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 10.20;
         var northCoordinate = 20.10;
-        var locationUpdated = DateTime.UtcNow;
         var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
@@ -201,7 +193,6 @@ public class AcessAddressTests
             postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
-            locationUpdated: locationUpdated,
             supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
@@ -230,7 +221,6 @@ public class AcessAddressTests
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 10.20;
         var northCoordinate = 20.10;
-        var locationUpdated = DateTime.UtcNow;
         var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
@@ -251,7 +241,6 @@ public class AcessAddressTests
             postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
-            locationUpdated: locationUpdated,
             supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
@@ -280,7 +269,6 @@ public class AcessAddressTests
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 10.20;
         var northCoordinate = 20.10;
-        var locationUpdated = DateTime.UtcNow;
         var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
@@ -301,7 +289,6 @@ public class AcessAddressTests
             postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
-            locationUpdated: locationUpdated,
             supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
@@ -330,7 +317,6 @@ public class AcessAddressTests
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 10.20;
         var northCoordinate = 20.10;
-        var locationUpdated = DateTime.UtcNow;
         var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("e138802a-1717-49d6-9281-9a13dff2fdb9");
@@ -351,7 +337,6 @@ public class AcessAddressTests
             postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
-            locationUpdated: locationUpdated,
             supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
@@ -380,7 +365,6 @@ public class AcessAddressTests
         var postCodeId = Guid.Parse("082cb73e-caa8-4fff-9374-4f186567f719");
         var eastCoordinate = 10.20;
         var northCoordinate = 20.10;
-        var locationUpdated = DateTime.UtcNow;
         var supplementaryTownName = "Fredericia";
         var plotId = "12455F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
@@ -401,7 +385,6 @@ public class AcessAddressTests
             postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
-            locationUpdated: locationUpdated,
             supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
@@ -429,7 +412,6 @@ public class AcessAddressTests
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
-        var locationUpdated = DateTime.Today;
         var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
@@ -448,7 +430,6 @@ public class AcessAddressTests
             postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
-            locationUpdated: locationUpdated,
             supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
@@ -468,7 +449,6 @@ public class AcessAddressTests
         accessAddressAR.PostCodeId.Should().Be(postCodeId);
         accessAddressAR.EastCoordinate.Should().Be(eastCoordinate);
         accessAddressAR.NorthCoordinate.Should().Be(northCoordinate);
-        accessAddressAR.LocationUpdated.Should().Be(locationUpdated);
         accessAddressAR.SupplementaryTownName.Should().Be(supplementaryTownName);
         accessAddressAR.PlotId.Should().Be(plotId);
         accessAddressAR.RoadId.Should().Be(roadId);
@@ -488,7 +468,6 @@ public class AcessAddressTests
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
-        var locationUpdated = DateTime.UtcNow;
         var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
@@ -507,7 +486,6 @@ public class AcessAddressTests
             postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
-            locationUpdated: locationUpdated,
             supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
@@ -535,7 +513,6 @@ public class AcessAddressTests
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
-        var locationUpdated = DateTime.UtcNow;
         var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
@@ -554,7 +531,6 @@ public class AcessAddressTests
             postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
-            locationUpdated: locationUpdated,
             supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
@@ -582,7 +558,6 @@ public class AcessAddressTests
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
-        var locationUpdated = DateTime.UtcNow;
         var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("4d137186-56b7-4753-80b8-b9785104868a");
@@ -601,7 +576,6 @@ public class AcessAddressTests
             postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
-            locationUpdated: locationUpdated,
             supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
@@ -629,7 +603,6 @@ public class AcessAddressTests
         var postCodeId = Guid.Parse("082cb73e-caa8-4fff-9374-4f186567f719");
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
-        var locationUpdated = DateTime.UtcNow;
         var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
@@ -648,7 +621,6 @@ public class AcessAddressTests
             postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
-            locationUpdated: locationUpdated,
             supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
@@ -676,7 +648,6 @@ public class AcessAddressTests
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
-        var locationUpdated = DateTime.Today;
         var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
@@ -695,7 +666,6 @@ public class AcessAddressTests
             postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
-            locationUpdated: locationUpdated,
             supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,
@@ -771,7 +741,6 @@ public class AcessAddressTests
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
-        var locationUpdated = DateTime.UtcNow;
         var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
@@ -790,7 +759,6 @@ public class AcessAddressTests
             postCodeId: postCodeId,
             eastCoordinate: eastCoordinate,
             northCoordinate: northCoordinate,
-            locationUpdated: locationUpdated,
             supplementaryTownName: supplementaryTownName,
             plotId: plotId,
             roadId: roadId,

@@ -172,10 +172,6 @@ that does not exist ('{accessAddressId}')."));
             {
                 return true;
             }
-            if (Updated != updated)
-            {
-                return true;
-            }
 
             return false;
         };
