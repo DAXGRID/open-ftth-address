@@ -307,7 +307,7 @@ public class UnitAddressTests
         var status = UnitAddressStatus.Discontinued;
         string? floorName = null;
         string? suitName = null;
-        var updated = DateTime.UtcNow;
+        var updated = DateTime.Today;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
 
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
@@ -436,7 +436,7 @@ public class UnitAddressTests
         var status = UnitAddressStatus.Pending;
         string? floorName = null;
         string? suitName = null;
-        var updated = DateTime.UtcNow;
+        var updated = DateTime.Today;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
 
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
@@ -456,6 +456,39 @@ public class UnitAddressTests
             .Code
             .Should()
             .Be(UnitAddressErrorCodes.ACCESS_ADDRESS_DOES_NOT_EXISTS);
+    }
+
+    [Fact, Order(3)]
+    public void Update_with_no_changes_is_invalid()
+    {
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
+        var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
+        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
+        var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var status = UnitAddressStatus.Discontinued;
+        string? floorName = null;
+        string? suitName = null;
+        var updated = DateTime.Today;
+        var existingAccessAddressIds = addressProjection.AccessAddressIds;
+
+        var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
+
+        var updateUnitAddressResult = unitAddressAR.Update(
+            officialId: officialId,
+            accessAddressId: accessAddressId,
+            status: status,
+            floorName: floorName,
+            suitName: suitName,
+            updated: updated,
+            existingAccessAddressIds: existingAccessAddressIds);
+
+        updateUnitAddressResult.IsSuccess.Should().BeFalse();
+        updateUnitAddressResult.Errors.Should().HaveCount(1);
+        ((UnitAddressError)updateUnitAddressResult.Errors.First())
+            .Code
+            .Should()
+            .Be(UnitAddressErrorCodes.NO_CHANGES);
     }
 
     [Fact, Order(3)]

@@ -150,6 +150,45 @@ that does not exist ('{accessAddressId}')."));
 that does not exist ('{accessAddressId}')."));
         }
 
+        var hasChanges = () =>
+        {
+            if (OfficialId != officialId)
+            {
+                return true;
+            }
+            if (AccessAddressId != accessAddressId)
+            {
+                return true;
+            }
+            if (Status != status)
+            {
+                return true;
+            }
+            if (FloorName != floorName)
+            {
+                return true;
+            }
+            if (SuitName != suitName)
+            {
+                return true;
+            }
+            if (Updated != updated)
+            {
+                return true;
+            }
+
+            return false;
+        };
+
+        if (!hasChanges())
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCodes.NO_CHANGES,
+                    @$" Cannot reference to a access-address
+that does not exist ('{accessAddressId}')."));
+        }
+
         RaiseEvent(new UnitAddressUpdated(
                        id: Id,
                        officialAddressId: officialId,
