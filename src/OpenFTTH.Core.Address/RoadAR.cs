@@ -69,7 +69,33 @@ public class RoadAR : AggregateBase
             return Result.Fail(
                 new RoadError(
                     RoadErrorCode.CANNOT_UPDATE_DELETED,
-                    @$"Cannot update deleted road with id: '{Id}'"));
+                    @$"Cannot update deleted road with id: '{Id}'."));
+        }
+
+        var hasChanges = () =>
+        {
+            if (Name != name)
+            {
+                return true;
+            }
+            if (OfficialId != officialId)
+            {
+                return true;
+            }
+            if (Status != status)
+            {
+                return true;
+            }
+
+            return false;
+        };
+
+        if (!hasChanges())
+        {
+            return Result.Fail(
+               new RoadError(
+                   RoadErrorCode.NO_CHANGES,
+                   $"No changes for road with id '{Id}'."));
         }
 
         RaiseEvent(new RoadUpdated(
