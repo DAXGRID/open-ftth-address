@@ -24,7 +24,6 @@ public class AccessAddressAR : AggregateBase
     public Guid PostCodeId { get; private set; }
     public double EastCoordinate { get; private set; }
     public double NorthCoordinate { get; private set; }
-    public DateTime? LocationUpdated { get; private set; }
     public string? SupplementaryTownName { get; private set; }
     public string? PlotId { get; private set; }
     public Guid RoadId { get; private set; }
@@ -49,7 +48,6 @@ public class AccessAddressAR : AggregateBase
         Guid postCodeId,
         double eastCoordinate,
         double northCoordinate,
-        DateTime? locationUpdated,
         string? supplementaryTownName,
         string? plotId,
         Guid roadId,
@@ -111,7 +109,6 @@ public class AccessAddressAR : AggregateBase
                 postCodeId: postCodeId,
                 eastCoordinate: eastCoordinate,
                 northCoordinate: northCoordinate,
-                locationUpdated: locationUpdated,
                 townName: supplementaryTownName,
                 plotId: plotId,
                 roadId: roadId));
@@ -129,7 +126,6 @@ public class AccessAddressAR : AggregateBase
         Guid postCodeId,
         double eastCoordinate,
         double northCoordinate,
-        DateTime? locationUpdated,
         string? supplementaryTownName,
         string? plotId,
         Guid roadId,
@@ -183,10 +179,6 @@ public class AccessAddressAR : AggregateBase
             {
                 return true;
             }
-            if (Updated != updated)
-            {
-                return true;
-            }
             if (MunicipalCode != municipalCode)
             {
                 return true;
@@ -208,10 +200,6 @@ public class AccessAddressAR : AggregateBase
                 return true;
             }
             if (NorthCoordinate != northCoordinate)
-            {
-                return true;
-            }
-            if (LocationUpdated != locationUpdated)
             {
                 return true;
             }
@@ -251,7 +239,6 @@ public class AccessAddressAR : AggregateBase
                 postCodeId: postCodeId,
                 eastCoordinate: eastCoordinate,
                 northCoordinate: northCoordinate,
-                locationUpdated: locationUpdated,
                 townName: supplementaryTownName,
                 plotId: plotId,
                 roadId: roadId));
@@ -296,7 +283,6 @@ public class AccessAddressAR : AggregateBase
         PostCodeId = accessAddressCreated.PostCodeId;
         EastCoordinate = accessAddressCreated.EastCoordinate;
         NorthCoordinate = accessAddressCreated.NorthCoordinate;
-        LocationUpdated = accessAddressCreated.LocationUpdated;
         SupplementaryTownName = accessAddressCreated.TownName;
         PlotId = accessAddressCreated.PlotId;
         RoadId = accessAddressCreated.RoadId;
@@ -313,7 +299,6 @@ public class AccessAddressAR : AggregateBase
         PostCodeId = accessAddressUpdated.PostCodeId;
         EastCoordinate = accessAddressUpdated.EastCoordinate;
         NorthCoordinate = accessAddressUpdated.NorthCoordinate;
-        LocationUpdated = accessAddressUpdated.LocationUpdated;
         SupplementaryTownName = accessAddressUpdated.TownName;
         PlotId = accessAddressUpdated.PlotId;
         RoadId = accessAddressUpdated.RoadId;
