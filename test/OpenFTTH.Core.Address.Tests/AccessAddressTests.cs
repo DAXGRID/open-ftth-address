@@ -421,7 +421,7 @@ public class AcessAddressTests
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
-        var updated = DateTime.UtcNow;
+        var updated = DateTime.Today;
         var municipalCode = "F1234";
         var status = AccessAddressStatus.Discontinued;
         var roadCode = "F12";
@@ -429,7 +429,7 @@ public class AcessAddressTests
         var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var eastCoordinate = 50.20;
         var northCoordinate = 50.10;
-        var locationUpdated = DateTime.UtcNow;
+        var locationUpdated = DateTime.Today;
         var supplementaryTownName = "Kolding";
         var plotId = "12445F";
         var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
@@ -659,6 +659,53 @@ public class AcessAddressTests
         updateAccessAddressResult.Errors.Count.Should().Be(1);
         ((AccessAddressError)updateAccessAddressResult.Errors.First())
             .Code.Should().Be(AccessAddressErrorCodes.POST_CODE_DOES_NOT_EXIST);
+    }
+
+    [Fact, Order(3)]
+    public void Update_with_no_changes_is_invalid()
+    {
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
+        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
+        var updated = DateTime.Today;
+        var municipalCode = "F1234";
+        var status = AccessAddressStatus.Discontinued;
+        var roadCode = "F12";
+        var houseNumber = "10F";
+        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
+        var eastCoordinate = 50.20;
+        var northCoordinate = 50.10;
+        var locationUpdated = DateTime.Today;
+        var supplementaryTownName = "Kolding";
+        var plotId = "12445F";
+        var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
+        var existingRoadIds = addressProjection.GetRoadIds();
+        var existingPostCodeIds = addressProjection.GetPostCodeIds();
+
+        var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
+
+        var updateAccessAddressResult = accessAddressAR.Update(
+            officialId: officialId,
+            updated: updated,
+            municipalCode: municipalCode,
+            status: status,
+            roadCode: roadCode,
+            houseNumber: houseNumber,
+            postCodeId: postCodeId,
+            eastCoordinate: eastCoordinate,
+            northCoordinate: northCoordinate,
+            locationUpdated: locationUpdated,
+            supplementaryTownName: supplementaryTownName,
+            plotId: plotId,
+            roadId: roadId,
+            existingRoadIds: existingRoadIds,
+            existingPostCodeIds: existingPostCodeIds);
+
+        updateAccessAddressResult.IsSuccess.Should().BeFalse();
+        updateAccessAddressResult.Errors.Count.Should().Be(1);
+        ((AccessAddressError)updateAccessAddressResult.Errors.First())
+            .Code.Should().Be(AccessAddressErrorCodes.NO_CHANGES);
     }
 
     [Fact, Order(3)]

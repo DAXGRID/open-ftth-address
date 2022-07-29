@@ -10,7 +10,8 @@ public enum AccessAddressErrorCodes
     ROAD_DOES_NOT_EXIST,
     POST_CODE_DOES_NOT_EXIST,
     CANNOT_UPDATE_DELETED,
-    CANNOT_DELETE_ALREADY_DELETED
+    CANNOT_DELETE_ALREADY_DELETED,
+    NO_CHANGES
 }
 
 public class AccessAddressError : Error
