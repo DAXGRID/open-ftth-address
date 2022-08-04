@@ -16,47 +16,64 @@ public class AddressProjection : ProjectionBase
 
     public AddressProjection()
     {
-        ProjectEvent<AccessAddressCreated>(
-            (@event) =>
-            {
-                var accessAddressCreated = (AccessAddressCreated)@event.Data;
-                if (accessAddressCreated.OfficialId is not null)
-                {
-                    AccessAddressOfficialIdToId.Add(
-                        accessAddressCreated.OfficialId, accessAddressCreated.Id);
-                }
+        ProjectEventAsync<AccessAddressCreated>(ProjectAsync);
+        ProjectEventAsync<UnitAddressCreated>(ProjectAsync);
+        ProjectEventAsync<RoadCreated>(ProjectAsync);
+        ProjectEventAsync<PostCodeCreated>(ProjectAsync);
+    }
 
-                // This is a bit special since we allow access addresses to be created
-                // without 'officialIds' so we cannot use the values from the
-                // official id to project an internal id lookup table,
-                // so we have to keep a seperate lookup table in sync.
-                // This is needed so we can check if access address exists.
-                AccessAddressIds.Add(accessAddressCreated.Id);
-            });
+    private Task ProjectAsync(IEventEnvelope eventEnvelope)
+    {
+        switch (eventEnvelope.Data)
+        {
+            case (AccessAddressCreated @event):
+                Handle(@event);
+                break;
+            case (UnitAddressCreated @event):
+                Handle(@event);
+                break;
+            case (RoadCreated @event):
+                Handle(@event);
+                break;
+            default:
+                throw new ArgumentException($"Could not handle typeof '{eventEnvelope.Data.GetType().Name}'");
+        }
 
-        ProjectEvent<UnitAddressCreated>(
-            (@event) =>
-            {
-                var unitAddressCreated = (UnitAddressCreated)@event.Data;
-                if (unitAddressCreated.OfficialId is not null)
-                {
-                    UnitAddressOfficialIdToId.Add(
-                        unitAddressCreated.OfficialId, unitAddressCreated.Id);
-                }
-            });
+        return Task.CompletedTask;
+    }
 
-        ProjectEvent<RoadCreated>(
-            (@event) =>
-            {
-                var roadCreated = (RoadCreated)@event.Data;
-                RoadOfficialIdIdToId.Add(roadCreated.OfficialId, roadCreated.Id);
-            });
+    private void Handle(AccessAddressCreated accessAddressCreated)
+    {
+        if (accessAddressCreated.OfficialId is not null)
+        {
+            AccessAddressOfficialIdToId.Add(
+                accessAddressCreated.OfficialId, accessAddressCreated.Id);
+        }
 
-        ProjectEvent<PostCodeCreated>(
-            (@event) =>
-            {
-                var postCodeCreated = (PostCodeCreated)@event.Data;
-                PostCodeNumberToId.Add(postCodeCreated.Number, postCodeCreated.Id);
-            });
+        // This is a bit special since we allow access addresses to be created
+        // without 'officialIds' so we cannot use the values from the
+        // official id to project an internal id lookup table,
+        // so we have to keep a seperate lookup table in sync.
+        // This is needed so we can check if access address exists.
+        AccessAddressIds.Add(accessAddressCreated.Id);
+    }
+
+    private void Handle(UnitAddressCreated unitAddressCreated)
+    {
+        if (unitAddressCreated.OfficialId is not null)
+        {
+            UnitAddressOfficialIdToId.Add(
+                unitAddressCreated.OfficialId, unitAddressCreated.Id);
+        }
+    }
+
+    private void Handle(RoadCreated roadCreated)
+    {
+        RoadOfficialIdIdToId.Add(roadCreated.OfficialId, roadCreated.Id);
+    }
+
+    private void Handle(PostCodeCreated postCodeCreated)
+    {
+        PostCodeNumberToId.Add(postCodeCreated.Number, postCodeCreated.Id);
     }
 }
