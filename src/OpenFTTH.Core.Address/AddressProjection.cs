@@ -35,6 +35,9 @@ public class AddressProjection : ProjectionBase
             case (RoadCreated @event):
                 Handle(@event);
                 break;
+            case (PostCodeCreated @event):
+                Handle(@event);
+                break;
             default:
                 throw new ArgumentException($"Could not handle typeof '{eventEnvelope.Data.GetType().Name}'");
         }
