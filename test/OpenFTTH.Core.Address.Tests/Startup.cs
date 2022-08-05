@@ -11,7 +11,8 @@ public static class Startup
     {
         services.AddSingleton<IEventStore, InMemEventStore>();
         {
-            var businessAssemblies = new Assembly[] {
+            var businessAssemblies = new Assembly[]
+            {
                 AppDomain.CurrentDomain.Load("OpenFTTH.Core.Address"),
             };
 
