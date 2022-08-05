@@ -39,7 +39,8 @@ public class AddressProjection : ProjectionBase
                 Handle(@event);
                 break;
             default:
-                throw new ArgumentException($"Could not handle typeof '{eventEnvelope.Data.GetType().Name}'");
+                throw new ArgumentException(
+                    $"Could not handle typeof '{eventEnvelope.Data.GetType().Name}'");
         }
 
         return Task.CompletedTask;
