@@ -1,4 +1,4 @@
-namespace OpenFTTH.Core.Address;
+namespace OpenFTTH.Core.Address.Events;
 
 public sealed record PostCodeDeleted
 {
