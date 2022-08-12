@@ -197,7 +197,7 @@ that does not exist ('{accessAddressId}')."));
         return Result.Ok();
     }
 
-    public Result Delete()
+    public Result Delete(DateTime updated)
     {
         if (Id == Guid.Empty)
         {
@@ -216,7 +216,15 @@ that does not exist ('{accessAddressId}')."));
                     @$"Cannot delete already deleted."));
         }
 
-        RaiseEvent(new UnitAddressDeleted(Id));
+        if (updated == default)
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
+                    $"{nameof(updated)} being default date is invalid."));
+        }
+
+        RaiseEvent(new UnitAddressDeleted(Id, updated));
 
         return Result.Ok();
     }
@@ -246,5 +254,6 @@ that does not exist ('{accessAddressId}')."));
     private void Apply(UnitAddressDeleted unitAddressDeleted)
     {
         Deleted = true;
+        Updated = unitAddressDeleted.Updated;
     }
 }
