@@ -682,10 +682,11 @@ public class AcessAddressTests
     public void Cannot_delete_accesss_address_that_has_not_been_created()
     {
         var id = Guid.NewGuid();
+        var updated = DateTime.UtcNow;
 
         var accessAddressAR = new AccessAddressAR();
 
-        var deleteResult = accessAddressAR.Delete();
+        var deleteResult = accessAddressAR.Delete(updated);
 
         deleteResult.IsSuccess.Should().BeFalse();
         deleteResult.Errors.Count.Should().Be(1);
@@ -695,28 +696,50 @@ public class AcessAddressTests
     }
 
     [Fact, Order(3)]
-    public void Delete_is_success()
+    public void Delete_with_default_updated_date_is_invalid()
     {
         var id = Guid.Parse("94b1f97d-42df-49b3-90c6-74266a16661d");
+        var updated = new DateTime();
 
         var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
 
-        var deleteResult = accessAddressAR.Delete();
+        var deleteResult = accessAddressAR.Delete(updated);
+
+        _eventStore.Aggregates.Store(accessAddressAR);
+
+        deleteResult.IsSuccess.Should().BeFalse();
+        deleteResult.Errors.Count.Should().Be(1);
+        ((AccessAddressError)deleteResult.Errors.First())
+            .Code.Should().Be(AccessAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE);
+        accessAddressAR.Deleted.Should().BeFalse();
+    }
+
+    [Fact, Order(4)]
+    public void Delete_is_success()
+    {
+        var id = Guid.Parse("94b1f97d-42df-49b3-90c6-74266a16661d");
+        var updated = DateTime.UtcNow;
+
+        var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
+
+        var deleteResult = accessAddressAR.Delete(updated);
 
         _eventStore.Aggregates.Store(accessAddressAR);
 
         deleteResult.IsSuccess.Should().BeTrue();
         accessAddressAR.Deleted.Should().BeTrue();
+        accessAddressAR.Updated.Should().Be(updated);
     }
 
-    [Fact, Order(4)]
+    [Fact, Order(5)]
     public void Cannot_delete_already_deleted()
     {
         var id = Guid.Parse("94b1f97d-42df-49b3-90c6-74266a16661d");
+        var updated = DateTime.UtcNow;
 
         var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
 
-        var deleteResult = accessAddressAR.Delete();
+        var deleteResult = accessAddressAR.Delete(updated);
 
         deleteResult.IsSuccess.Should().BeFalse();
         deleteResult.Errors.Count.Should().Be(1);
@@ -725,7 +748,7 @@ public class AcessAddressTests
         accessAddressAR.Deleted.Should().BeTrue();
     }
 
-    [Fact, Order(4)]
+    [Fact, Order(5)]
     public void Cannot_update_when_deleted()
     {
         var id = Guid.Parse("94b1f97d-42df-49b3-90c6-74266a16661d");
