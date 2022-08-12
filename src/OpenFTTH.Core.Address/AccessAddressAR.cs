@@ -246,7 +246,7 @@ public class AccessAddressAR : AggregateBase
         return Result.Ok();
     }
 
-    public Result Delete()
+    public Result Delete(DateTime updated)
     {
         if (Id == Guid.Empty)
         {
@@ -265,7 +265,15 @@ public class AccessAddressAR : AggregateBase
                     @$"{nameof(Id)}, is already deleted."));
         }
 
-        RaiseEvent(new AccessAddressDeleted(Id));
+        if (updated == default)
+        {
+            return Result.Fail(
+                new AccessAddressError(
+                    AccessAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
+                    $"{nameof(updated)}, being default date, is invalid."));
+        }
+
+        RaiseEvent(new AccessAddressDeleted(Id, updated));
 
         return Result.Ok();
     }
@@ -307,5 +315,6 @@ public class AccessAddressAR : AggregateBase
     private void Apply(AccessAddressDeleted accessAddressDeleted)
     {
         Deleted = true;
+        Updated = accessAddressDeleted.Updated;
     }
 }

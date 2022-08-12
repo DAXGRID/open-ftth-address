@@ -495,10 +495,11 @@ public class UnitAddressTests
     public void Cannot_delete_when_it_not_been_created()
     {
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
+        var updated = DateTime.UtcNow;
 
         var unitAddressAR = new UnitAddressAR();
 
-        var deleteResult = unitAddressAR.Delete();
+        var deleteResult = unitAddressAR.Delete(updated);
 
         deleteResult.Errors.Should().HaveCount(1);
         ((UnitAddressError)(deleteResult.Errors.First()))
@@ -508,21 +509,40 @@ public class UnitAddressTests
     }
 
     [Fact, Order(3)]
-    public void Delete_is_success()
+    public void Delete_with_default_update_date_is_invalid()
     {
         var id = Guid.Parse("9a171f9b-1d25-458e-b664-627fd15e14f6");
+        var updated = new DateTime();
 
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
 
-        var deleteResult = unitAddressAR.Delete();
+        var deleteResult = unitAddressAR.Delete(updated);
+
+        deleteResult.Errors.Should().HaveCount(1);
+        ((UnitAddressError)(deleteResult.Errors.First()))
+            .Code
+            .Should()
+            .Be(UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE);
+    }
+
+    [Fact, Order(4)]
+    public void Delete_is_success()
+    {
+        var id = Guid.Parse("9a171f9b-1d25-458e-b664-627fd15e14f6");
+        var updated = DateTime.UtcNow;
+
+        var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
+
+        var deleteResult = unitAddressAR.Delete(updated);
 
         _eventStore.Aggregates.Store(unitAddressAR);
 
         deleteResult.IsSuccess.Should().BeTrue();
         unitAddressAR.Deleted.Should().BeTrue();
+        unitAddressAR.Updated.Should().Be(updated);
     }
 
-    [Fact, Order(4)]
+    [Fact, Order(5)]
     public void Cannot_update_when_deleted()
     {
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
@@ -557,15 +577,16 @@ public class UnitAddressTests
         unitAddressAR.Deleted.Should().BeTrue();
     }
 
-    [Fact, Order(4)]
+    [Fact, Order(5)]
     public void Cannot_delete_already_deleted()
     {
         var id = Guid.Parse("9a171f9b-1d25-458e-b664-627fd15e14f6");
+        var updated = DateTime.UtcNow;
 
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
 
-        var updateUnitAddressResult = unitAddressAR.Delete();
+        var updateUnitAddressResult = unitAddressAR.Delete(updated);
 
         _eventStore.Aggregates.Store(unitAddressAR);
 
