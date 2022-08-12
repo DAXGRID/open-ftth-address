@@ -8,15 +8,21 @@ public record CreatePostCodeExampleData
     public Guid Id { get; init; }
     public string Number { get; init; }
     public string Name { get; init; }
+    public DateTime Created { get; init; }
+    public DateTime Updated { get; init; }
 
     public CreatePostCodeExampleData(
         Guid id,
         string number,
-        string name)
+        string name,
+        DateTime created,
+        DateTime updated)
     {
         Id = id;
         Number = number;
         Name = name;
+        Created = created;
+        Updated = updated;
     }
 }
 
@@ -37,7 +43,9 @@ public class PostCodeTests
             new CreatePostCodeExampleData(
                 id: Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002"),
                 number: "7000",
-                name: "Fredericia")
+                name: "Fredericia",
+                created: DateTime.UtcNow,
+                updated: DateTime.UtcNow)
         };
 
         yield return new object[]
@@ -45,7 +53,9 @@ public class PostCodeTests
             new CreatePostCodeExampleData(
                 id: Guid.Parse("7460bb7e-9d72-45f0-a5fa-6a92b7bb30dc"),
                 number: "8660",
-                name: "Skanderborg")
+                name: "Skanderborg",
+                created: DateTime.UtcNow,
+                updated: DateTime.UtcNow)
         };
     }
 
@@ -63,7 +73,9 @@ public class PostCodeTests
         var createPostCodeResult = postCodeAR.Create(
             id: postCodeExampleData.Id,
             number: postCodeExampleData.Number,
-            name: postCodeExampleData.Name);
+            name: postCodeExampleData.Name,
+            created: postCodeExampleData.Created,
+            updated: postCodeExampleData.Updated);
 
         _eventStore.Aggregates.Store(postCodeAR);
 
@@ -71,6 +83,7 @@ public class PostCodeTests
         postCodeAR.Id.Should().Be(postCodeExampleData.Id);
         postCodeAR.Number.Should().Be(postCodeExampleData.Number);
         postCodeAR.Name.Should().Be(postCodeExampleData.Name);
+        postCodeAR.Updated.Should().Be(postCodeExampleData.Updated);
     }
 
     [Fact, Order(1)]
@@ -79,13 +92,17 @@ public class PostCodeTests
         var id = Guid.Empty;
         var number = "7000";
         var name = "Fredericia";
+        var created = DateTime.UtcNow;
+        var updated = DateTime.UtcNow;
 
         var postCodeAR = new PostCodeAR();
 
         var createPostCodeResult = postCodeAR.Create(
             id: id,
             number: number,
-            name: name);
+            name: name,
+            created: created,
+            updated: updated);
 
         createPostCodeResult.IsSuccess.Should().BeFalse();
         createPostCodeResult.Errors.Should().HaveCount(1);
@@ -104,13 +121,17 @@ public class PostCodeTests
     {
         var id = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var name = "Fredericia";
+        var created = DateTime.UtcNow;
+        var updated = DateTime.UtcNow;
 
         var postCodeAR = new PostCodeAR();
 
         var createPostCodeResult = postCodeAR.Create(
             id: id,
             number: number,
-            name: name);
+            name: name,
+            created: created,
+            updated: updated);
 
         createPostCodeResult.IsSuccess.Should().BeFalse();
         createPostCodeResult.Errors.Should().HaveCount(1);
@@ -129,13 +150,17 @@ public class PostCodeTests
     {
         var id = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var number = "7000";
+        var created = DateTime.UtcNow;
+        var updated = DateTime.UtcNow;
 
         var postCodeAR = new PostCodeAR();
 
         var createPostCodeResult = postCodeAR.Create(
             id: id,
             number: number,
-            name: name);
+            name: name,
+            created: created,
+            updated: updated);
 
         createPostCodeResult.IsSuccess.Should().BeFalse();
         createPostCodeResult.Errors.Should().HaveCount(1);
@@ -145,16 +170,71 @@ public class PostCodeTests
             .Be(PostCodeErrorCodes.NAME_CANNOT_BE_EMPTY_NULL_OR_WHITESPACE);
     }
 
+    [Fact, Order(1)]
+    public void Create_created_date_being_default_is_invalid()
+    {
+        var id = Guid.NewGuid();
+        var number = "7000";
+        var name = "Fredericia";
+        var created = new DateTime();
+        var updated = DateTime.UtcNow;
+
+        var postCodeAR = new PostCodeAR();
+
+        var createPostCodeResult = postCodeAR.Create(
+            id: id,
+            number: number,
+            name: name,
+            created: created,
+            updated: updated);
+
+        createPostCodeResult.IsSuccess.Should().BeFalse();
+        createPostCodeResult.Errors.Should().HaveCount(1);
+        ((PostCodeError)createPostCodeResult.Errors.First())
+            .Code
+            .Should()
+            .Be(PostCodeErrorCodes.CREATED_CANNOT_BE_DEFAULT_DATE);
+    }
+
+    [Fact, Order(1)]
+    public void Create_updated_date_being_default_is_invalid()
+    {
+        var id = Guid.NewGuid();
+        var number = "7000";
+        var name = "Fredericia";
+        var created = DateTime.UtcNow;
+        var updated = new DateTime();
+
+        var postCodeAR = new PostCodeAR();
+
+        var createPostCodeResult = postCodeAR.Create(
+            id: id,
+            number: number,
+            name: name,
+            created: created,
+            updated: updated);
+
+        createPostCodeResult.IsSuccess.Should().BeFalse();
+        createPostCodeResult.Errors.Should().HaveCount(1);
+        ((PostCodeError)createPostCodeResult.Errors.First())
+            .Code
+            .Should()
+            .Be(PostCodeErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE);
+    }
+
     [Fact, Order(2)]
     public void Update_is_success()
     {
         var id = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var number = "7000";
         var name = "New Fredericia";
+        var updated = DateTime.UtcNow;
 
         var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
 
-        var updatePostCodeResult = postCodeAR.Update(name: name);
+        var updatePostCodeResult = postCodeAR.Update(
+            name: name,
+            updated: updated);
 
         _eventStore.Aggregates.Store(postCodeAR);
 
@@ -162,15 +242,41 @@ public class PostCodeTests
         postCodeAR.Id.Should().Be(id);
         postCodeAR.Name.Should().Be(name);
         postCodeAR.Number.Should().Be(number);
+        postCodeAR.Updated.Should().Be(updated);
+    }
+
+    [Fact, Order(2)]
+    public void Update_updated_date_being_default_is_invalid()
+    {
+        var id = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
+        var name = "New Fredericia";
+        var updated = new DateTime();
+
+        var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
+
+        var updatePostCodeResult = postCodeAR.Update(
+            name: name,
+            updated: updated);
+
+        updatePostCodeResult.IsSuccess.Should().BeFalse();
+        updatePostCodeResult.Errors.Should().HaveCount(1);
+        ((PostCodeError)updatePostCodeResult.Errors.First())
+            .Code
+            .Should()
+            .Be(PostCodeErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE);
     }
 
     [Fact, Order(2)]
     public void Update_guid_is_empty_is_invalid()
     {
         var name = "New Fredericia";
+        var updated = DateTime.UtcNow;
+
         var postCodeAR = new PostCodeAR();
 
-        var updatePostCodeResult = postCodeAR.Update(name: name);
+        var updatePostCodeResult = postCodeAR.Update(
+            name: name,
+            updated: updated);
 
         updatePostCodeResult.IsSuccess.Should().BeFalse();
         updatePostCodeResult.Errors.Should().HaveCount(1);
@@ -185,10 +291,13 @@ public class PostCodeTests
     {
         var id = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var name = String.Empty;
+        var updated = DateTime.UtcNow;
 
         var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
 
-        var updatePostCodeResult = postCodeAR.Update(name: name);
+        var updatePostCodeResult = postCodeAR.Update(
+            name: name,
+            updated: updated);
 
         updatePostCodeResult.IsSuccess.Should().BeFalse();
         updatePostCodeResult.Errors.Should().HaveCount(1);
@@ -203,10 +312,13 @@ public class PostCodeTests
     {
         var id = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
         var name = "New Fredericia";
+        var updated = DateTime.UtcNow;
 
         var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
 
-        var updatePostCodeResult = postCodeAR.Update(name: name);
+        var updatePostCodeResult = postCodeAR.Update(
+            name: name,
+            updated: updated);
 
         updatePostCodeResult.IsSuccess.Should().BeFalse();
         updatePostCodeResult.Errors.Should().HaveCount(1);
@@ -220,9 +332,10 @@ public class PostCodeTests
     public void Cannot_delete_post_code_that_has_not_yet_been_created()
     {
         var id = Guid.Parse("53d46647-edb3-428e-8063-b25e1009029e");
+        var updated = DateTime.UtcNow;
 
         var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
-        var deleteResult = postCodeAR.Delete();
+        var deleteResult = postCodeAR.Delete(updated: updated);
 
         deleteResult.IsSuccess.Should().BeFalse();
         deleteResult.Errors.Should().HaveCount(1);
@@ -234,18 +347,41 @@ public class PostCodeTests
     }
 
     [Fact, Order(3)]
-    public void Delete_is_successful()
+    public void Delete_updated_date_being_default_is_invalid()
     {
         var id = Guid.Parse("7460bb7e-9d72-45f0-a5fa-6a92b7bb30dc");
+        var updated = new DateTime();
 
         var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
 
-        var deleteResult = postCodeAR.Delete();
+        var deleteResult = postCodeAR.Delete(updated: updated);
+
+        _eventStore.Aggregates.Store(postCodeAR);
+
+        deleteResult.IsSuccess.Should().BeFalse();
+        deleteResult.Errors.Should().HaveCount(1);
+        ((PostCodeError)deleteResult.Errors.First())
+            .Code
+            .Should()
+            .Be(PostCodeErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE);
+        postCodeAR.Deleted.Should().BeFalse();
+    }
+
+    [Fact, Order(3)]
+    public void Delete_is_successful()
+    {
+        var id = Guid.Parse("7460bb7e-9d72-45f0-a5fa-6a92b7bb30dc");
+        var updated = DateTime.UtcNow;
+
+        var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
+
+        var deleteResult = postCodeAR.Delete(updated: updated);
 
         _eventStore.Aggregates.Store(postCodeAR);
 
         deleteResult.IsSuccess.Should().BeTrue();
         postCodeAR.Deleted.Should().BeTrue();
+        postCodeAR.Updated.Should().Be(updated);
     }
 
     [Fact, Order(4)]
@@ -253,10 +389,13 @@ public class PostCodeTests
     {
         var id = Guid.Parse("7460bb7e-9d72-45f0-a5fa-6a92b7bb30dc");
         var name = "New Fredericia";
+        var updated = DateTime.UtcNow;
 
         var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
 
-        var updateResult = postCodeAR.Update(name: name);
+        var updateResult = postCodeAR.Update(
+            name: name,
+            updated: updated);
 
         updateResult.IsSuccess.Should().BeFalse();
         updateResult.Errors.Should().HaveCount(1);
@@ -271,10 +410,11 @@ public class PostCodeTests
     public void Cannot_delete_when_already_deleted()
     {
         var id = Guid.Parse("7460bb7e-9d72-45f0-a5fa-6a92b7bb30dc");
+        var updated = DateTime.UtcNow;
 
         var postCodeAR = _eventStore.Aggregates.Load<PostCodeAR>(id);
 
-        var deleteResult = postCodeAR.Delete();
+        var deleteResult = postCodeAR.Delete(updated: updated);
 
         deleteResult.IsSuccess.Should().BeFalse();
         deleteResult.Errors.Should().HaveCount(1);

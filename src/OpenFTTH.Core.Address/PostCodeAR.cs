@@ -9,6 +9,8 @@ public class PostCodeAR : AggregateBase
     public string? Number { get; private set; }
     public string? Name { get; private set; }
     public bool Deleted { get; private set; }
+    public DateTime Created { get; private set; }
+    public DateTime Updated { get; private set; }
 
     public PostCodeAR()
     {
@@ -17,7 +19,12 @@ public class PostCodeAR : AggregateBase
         Register<PostCodeDeleted>(Apply);
     }
 
-    public Result Create(Guid id, string number, string name)
+    public Result Create(
+        Guid id,
+        string number,
+        string name,
+        DateTime created,
+        DateTime updated)
     {
         if (id == Guid.Empty)
         {
@@ -43,17 +50,36 @@ public class PostCodeAR : AggregateBase
                     $"{nameof(name)} cannot be null empty or whitespace."));
         }
 
+        if (created == default)
+        {
+            return Result.Fail(
+                new PostCodeError(
+                    PostCodeErrorCodes.CREATED_CANNOT_BE_DEFAULT_DATE,
+                    @$"{nameof(created)} being default date is invalid."));
+        }
+
+
+        if (updated == default)
+        {
+            return Result.Fail(
+                new PostCodeError(
+                    PostCodeErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
+                    @$"{nameof(updated)} being default date is invalid."));
+        }
+
         Id = id;
 
         RaiseEvent(new PostCodeCreated(
                        id: id,
                        number: number,
-                       name: name));
+                       name: name,
+                       created: created,
+                       updated: updated));
 
         return Result.Ok();
     }
 
-    public Result Update(string name)
+    public Result Update(string name, DateTime updated)
     {
         if (Id == Guid.Empty)
         {
@@ -80,6 +106,14 @@ public class PostCodeAR : AggregateBase
                     $"{nameof(name)} cannot be null empty or whitespace."));
         }
 
+        if (updated == default)
+        {
+            return Result.Fail(
+                new PostCodeError(
+                    PostCodeErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
+                    @$"{nameof(updated)} being default date is invalid."));
+        }
+
         var hasChanges = () =>
         {
             if (Name != name)
@@ -98,12 +132,15 @@ public class PostCodeAR : AggregateBase
                     "No changes to the AR doing update."));
         }
 
-        RaiseEvent(new PostCodeUpdated(id: this.Id, name: name));
+        RaiseEvent(new PostCodeUpdated(
+                       id: Id,
+                       name: name,
+                       updated: updated));
 
         return Result.Ok();
     }
 
-    public Result Delete()
+    public Result Delete(DateTime updated)
     {
         if (Id == Guid.Empty)
         {
@@ -122,7 +159,15 @@ public class PostCodeAR : AggregateBase
                     @$"Id: '{Id}' is already deleted."));
         }
 
-        RaiseEvent(new PostCodeDeleted(this.Id));
+        if (updated == default)
+        {
+            return Result.Fail(
+                new PostCodeError(
+                    PostCodeErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
+                    @$"{nameof(updated)} being default date is invalid."));
+        }
+
+        RaiseEvent(new PostCodeDeleted(Id, updated));
 
         return Result.Ok();
     }
@@ -132,15 +177,19 @@ public class PostCodeAR : AggregateBase
         Id = postCodeCreated.Id;
         Number = postCodeCreated.Number;
         Name = postCodeCreated.Name;
+        Created = postCodeCreated.Created;
+        Updated = postCodeCreated.Updated;
     }
 
     private void Apply(PostCodeUpdated postCodeUpdated)
     {
         Name = postCodeUpdated.Name;
+        Updated = postCodeUpdated.Updated;
     }
 
     private void Apply(PostCodeDeleted postCodeDeleted)
     {
         Deleted = true;
+        Updated = postCodeDeleted.Updated;
     }
 }
