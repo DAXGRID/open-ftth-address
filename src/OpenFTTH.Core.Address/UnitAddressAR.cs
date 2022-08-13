@@ -20,8 +20,9 @@ public class UnitAddressAR : AggregateBase
     public string? FloorName { get; private set; }
     public string? SuitName { get; private set; }
     public DateTime Created { get; private set; }
-    public DateTime? Updated { get; private set; }
+    public DateTime Updated { get; private set; }
     public bool Deleted { get; private set; }
+    public bool PendingOfficial { get; private set; }
 
     public UnitAddressAR()
     {
@@ -39,7 +40,8 @@ public class UnitAddressAR : AggregateBase
         string? suitName,
         DateTime created,
         DateTime updated,
-        HashSet<Guid> existingAccessAddressIds)
+        HashSet<Guid> existingAccessAddressIds,
+        bool pendingOfficial)
     {
         if (id == Guid.Empty)
         {
@@ -93,7 +95,8 @@ that does not exist ('{accessAddressId}')."));
                        floorName: floorName,
                        suitName: suitName,
                        created: created,
-                       updated: updated));
+                       updated: updated,
+                       pendingOfficial: pendingOfficial));
 
         return Result.Ok();
     }
@@ -105,7 +108,8 @@ that does not exist ('{accessAddressId}')."));
         string? floorName,
         string? suitName,
         DateTime updated,
-        HashSet<Guid> existingAccessAddressIds)
+        HashSet<Guid> existingAccessAddressIds,
+        bool pendingOfficial)
     {
         if (Id == Guid.Empty)
         {
@@ -172,6 +176,10 @@ that does not exist ('{accessAddressId}')."));
             {
                 return true;
             }
+            if (PendingOfficial != pendingOfficial)
+            {
+                return true;
+            }
 
             return false;
         };
@@ -192,7 +200,8 @@ that does not exist ('{accessAddressId}')."));
                        status: status,
                        floorName: floorName,
                        suitName: suitName,
-                       updated: updated));
+                       updated: updated,
+                       pendingOfficial: pendingOfficial));
 
         return Result.Ok();
     }
@@ -239,6 +248,7 @@ that does not exist ('{accessAddressId}')."));
         SuitName = unitAddressCreated.SuitName;
         Created = unitAddressCreated.Created;
         Updated = unitAddressCreated.Updated;
+        PendingOfficial = unitAddressCreated.PendingOfficial;
     }
 
     private void Apply(UnitAddressUpdated unitAddressCreated)
@@ -249,6 +259,7 @@ that does not exist ('{accessAddressId}')."));
         FloorName = unitAddressCreated.FloorName;
         SuitName = unitAddressCreated.SuitName;
         Updated = unitAddressCreated.Updated;
+        PendingOfficial = unitAddressCreated.PendingOfficial;
     }
 
     private void Apply(UnitAddressDeleted unitAddressDeleted)
