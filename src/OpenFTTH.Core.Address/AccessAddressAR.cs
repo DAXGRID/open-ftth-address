@@ -218,6 +218,10 @@ public class AccessAddressAR : AggregateBase
             {
                 return true;
             }
+            if (PendingOfficial != pendingOfficial)
+            {
+                return true;
+            }
 
             return false;
         };
