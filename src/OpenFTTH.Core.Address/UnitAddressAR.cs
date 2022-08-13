@@ -85,8 +85,6 @@ public class UnitAddressAR : AggregateBase
 that does not exist ('{accessAddressId}')."));
         }
 
-        Id = id;
-
         RaiseEvent(new UnitAddressCreated(
                        id: id,
                        officialId: officialId,

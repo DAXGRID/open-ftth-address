@@ -96,8 +96,6 @@ public class AccessAddressAR : AggregateBase
                     $"No postcode wxists with id '{postCodeId}'."));
         }
 
-        Id = id;
-
         RaiseEvent(
             new AccessAddressCreated(
                 id: id,

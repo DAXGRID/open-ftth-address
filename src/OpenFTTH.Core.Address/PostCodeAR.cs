@@ -67,8 +67,6 @@ public class PostCodeAR : AggregateBase
                     @$"{nameof(updated)} being default date is invalid."));
         }
 
-        Id = id;
-
         RaiseEvent(new PostCodeCreated(
                        id: id,
                        number: number,
