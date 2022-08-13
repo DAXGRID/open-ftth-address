@@ -15,6 +15,7 @@ public sealed record AccessAddressUpdated
     public string? TownName { get; init; }
     public string? PlotId { get; init; }
     public Guid RoadId { get; init; }
+    public bool PendingOfficial { get; init; }
 
     public AccessAddressUpdated(
         Guid id,
@@ -29,7 +30,8 @@ public sealed record AccessAddressUpdated
         double northCoordinate,
         string? townName,
         string? plotId,
-        Guid roadId)
+        Guid roadId,
+        bool pendingOfficial)
     {
         Id = id;
         OfficialId = officialId;
@@ -44,5 +46,6 @@ public sealed record AccessAddressUpdated
         TownName = townName;
         PlotId = plotId;
         RoadId = roadId;
+        PendingOfficial = pendingOfficial;
     }
 }

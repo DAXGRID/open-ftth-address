@@ -28,6 +28,7 @@ public class AccessAddressAR : AggregateBase
     public string? PlotId { get; private set; }
     public Guid RoadId { get; private set; }
     public bool Deleted { get; private set; }
+    public bool PendingOfficial { get; private set; }
 
     public AccessAddressAR()
     {
@@ -52,7 +53,8 @@ public class AccessAddressAR : AggregateBase
         string? plotId,
         Guid roadId,
         HashSet<Guid> existingRoadIds,
-        HashSet<Guid> existingPostCodeIds)
+        HashSet<Guid> existingPostCodeIds,
+        bool pendingOfficial)
     {
         if (id == Guid.Empty)
         {
@@ -111,7 +113,7 @@ public class AccessAddressAR : AggregateBase
                 northCoordinate: northCoordinate,
                 townName: supplementaryTownName,
                 plotId: plotId,
-                roadId: roadId));
+                roadId: roadId, pendingOfficial: pendingOfficial));
 
         return Result.Ok();
     }
@@ -130,7 +132,8 @@ public class AccessAddressAR : AggregateBase
         string? plotId,
         Guid roadId,
         HashSet<Guid> existingRoadIds,
-        HashSet<Guid> existingPostCodeIds)
+        HashSet<Guid> existingPostCodeIds,
+        bool pendingOfficial)
     {
         if (Id == Guid.Empty)
         {
@@ -241,7 +244,8 @@ public class AccessAddressAR : AggregateBase
                 northCoordinate: northCoordinate,
                 townName: supplementaryTownName,
                 plotId: plotId,
-                roadId: roadId));
+                roadId: roadId,
+                pendingOfficial: pendingOfficial));
 
         return Result.Ok();
     }
@@ -294,6 +298,7 @@ public class AccessAddressAR : AggregateBase
         SupplementaryTownName = accessAddressCreated.TownName;
         PlotId = accessAddressCreated.PlotId;
         RoadId = accessAddressCreated.RoadId;
+        PendingOfficial = accessAddressCreated.PendingOfficial;
     }
 
     private void Apply(AccessAddressUpdated accessAddressUpdated)
@@ -310,6 +315,7 @@ public class AccessAddressAR : AggregateBase
         SupplementaryTownName = accessAddressUpdated.TownName;
         PlotId = accessAddressUpdated.PlotId;
         RoadId = accessAddressUpdated.RoadId;
+        PendingOfficial = accessAddressUpdated.PendingOfficial;
     }
 
     private void Apply(AccessAddressDeleted accessAddressDeleted)
