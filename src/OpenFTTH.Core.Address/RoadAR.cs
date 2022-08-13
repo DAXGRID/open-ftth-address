@@ -66,8 +66,6 @@ public class RoadAR : AggregateBase
                     $"{nameof(updated)} being default date is invalid."));
         }
 
-        Id = id;
-
         RaiseEvent(new RoadCreated(
             id: id,
             officialId: officialId,
@@ -180,6 +178,7 @@ public class RoadAR : AggregateBase
 
     private void Apply(RoadCreated roadCreated)
     {
+        Id = roadCreated.Id;
         OfficialId = roadCreated.OfficialId;
         Name = roadCreated.Name;
         Status = roadCreated.Status;
