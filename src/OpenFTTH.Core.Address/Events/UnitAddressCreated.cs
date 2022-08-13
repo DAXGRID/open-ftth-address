@@ -10,6 +10,7 @@ public sealed record UnitAddressCreated
     public string? SuitName { get; init; }
     public DateTime Created { get; init; }
     public DateTime Updated { get; init; }
+    public bool PendingOfficial { get; init; }
 
     public UnitAddressCreated(
         Guid id,
@@ -19,7 +20,8 @@ public sealed record UnitAddressCreated
         string? floorName,
         string? suitName,
         DateTime created,
-        DateTime updated)
+        DateTime updated,
+        bool pendingOfficial)
     {
         Id = id;
         OfficialId = officialId;
@@ -29,5 +31,6 @@ public sealed record UnitAddressCreated
         SuitName = suitName;
         Created = created;
         Updated = updated;
+        PendingOfficial = pendingOfficial;
     }
 }

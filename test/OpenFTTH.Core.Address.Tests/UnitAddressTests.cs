@@ -13,6 +13,7 @@ public record CreateUnitAddressExampleData
     public string? SuitName { get; init; }
     public DateTime Created { get; init; }
     public DateTime Updated { get; init; }
+    public bool PendingOfficial { get; init; }
 
     public CreateUnitAddressExampleData(
         Guid id,
@@ -22,7 +23,8 @@ public record CreateUnitAddressExampleData
         string? floorName,
         string? suitName,
         DateTime created,
-        DateTime updated)
+        DateTime updated,
+        bool pendingOfficial)
     {
         Id = id;
         OfficialId = officialId;
@@ -32,6 +34,7 @@ public record CreateUnitAddressExampleData
         SuitName = suitName;
         Created = created;
         Updated = updated;
+        PendingOfficial = pendingOfficial;
     }
 }
 
@@ -57,7 +60,8 @@ public class UnitAddressTests
                 floorName: null,
                 suitName: null,
                 created: DateTime.UtcNow,
-                updated: DateTime.UtcNow)
+                updated: DateTime.UtcNow,
+                pendingOfficial: true)
         };
 
         yield return new object[]
@@ -70,7 +74,8 @@ public class UnitAddressTests
                 floorName: "1 st.",
                 suitName: "mf",
                 created: DateTime.UtcNow,
-                updated: DateTime.UtcNow)
+                updated: DateTime.UtcNow,
+                pendingOfficial: false)
         };
     }
 
@@ -98,7 +103,8 @@ public class UnitAddressTests
             suitName: unitAddressExampleData.SuitName,
             created: unitAddressExampleData.Created,
             updated: unitAddressExampleData.Updated,
-            existingAccessAddressIds: existingAccessAddressIds);
+            existingAccessAddressIds: existingAccessAddressIds,
+            pendingOfficial: unitAddressExampleData.PendingOfficial);
 
         _eventStore.Aggregates.Store(unitAddressAR);
 
@@ -111,6 +117,7 @@ public class UnitAddressTests
         unitAddressAR.SuitName.Should().Be(unitAddressExampleData.SuitName);
         unitAddressAR.Created.Should().Be(unitAddressExampleData.Created);
         unitAddressAR.Updated.Should().Be(unitAddressExampleData.Updated);
+        unitAddressAR.PendingOfficial.Should().Be(unitAddressExampleData.PendingOfficial);
     }
 
     [Fact, Order(1)]
@@ -127,6 +134,7 @@ public class UnitAddressTests
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
+        var pendingOfficial = false;
 
         var unitAddressAR = new UnitAddressAR();
 
@@ -139,7 +147,8 @@ public class UnitAddressTests
             suitName: suitName,
             created: created,
             updated: updated,
-            existingAccessAddressIds: existingAccessAddressIds);
+            existingAccessAddressIds: existingAccessAddressIds,
+            pendingOfficial: pendingOfficial);
 
         _eventStore.Aggregates.Store(unitAddressAR);
 
@@ -166,6 +175,7 @@ public class UnitAddressTests
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
+        var pendingOfficial = false;
 
         var unitAddressAR = new UnitAddressAR();
 
@@ -178,7 +188,8 @@ public class UnitAddressTests
             suitName: suitName,
             created: created,
             updated: updated,
-            existingAccessAddressIds: existingAccessAddressIds);
+            existingAccessAddressIds: existingAccessAddressIds,
+            pendingOfficial: pendingOfficial);
 
         createUnitAddressResult.IsSuccess.Should().BeFalse();
         createUnitAddressResult.Errors.Should().HaveCount(1);
@@ -202,6 +213,7 @@ public class UnitAddressTests
         var created = new DateTime();
         var updated = DateTime.UtcNow;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
+        var pendingOfficial = false;
 
         var unitAddressAR = new UnitAddressAR();
 
@@ -214,7 +226,8 @@ public class UnitAddressTests
             suitName: suitName,
             created: created,
             updated: updated,
-            existingAccessAddressIds: existingAccessAddressIds);
+            existingAccessAddressIds: existingAccessAddressIds,
+            pendingOfficial: pendingOfficial);
 
         createUnitAddressResult.IsSuccess.Should().BeFalse();
         createUnitAddressResult.Errors.Should().HaveCount(1);
@@ -238,6 +251,7 @@ public class UnitAddressTests
         var created = DateTime.UtcNow;
         var updated = new DateTime();
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
+        var pendingOfficial = false;
 
         var unitAddressAR = new UnitAddressAR();
 
@@ -250,7 +264,8 @@ public class UnitAddressTests
             suitName: suitName,
             created: created,
             updated: updated,
-            existingAccessAddressIds: existingAccessAddressIds);
+            existingAccessAddressIds: existingAccessAddressIds,
+            pendingOfficial: pendingOfficial);
 
         createUnitAddressResult.IsSuccess.Should().BeFalse();
         createUnitAddressResult.Errors.Should().HaveCount(1);
@@ -274,6 +289,7 @@ public class UnitAddressTests
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
+        var pendingOfficial = false;
 
         var unitAddressAR = new UnitAddressAR();
 
@@ -286,7 +302,8 @@ public class UnitAddressTests
             suitName: suitName,
             created: created,
             updated: updated,
-            existingAccessAddressIds: existingAccessAddressIds);
+            existingAccessAddressIds: existingAccessAddressIds,
+            pendingOfficial: pendingOfficial);
 
         createUnitAddressResult.IsSuccess.Should().BeFalse();
         createUnitAddressResult.Errors.Should().HaveCount(1);
@@ -309,6 +326,7 @@ public class UnitAddressTests
         string? suitName = null;
         var updated = DateTime.Today;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
+        var pendingOfficial = false;
 
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
 
@@ -319,7 +337,8 @@ public class UnitAddressTests
             floorName: floorName,
             suitName: suitName,
             updated: updated,
-            existingAccessAddressIds: existingAccessAddressIds);
+            existingAccessAddressIds: existingAccessAddressIds,
+            pendingOfficial: pendingOfficial);
 
         _eventStore.Aggregates.Store(unitAddressAR);
 
@@ -331,6 +350,7 @@ public class UnitAddressTests
         unitAddressAR.FloorName.Should().Be(floorName);
         unitAddressAR.SuitName.Should().Be(suitName);
         unitAddressAR.Updated.Should().Be(updated);
+        unitAddressAR.PendingOfficial.Should().Be(pendingOfficial);
     }
 
     [Fact, Order(2)]
@@ -345,6 +365,7 @@ public class UnitAddressTests
         string? suitName = null;
         var updated = DateTime.UtcNow;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
+        var pendingOfficial = false;
 
         var unitAddressAR = new UnitAddressAR();
 
@@ -355,7 +376,8 @@ public class UnitAddressTests
             floorName: floorName,
             suitName: suitName,
             updated: updated,
-            existingAccessAddressIds: existingAccessAddressIds);
+            existingAccessAddressIds: existingAccessAddressIds,
+            pendingOfficial: pendingOfficial);
 
         updateUnitAddressResult.IsSuccess.Should().BeFalse();
         updateUnitAddressResult.Errors.Should().HaveCount(1);
@@ -376,6 +398,7 @@ public class UnitAddressTests
         string? suitName = null;
         var updated = DateTime.UtcNow;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
+        var pendingOfficial = false;
 
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
 
@@ -386,7 +409,8 @@ public class UnitAddressTests
             floorName: floorName,
             suitName: suitName,
             updated: updated,
-            existingAccessAddressIds: existingAccessAddressIds);
+            existingAccessAddressIds: existingAccessAddressIds,
+            pendingOfficial: pendingOfficial);
 
         updateUnitAddressResult.IsSuccess.Should().BeFalse();
         updateUnitAddressResult.Errors.Should().HaveCount(1);
@@ -407,6 +431,7 @@ public class UnitAddressTests
         string? suitName = null;
         var updated = new DateTime();
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
+        var pendingOfficial = false;
 
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
 
@@ -417,7 +442,8 @@ public class UnitAddressTests
             floorName: floorName,
             suitName: suitName,
             updated: updated,
-            existingAccessAddressIds: existingAccessAddressIds);
+            existingAccessAddressIds: existingAccessAddressIds,
+            pendingOfficial: pendingOfficial);
 
         updateUnitAddressResult.IsSuccess.Should().BeFalse();
         updateUnitAddressResult.Errors.Should().HaveCount(1);
@@ -438,6 +464,7 @@ public class UnitAddressTests
         string? suitName = null;
         var updated = DateTime.Today;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
+        var pendingOfficial = false;
 
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
 
@@ -448,7 +475,8 @@ public class UnitAddressTests
             floorName: floorName,
             suitName: suitName,
             updated: updated,
-            existingAccessAddressIds: existingAccessAddressIds);
+            existingAccessAddressIds: existingAccessAddressIds,
+            pendingOfficial: pendingOfficial);
 
         updateUnitAddressResult.IsSuccess.Should().BeFalse();
         updateUnitAddressResult.Errors.Should().HaveCount(1);
@@ -471,6 +499,7 @@ public class UnitAddressTests
         string? suitName = null;
         var updated = DateTime.Today;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
+        var pendingOfficial = false;
 
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
 
@@ -481,7 +510,8 @@ public class UnitAddressTests
             floorName: floorName,
             suitName: suitName,
             updated: updated,
-            existingAccessAddressIds: existingAccessAddressIds);
+            existingAccessAddressIds: existingAccessAddressIds,
+            pendingOfficial: pendingOfficial);
 
         updateUnitAddressResult.IsSuccess.Should().BeFalse();
         updateUnitAddressResult.Errors.Should().HaveCount(1);
@@ -555,6 +585,7 @@ public class UnitAddressTests
         string? suitName = null;
         var updated = DateTime.UtcNow;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
+        var pendingOfficial = false;
 
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
 
@@ -565,7 +596,8 @@ public class UnitAddressTests
             floorName: floorName,
             suitName: suitName,
             updated: updated,
-            existingAccessAddressIds: existingAccessAddressIds);
+            existingAccessAddressIds: existingAccessAddressIds,
+            pendingOfficial: pendingOfficial);
 
         _eventStore.Aggregates.Store(unitAddressAR);
 
