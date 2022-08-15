@@ -6,8 +6,8 @@ namespace OpenFTTH.Core.Address;
 
 public class PostCodeAR : AggregateBase
 {
-    public string? Number { get; private set; }
-    public string? Name { get; private set; }
+    public string Number { get; private set; } = string.Empty;
+    public string Name { get; private set; } = string.Empty;
     public bool Deleted { get; private set; }
     public DateTime Created { get; private set; }
     public DateTime Updated { get; private set; }

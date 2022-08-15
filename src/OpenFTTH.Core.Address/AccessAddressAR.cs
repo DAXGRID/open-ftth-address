@@ -17,10 +17,10 @@ public class AccessAddressAR : AggregateBase
     public string? OfficialId { get; private set; }
     public DateTime Created { get; private set; }
     public DateTime Updated { get; private set; }
-    public string? MunicipalCode { get; private set; }
+    public string MunicipalCode { get; private set; } = string.Empty;
     public AccessAddressStatus Status { get; private set; }
-    public string? RoadCode { get; private set; }
-    public string? HouseNumber { get; private set; }
+    public string RoadCode { get; private set; } = string.Empty;
+    public string HouseNumber { get; private set; } = string.Empty;
     public Guid PostCodeId { get; private set; }
     public double EastCoordinate { get; private set; }
     public double NorthCoordinate { get; private set; }

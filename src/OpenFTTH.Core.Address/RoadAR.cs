@@ -13,7 +13,7 @@ public enum RoadStatus
 public class RoadAR : AggregateBase
 {
     public string? OfficialId { get; private set; }
-    public string? Name { get; private set; }
+    public string Name { get; private set; } = string.Empty;
     public RoadStatus Status { get; private set; }
     public bool Deleted { get; private set; }
     public DateTime Created { get; private set; }
