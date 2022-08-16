@@ -6,7 +6,7 @@ namespace OpenFTTH.Core.Address.Tests;
 public record CreateRoadAddressExampleData
 {
     public Guid Id { get; init; }
-    public string? OfficialId { get; init; }
+    public string? ExternalId { get; init; }
     public string Name { get; init; }
     public RoadStatus Status { get; init; }
     public DateTime Created { get; init; }
@@ -14,14 +14,14 @@ public record CreateRoadAddressExampleData
 
     public CreateRoadAddressExampleData(
         Guid id,
-        string? officialId,
+        string? externalId,
         string name,
         RoadStatus status,
         DateTime created,
         DateTime updated)
     {
         Id = id;
-        OfficialId = officialId;
+        ExternalId = externalId;
         Name = name;
         Status = status;
         Created = created;
@@ -45,7 +45,7 @@ public class RoadTests
         {
             new CreateRoadAddressExampleData(
                 id: Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5"),
-                officialId: "F12345",
+                externalId: "F12345",
                 name: "Pilevej",
                 status: RoadStatus.Effective,
                 created: DateTime.UtcNow,
@@ -56,7 +56,7 @@ public class RoadTests
         {
             new CreateRoadAddressExampleData(
                 id: Guid.Parse("40fc2260-870c-413e-953e-5b17daa57073"),
-                officialId: "A12345",
+                externalId: "A12345",
                 name: "Blomsterhaven",
                 status: RoadStatus.Temporary,
                 created: DateTime.UtcNow,
@@ -76,7 +76,7 @@ public class RoadTests
         var roadAR = new RoadAR();
         var createRoadResult = roadAR.Create(
             id: roadExampleData.Id,
-            officialId: roadExampleData.OfficialId,
+            externalId: roadExampleData.ExternalId,
             name: roadExampleData.Name,
             status: roadExampleData.Status,
             created: roadExampleData.Created,
@@ -86,7 +86,7 @@ public class RoadTests
 
         createRoadResult.IsSuccess.Should().BeTrue();
         roadAR.Id.Should().Be(roadExampleData.Id);
-        roadAR.OfficialId.Should().Be(roadExampleData.OfficialId);
+        roadAR.ExternalId.Should().Be(roadExampleData.ExternalId);
         roadAR.Name.Should().Be(roadExampleData.Name);
         roadAR.Status.Should().Be(roadExampleData.Status);
         roadAR.Created.Should().Be(roadExampleData.Created);
@@ -97,7 +97,7 @@ public class RoadTests
     public void Create_default_id_is_invalid()
     {
         var id = Guid.Empty;
-        var officialId = "F12345";
+        var externalId = "F12345";
         var name = "Pilevej";
         var status = RoadStatus.Effective;
         var created = DateTime.UtcNow;
@@ -106,7 +106,7 @@ public class RoadTests
         var roadAR = new RoadAR();
         var createRoadResult = roadAR.Create(
             id: id,
-            officialId: officialId,
+            externalId: externalId,
             name: name,
             status: status,
             created: created,
@@ -124,7 +124,7 @@ public class RoadTests
     public void Create_created_being_default_is_invalid()
     {
         var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var officialId = "F12345";
+        var externalId = "F12345";
         var name = "Pilevej";
         var status = RoadStatus.Effective;
         var created = new DateTime();
@@ -133,7 +133,7 @@ public class RoadTests
         var roadAR = new RoadAR();
         var createRoadResult = roadAR.Create(
             id: id,
-            officialId: officialId,
+            externalId: externalId,
             name: name,
             status: status,
             created: created,
@@ -151,7 +151,7 @@ public class RoadTests
     public void Create_updated_being_default_is_invalid()
     {
         var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var officialId = "F12345";
+        var externalId = "F12345";
         var name = "Pilevej";
         var status = RoadStatus.Effective;
         var created = DateTime.UtcNow;
@@ -160,7 +160,7 @@ public class RoadTests
         var roadAR = new RoadAR();
         var createRoadResult = roadAR.Create(
             id: id,
-            officialId: officialId,
+            externalId: externalId,
             name: name,
             status: status,
             created: created,
@@ -179,7 +179,7 @@ public class RoadTests
     [InlineData(" ")]
     [InlineData("  ")]
     [InlineData(null)]
-    public void Create_empty_or_whitespace_official_id_is_invalid(string officialId)
+    public void Create_empty_or_whitespace_external_id_is_invalid(string externalId)
     {
         var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
         var name = "Pilevej";
@@ -190,7 +190,7 @@ public class RoadTests
         var roadAR = new RoadAR();
         var createRoadResult = roadAR.Create(
             id: id,
-            officialId: officialId,
+            externalId: externalId,
             name: name,
             status: status,
             created: created,
@@ -201,14 +201,14 @@ public class RoadTests
         ((RoadError)createRoadResult.Errors.First())
             .Code
             .Should()
-            .Be(RoadErrorCode.OFFICIAL_ID_CANNOT_BE_WHITE_SPACE_OR_NULL);
+            .Be(RoadErrorCode.EXTERNAL_ID_CANNOT_BE_WHITE_SPACE_OR_NULL);
     }
 
     [Fact, Order(2)]
     public void Update_is_success()
     {
         var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var officialId = "F123456";
+        var externalId = "F123456";
         var name = "Kolding 2";
         var status = RoadStatus.Temporary;
         var updated = DateTime.UtcNow;
@@ -216,7 +216,7 @@ public class RoadTests
         var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
 
         var updateRoadResult = roadAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             name: name,
             status: status,
             updated: updated);
@@ -225,7 +225,7 @@ public class RoadTests
 
         updateRoadResult.IsSuccess.Should().BeTrue();
         roadAR.Id.Should().Be(id);
-        roadAR.OfficialId.Should().Be(officialId);
+        roadAR.ExternalId.Should().Be(externalId);
         roadAR.Name.Should().Be(name);
         roadAR.Status.Should().Be(status);
         roadAR.Updated.Should().Be(updated);
@@ -235,7 +235,7 @@ public class RoadTests
     public void Update_updated_date_being_default_is_invalid()
     {
         var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var officialId = "F123456";
+        var externalId = "F123456";
         var name = "Kolding 2";
         var status = RoadStatus.Temporary;
         var updated = new DateTime();
@@ -243,7 +243,7 @@ public class RoadTests
         var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
 
         var updateRoadResult = roadAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             name: name,
             status: status,
             updated: updated);
@@ -260,7 +260,7 @@ public class RoadTests
     public void Update_is_invalid_not_created_yet()
     {
         var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var officialId = "F123456";
+        var externalId = "F123456";
         var name = "Kolding 2";
         var status = RoadStatus.Temporary;
         var updated = DateTime.UtcNow;
@@ -268,7 +268,7 @@ public class RoadTests
         var roadAR = new RoadAR();
 
         var updateRoadResult = roadAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             name: name,
             status: status,
             updated: updated);
@@ -285,7 +285,7 @@ public class RoadTests
     public void Update_is_invalid_when_no_changes()
     {
         var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var officialId = "F123456";
+        var externalId = "F123456";
         var name = "Kolding 2";
         var status = RoadStatus.Temporary;
         var updated = DateTime.UtcNow;
@@ -293,7 +293,7 @@ public class RoadTests
         var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
 
         var updateRoadResult = roadAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             name: name,
             status: status,
             updated: updated);
@@ -365,7 +365,7 @@ public class RoadTests
     public void Cannot_update_deleted()
     {
         var id = Guid.Parse("40fc2260-870c-413e-953e-5b17daa57073");
-        var officialId = "F12345";
+        var externalId = "F12345";
         var name = "Kolding";
         var status = RoadStatus.Effective;
         var updated = DateTime.UtcNow;
@@ -374,7 +374,7 @@ public class RoadTests
 
         var updateRoadResult = roadAR.Update(
             name: name,
-            officialId: officialId,
+            externalId: externalId,
             status: status,
             updated: updated);
 

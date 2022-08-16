@@ -6,12 +6,12 @@ namespace OpenFTTH.Core.Address;
 public class AddressProjection : ProjectionBase
 {
     public HashSet<Guid> AccessAddressIds { get; } = new();
-    public Dictionary<string, Guid> AccessAddressOfficialIdToId { get; } = new();
-    public Dictionary<string, Guid> UnitAddressOfficialIdToId { get; } = new();
-    public Dictionary<string, Guid> RoadOfficialIdIdToId { get; } = new();
+    public Dictionary<string, Guid> AccessAddressExternalIdToId { get; } = new();
+    public Dictionary<string, Guid> UnitAddressExternalIdToId { get; } = new();
+    public Dictionary<string, Guid> RoadExternalIdIdToId { get; } = new();
     public Dictionary<string, Guid> PostCodeNumberToId { get; } = new();
 
-    public HashSet<Guid> GetRoadIds() => RoadOfficialIdIdToId.Values.ToHashSet();
+    public HashSet<Guid> GetRoadIds() => RoadExternalIdIdToId.Values.ToHashSet();
     public HashSet<Guid> GetPostCodeIds() => PostCodeNumberToId.Values.ToHashSet();
 
     public AddressProjection()
@@ -50,12 +50,12 @@ public class AddressProjection : ProjectionBase
     {
         if (accessAddressCreated.ExternalId is not null)
         {
-            AccessAddressOfficialIdToId.Add(
+            AccessAddressExternalIdToId.Add(
                 accessAddressCreated.ExternalId, accessAddressCreated.Id);
         }
 
         // This is a bit special since we allow access addresses to be created
-        // without 'officialIds' so we cannot use the values from the
+        // without 'externalIds' so we cannot use the values from the
         // official id to project an internal id lookup table,
         // so we have to keep a seperate lookup table in sync.
         // This is needed so we can check if access address exists.
@@ -66,14 +66,14 @@ public class AddressProjection : ProjectionBase
     {
         if (unitAddressCreated.ExternalId is not null)
         {
-            UnitAddressOfficialIdToId.Add(
+            UnitAddressExternalIdToId.Add(
                 unitAddressCreated.ExternalId, unitAddressCreated.Id);
         }
     }
 
     private void Handle(RoadCreated roadCreated)
     {
-        RoadOfficialIdIdToId.Add(roadCreated.OfficialId, roadCreated.Id);
+        RoadExternalIdIdToId.Add(roadCreated.ExternalId, roadCreated.Id);
     }
 
     private void Handle(PostCodeCreated postCodeCreated)

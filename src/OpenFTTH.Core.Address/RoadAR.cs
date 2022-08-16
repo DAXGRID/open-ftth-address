@@ -12,7 +12,7 @@ public enum RoadStatus
 
 public class RoadAR : AggregateBase
 {
-    public string? OfficialId { get; private set; }
+    public string? ExternalId { get; private set; }
     public string Name { get; private set; } = string.Empty;
     public RoadStatus Status { get; private set; }
     public bool Deleted { get; private set; }
@@ -28,7 +28,7 @@ public class RoadAR : AggregateBase
 
     public Result Create(
         Guid id,
-        string? officialId,
+        string? externalId,
         string name,
         RoadStatus status,
         DateTime created,
@@ -42,12 +42,12 @@ public class RoadAR : AggregateBase
                     $"{nameof(id)} cannot be empty guid."));
         }
 
-        if (String.IsNullOrWhiteSpace(officialId))
+        if (String.IsNullOrWhiteSpace(externalId))
         {
             return Result.Fail(
                 new RoadError(
-                    RoadErrorCode.OFFICIAL_ID_CANNOT_BE_WHITE_SPACE_OR_NULL,
-                    $"{nameof(officialId)} is not allowed to be whitespace or null."));
+                    RoadErrorCode.EXTERNAL_ID_CANNOT_BE_WHITE_SPACE_OR_NULL,
+                    $"{nameof(externalId)} is not allowed to be whitespace or null."));
         }
 
         if (created == default)
@@ -68,7 +68,7 @@ public class RoadAR : AggregateBase
 
         RaiseEvent(new RoadCreated(
             id: id,
-            officialId: officialId,
+            externalId: externalId,
             name: name,
             status: status,
             created: created,
@@ -79,7 +79,7 @@ public class RoadAR : AggregateBase
 
     public Result Update(
         string name,
-        string officialId,
+        string externalId,
         RoadStatus status,
         DateTime updated)
     {
@@ -114,7 +114,7 @@ public class RoadAR : AggregateBase
             {
                 return true;
             }
-            if (OfficialId != officialId)
+            if (ExternalId != externalId)
             {
                 return true;
             }
@@ -136,7 +136,7 @@ public class RoadAR : AggregateBase
 
         RaiseEvent(new RoadUpdated(
             id: Id,
-            officialId: officialId,
+            externalId: externalId,
             name: name,
             status: status,
             updated: updated));
@@ -179,7 +179,7 @@ public class RoadAR : AggregateBase
     private void Apply(RoadCreated roadCreated)
     {
         Id = roadCreated.Id;
-        OfficialId = roadCreated.OfficialId;
+        ExternalId = roadCreated.ExternalId;
         Name = roadCreated.Name;
         Status = roadCreated.Status;
         Created = roadCreated.Created;
@@ -188,7 +188,7 @@ public class RoadAR : AggregateBase
 
     private void Apply(RoadUpdated roadUpdated)
     {
-        OfficialId = roadUpdated.OfficialId;
+        ExternalId = roadUpdated.ExternalId;
         Name = roadUpdated.Name;
         Status = roadUpdated.Status;
         Updated = roadUpdated.Updated;
