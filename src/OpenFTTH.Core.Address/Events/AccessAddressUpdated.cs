@@ -3,7 +3,7 @@ namespace OpenFTTH.Core.Address.Events;
 public sealed record AccessAddressUpdated
 {
     public Guid Id { get; init; }
-    public string? OfficialId { get; init; }
+    public string? ExternalId { get; init; }
     public DateTime Updated { get; init; }
     public string MunicipalCode { get; init; }
     public AccessAddressStatus Status { get; init; }
@@ -19,7 +19,7 @@ public sealed record AccessAddressUpdated
 
     public AccessAddressUpdated(
         Guid id,
-        string? officialId,
+        string? externalId,
         DateTime updated,
         string municipalCode,
         AccessAddressStatus status,
@@ -34,7 +34,7 @@ public sealed record AccessAddressUpdated
         bool pendingOfficial)
     {
         Id = id;
-        OfficialId = officialId;
+        ExternalId = externalId;
         Updated = updated;
         MunicipalCode = municipalCode;
         Status = status;

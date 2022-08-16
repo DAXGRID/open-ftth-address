@@ -6,7 +6,7 @@ namespace OpenFTTH.Core.Address.Tests;
 public record CreateAccessAddressExampleData
 {
     public Guid Id { get; init; }
-    public string? OfficialId { get; init; }
+    public string? ExternalId { get; init; }
     public DateTime Created { get; init; }
     public DateTime Updated { get; init; }
     public string MunicipalCode { get; init; }
@@ -23,7 +23,7 @@ public record CreateAccessAddressExampleData
 
     public CreateAccessAddressExampleData(
         Guid id,
-        string? officialId,
+        string? externalId,
         DateTime created,
         DateTime updated,
         string municipalCode,
@@ -39,7 +39,7 @@ public record CreateAccessAddressExampleData
         bool pendingOfficial)
     {
         Id = id;
-        OfficialId = officialId;
+        ExternalId = externalId;
         Created = created;
         Updated = updated;
         MunicipalCode = municipalCode;
@@ -72,7 +72,7 @@ public class AcessAddressTests
         {
             new CreateAccessAddressExampleData(
                 id: Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc"),
-                officialId: "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc",
+                externalId: "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc",
                 created: DateTime.UtcNow,
                 updated: DateTime.UtcNow,
                 municipalCode: "D1234",
@@ -92,7 +92,7 @@ public class AcessAddressTests
         {
             new CreateAccessAddressExampleData(
                 id: Guid.Parse("94b1f97d-42df-49b3-90c6-74266a16661d"),
-                officialId: "476acb63-c29f-4d54-8f13-92a6b3022a0e",
+                externalId: "476acb63-c29f-4d54-8f13-92a6b3022a0e",
                 created: DateTime.UtcNow,
                 updated: DateTime.UtcNow,
                 municipalCode: "F1234",
@@ -127,7 +127,7 @@ public class AcessAddressTests
 
         var createAccessAddressResult = accessAddressAR.Create(
             id: createExampleData.Id,
-            officialId: createExampleData.OfficialId,
+            externalId: createExampleData.ExternalId,
             created: createExampleData.Created,
             updated: createExampleData.Updated,
             municipalCode: createExampleData.MunicipalCode,
@@ -148,7 +148,7 @@ public class AcessAddressTests
 
         createAccessAddressResult.IsSuccess.Should().BeTrue();
         accessAddressAR.Id.Should().Be(createExampleData.Id);
-        accessAddressAR.OfficialId.Should().Be(createExampleData.OfficialId);
+        accessAddressAR.ExternalId.Should().Be(createExampleData.ExternalId);
         accessAddressAR.Created.Should().Be(createExampleData.Created);
         accessAddressAR.Updated.Should().Be(createExampleData.Updated);
         accessAddressAR.MunicipalCode.Should().Be(createExampleData.MunicipalCode);
@@ -172,7 +172,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Empty;
-        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
+        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
@@ -193,7 +193,7 @@ public class AcessAddressTests
 
         var createAccessAddressResult = accessAddressAR.Create(
             id: id,
-            officialId: officialId,
+            externalId: externalId,
             created: created,
             updated: updated,
             municipalCode: municipalCode,
@@ -222,7 +222,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
+        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var created = new DateTime();
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
@@ -243,7 +243,7 @@ public class AcessAddressTests
 
         var createAccessAddressResult = accessAddressAR.Create(
             id: id,
-            officialId: officialId,
+            externalId: externalId,
             created: created,
             updated: updated,
             municipalCode: municipalCode,
@@ -272,7 +272,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
+        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var created = DateTime.UtcNow;
         var updated = new DateTime();
         var municipalCode = "D1234";
@@ -293,7 +293,7 @@ public class AcessAddressTests
 
         var createAccessAddressResult = accessAddressAR.Create(
             id: id,
-            officialId: officialId,
+            externalId: externalId,
             created: created,
             updated: updated,
             municipalCode: municipalCode,
@@ -322,7 +322,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
+        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
@@ -343,7 +343,7 @@ public class AcessAddressTests
 
         var createAccessAddressResult = accessAddressAR.Create(
             id: id,
-            officialId: officialId,
+            externalId: externalId,
             created: created,
             updated: updated,
             municipalCode: municipalCode,
@@ -372,7 +372,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
+        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var created = DateTime.UtcNow;
         var updated = DateTime.UtcNow;
         var municipalCode = "D1234";
@@ -393,7 +393,7 @@ public class AcessAddressTests
 
         var createAccessAddressResult = accessAddressAR.Create(
             id: id,
-            officialId: officialId,
+            externalId: externalId,
             created: created,
             updated: updated,
             municipalCode: municipalCode,
@@ -422,7 +422,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
+        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = DateTime.Today;
         var municipalCode = "F1234";
         var status = AccessAddressStatus.Discontinued;
@@ -441,7 +441,7 @@ public class AcessAddressTests
         var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
 
         var updateAccessAddressResult = accessAddressAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             updated: updated,
             municipalCode: municipalCode,
             status: status,
@@ -461,7 +461,7 @@ public class AcessAddressTests
 
         updateAccessAddressResult.IsSuccess.Should().BeTrue();
         accessAddressAR.Id.Should().Be(id);
-        accessAddressAR.OfficialId.Should().Be(officialId);
+        accessAddressAR.ExternalId.Should().Be(externalId);
         accessAddressAR.Updated.Should().Be(updated);
         accessAddressAR.MunicipalCode.Should().Be(municipalCode);
         accessAddressAR.Status.Should().Be(status);
@@ -481,7 +481,7 @@ public class AcessAddressTests
     {
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
-        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
+        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = DateTime.UtcNow;
         var municipalCode = "F1234";
         var status = AccessAddressStatus.Discontinued;
@@ -500,7 +500,7 @@ public class AcessAddressTests
         var accessAddressAR = new AccessAddressAR();
 
         var updateAccessAddressResult = accessAddressAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             updated: updated,
             municipalCode: municipalCode,
             status: status,
@@ -528,7 +528,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
+        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = new DateTime();
         var municipalCode = "F1234";
         var status = AccessAddressStatus.Discontinued;
@@ -547,7 +547,7 @@ public class AcessAddressTests
         var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
 
         var updateAccessAddressResult = accessAddressAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             updated: updated,
             municipalCode: municipalCode,
             status: status,
@@ -575,7 +575,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
+        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = DateTime.UtcNow;
         var municipalCode = "F1234";
         var status = AccessAddressStatus.Discontinued;
@@ -594,7 +594,7 @@ public class AcessAddressTests
         var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
 
         var updateAccessAddressResult = accessAddressAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             updated: updated,
             municipalCode: municipalCode,
             status: status,
@@ -622,7 +622,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
+        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = DateTime.UtcNow;
         var municipalCode = "F1234";
         var status = AccessAddressStatus.Discontinued;
@@ -641,7 +641,7 @@ public class AcessAddressTests
         var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
 
         var updateAccessAddressResult = accessAddressAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             updated: updated,
             municipalCode: municipalCode,
             status: status,
@@ -669,7 +669,7 @@ public class AcessAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
+        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = DateTime.Today;
         var municipalCode = "F1234";
         var status = AccessAddressStatus.Discontinued;
@@ -688,7 +688,7 @@ public class AcessAddressTests
         var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
 
         var updateAccessAddressResult = accessAddressAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             updated: updated,
             municipalCode: municipalCode,
             status: status,
@@ -787,7 +787,7 @@ public class AcessAddressTests
 
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
-        var officialId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
+        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
         var updated = DateTime.UtcNow;
         var municipalCode = "F1234";
         var status = AccessAddressStatus.Discontinued;
@@ -806,7 +806,7 @@ public class AcessAddressTests
         var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
 
         var updateAccessAddressResult = accessAddressAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             updated: updated,
             municipalCode: municipalCode,
             status: status,
