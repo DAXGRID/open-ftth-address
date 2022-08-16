@@ -235,7 +235,7 @@ public class AccessAddressAR : AggregateBase
         RaiseEvent(
             new AccessAddressUpdated(
                 id: Id,
-                officialId: externalId,
+                externalId: externalId,
                 updated: updated,
                 municipalCode: municipalCode,
                 status: status,
@@ -287,7 +287,7 @@ public class AccessAddressAR : AggregateBase
     private void Apply(AccessAddressCreated accessAddressCreated)
     {
         Id = accessAddressCreated.Id;
-        ExternalId = accessAddressCreated.OfficialId;
+        ExternalId = accessAddressCreated.ExternalId;
         Created = accessAddressCreated.Created;
         Updated = accessAddressCreated.Updated;
         MunicipalCode = accessAddressCreated.MunicipalCode;
@@ -305,7 +305,7 @@ public class AccessAddressAR : AggregateBase
 
     private void Apply(AccessAddressUpdated accessAddressUpdated)
     {
-        ExternalId = accessAddressUpdated.OfficialId;
+        ExternalId = accessAddressUpdated.ExternalId;
         Updated = accessAddressUpdated.Updated;
         MunicipalCode = accessAddressUpdated.MunicipalCode;
         Status = accessAddressUpdated.Status;

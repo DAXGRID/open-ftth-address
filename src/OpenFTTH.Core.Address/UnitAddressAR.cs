@@ -14,7 +14,7 @@ public enum UnitAddressStatus
 
 public class UnitAddressAR : AggregateBase
 {
-    public string? OfficialId { get; private set; }
+    public string? ExternalId { get; private set; }
     public Guid AccessAddressId { get; private set; }
     public UnitAddressStatus Status { get; private set; }
     public string? FloorName { get; private set; }
@@ -33,7 +33,7 @@ public class UnitAddressAR : AggregateBase
 
     public Result Create(
         Guid id,
-        string? officialId,
+        string? externalId,
         Guid accessAddressId,
         UnitAddressStatus status,
         string? floorName,
@@ -87,7 +87,7 @@ that does not exist ('{accessAddressId}')."));
 
         RaiseEvent(new UnitAddressCreated(
                        id: id,
-                       officialId: officialId,
+                       externalId: externalId,
                        accessAddressId: accessAddressId,
                        status: status,
                        floorName: floorName,
@@ -100,7 +100,7 @@ that does not exist ('{accessAddressId}')."));
     }
 
     public Result Update(
-        string? officialId,
+        string? externalId,
         Guid accessAddressId,
         UnitAddressStatus status,
         string? floorName,
@@ -154,7 +154,7 @@ that does not exist ('{accessAddressId}')."));
 
         var hasChanges = () =>
         {
-            if (OfficialId != officialId)
+            if (ExternalId != externalId)
             {
                 return true;
             }
@@ -193,7 +193,7 @@ that does not exist ('{accessAddressId}')."));
 
         RaiseEvent(new UnitAddressUpdated(
                        id: Id,
-                       officialAddressId: officialId,
+                       officialAddressId: externalId,
                        accessAddressId: accessAddressId,
                        status: status,
                        floorName: floorName,
@@ -239,7 +239,7 @@ that does not exist ('{accessAddressId}')."));
     private void Apply(UnitAddressCreated unitAddressCreated)
     {
         Id = unitAddressCreated.Id;
-        OfficialId = unitAddressCreated.OfficialId;
+        ExternalId = unitAddressCreated.ExternalId;
         AccessAddressId = unitAddressCreated.AccessAddressId;
         Status = unitAddressCreated.Status;
         FloorName = unitAddressCreated.FloorName;
@@ -251,7 +251,7 @@ that does not exist ('{accessAddressId}')."));
 
     private void Apply(UnitAddressUpdated unitAddressCreated)
     {
-        OfficialId = unitAddressCreated.OfficialId;
+        ExternalId = unitAddressCreated.ExternalId;
         AccessAddressId = unitAddressCreated.AccessAddressId;
         Status = unitAddressCreated.Status;
         FloorName = unitAddressCreated.FloorName;

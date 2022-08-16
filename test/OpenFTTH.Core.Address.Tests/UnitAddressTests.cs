@@ -6,7 +6,7 @@ namespace OpenFTTH.Core.Address.Tests;
 public record CreateUnitAddressExampleData
 {
     public Guid Id { get; init; }
-    public string? OfficialId { get; init; }
+    public string? ExternalId { get; init; }
     public Guid AccessAddressId { get; init; }
     public UnitAddressStatus Status { get; init; }
     public string? FloorName { get; init; }
@@ -17,7 +17,7 @@ public record CreateUnitAddressExampleData
 
     public CreateUnitAddressExampleData(
         Guid id,
-        string? officialId,
+        string? externalId,
         Guid accessAddressId,
         UnitAddressStatus status,
         string? floorName,
@@ -27,7 +27,7 @@ public record CreateUnitAddressExampleData
         bool pendingOfficial)
     {
         Id = id;
-        OfficialId = officialId;
+        ExternalId = externalId;
         AccessAddressId = accessAddressId;
         Status = status;
         FloorName = floorName;
@@ -54,7 +54,7 @@ public class UnitAddressTests
         {
             new CreateUnitAddressExampleData(
                 id: Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3"),
-                officialId: "8caafc15-331c-4ea8-a97e-26414351336f",
+                externalId: "8caafc15-331c-4ea8-a97e-26414351336f",
                 accessAddressId: Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc"),
                 status: UnitAddressStatus.Active,
                 floorName: null,
@@ -68,7 +68,7 @@ public class UnitAddressTests
         {
             new CreateUnitAddressExampleData(
                 id: Guid.Parse("9a171f9b-1d25-458e-b664-627fd15e14f6"),
-                officialId: "7cc671cc-7d07-47a8-b375-5aa9199d7348",
+                externalId: "7cc671cc-7d07-47a8-b375-5aa9199d7348",
                 accessAddressId: Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc"),
                 status: UnitAddressStatus.Active,
                 floorName: "1 st.",
@@ -96,7 +96,7 @@ public class UnitAddressTests
 
         var createUnitAddressResult = unitAddressAR.Create(
             id: unitAddressExampleData.Id,
-            officialId: unitAddressExampleData.OfficialId,
+            externalId: unitAddressExampleData.ExternalId,
             accessAddressId: unitAddressExampleData.AccessAddressId,
             status: unitAddressExampleData.Status,
             floorName: unitAddressExampleData.FloorName,
@@ -110,7 +110,7 @@ public class UnitAddressTests
 
         createUnitAddressResult.IsSuccess.Should().BeTrue();
         unitAddressAR.Id.Should().Be(unitAddressExampleData.Id);
-        unitAddressAR.OfficialId.Should().Be(unitAddressExampleData.OfficialId);
+        unitAddressAR.ExternalId.Should().Be(unitAddressExampleData.ExternalId);
         unitAddressAR.AccessAddressId.Should().Be(unitAddressExampleData.AccessAddressId);
         unitAddressAR.Status.Should().Be(unitAddressExampleData.Status);
         unitAddressAR.FloorName.Should().Be(unitAddressExampleData.FloorName);
@@ -126,7 +126,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Empty;
-        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
+        var externalId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var status = UnitAddressStatus.Active;
         string? floorName = null;
@@ -140,7 +140,7 @@ public class UnitAddressTests
 
         var createUnitAddressResult = unitAddressAR.Create(
             id: id,
-            officialId: officialId,
+            externalId: externalId,
             accessAddressId: accessAddressId,
             status: status,
             floorName: floorName,
@@ -167,7 +167,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
+        var externalId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Empty;
         var status = UnitAddressStatus.Active;
         string? floorName = null;
@@ -181,7 +181,7 @@ public class UnitAddressTests
 
         var createUnitAddressResult = unitAddressAR.Create(
             id: id,
-            officialId: officialId,
+            externalId: externalId,
             accessAddressId: accessAddressId,
             status: status,
             floorName: floorName,
@@ -205,7 +205,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
+        var externalId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var status = UnitAddressStatus.Active;
         string? floorName = null;
@@ -219,7 +219,7 @@ public class UnitAddressTests
 
         var createUnitAddressResult = unitAddressAR.Create(
             id: id,
-            officialId: officialId,
+            externalId: externalId,
             accessAddressId: accessAddressId,
             status: status,
             floorName: floorName,
@@ -243,7 +243,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
+        var externalId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var status = UnitAddressStatus.Active;
         string? floorName = null;
@@ -257,7 +257,7 @@ public class UnitAddressTests
 
         var createUnitAddressResult = unitAddressAR.Create(
             id: id,
-            officialId: officialId,
+            externalId: externalId,
             accessAddressId: accessAddressId,
             status: status,
             floorName: floorName,
@@ -281,7 +281,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
+        var externalId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("042cc296-ab4b-4cc1-8eed-f021361df6c3");
         var status = UnitAddressStatus.Active;
         string? floorName = null;
@@ -295,7 +295,7 @@ public class UnitAddressTests
 
         var createUnitAddressResult = unitAddressAR.Create(
             id: id,
-            officialId: officialId,
+            externalId: externalId,
             accessAddressId: accessAddressId,
             status: status,
             floorName: floorName,
@@ -319,7 +319,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
+        var externalId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var status = UnitAddressStatus.Discontinued;
         string? floorName = null;
@@ -331,7 +331,7 @@ public class UnitAddressTests
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
 
         var updateUnitAddressResult = unitAddressAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             accessAddressId: accessAddressId,
             status: status,
             floorName: floorName,
@@ -344,7 +344,7 @@ public class UnitAddressTests
 
         updateUnitAddressResult.IsSuccess.Should().BeTrue();
         unitAddressAR.Id.Should().Be(id);
-        unitAddressAR.OfficialId.Should().Be(officialId);
+        unitAddressAR.ExternalId.Should().Be(externalId);
         unitAddressAR.AccessAddressId.Should().Be(accessAddressId);
         unitAddressAR.Status.Should().Be(status);
         unitAddressAR.FloorName.Should().Be(floorName);
@@ -358,7 +358,7 @@ public class UnitAddressTests
     {
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
-        var officialId = "89852ac6-254f-4938-aec8-4fac7cb72901";
+        var externalId = "89852ac6-254f-4938-aec8-4fac7cb72901";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var status = UnitAddressStatus.Pending;
         string? floorName = null;
@@ -370,7 +370,7 @@ public class UnitAddressTests
         var unitAddressAR = new UnitAddressAR();
 
         var updateUnitAddressResult = unitAddressAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             accessAddressId: accessAddressId,
             status: status,
             floorName: floorName,
@@ -391,7 +391,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = "89852ac6-254f-4938-aec8-4fac7cb72901";
+        var externalId = "89852ac6-254f-4938-aec8-4fac7cb72901";
         var accessAddressId = Guid.Empty;
         var status = UnitAddressStatus.Pending;
         string? floorName = null;
@@ -403,7 +403,7 @@ public class UnitAddressTests
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
 
         var updateUnitAddressResult = unitAddressAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             accessAddressId: accessAddressId,
             status: status,
             floorName: floorName,
@@ -424,7 +424,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = "89852ac6-254f-4938-aec8-4fac7cb72901";
+        var externalId = "89852ac6-254f-4938-aec8-4fac7cb72901";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var status = UnitAddressStatus.Pending;
         string? floorName = null;
@@ -436,7 +436,7 @@ public class UnitAddressTests
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
 
         var updateUnitAddressResult = unitAddressAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             accessAddressId: accessAddressId,
             status: status,
             floorName: floorName,
@@ -457,7 +457,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = "89852ac6-254f-4938-aec8-4fac7cb72901";
+        var externalId = "89852ac6-254f-4938-aec8-4fac7cb72901";
         var accessAddressId = Guid.Parse("c00a5940-0184-4b79-baa9-d59290fac67d");
         var status = UnitAddressStatus.Pending;
         string? floorName = null;
@@ -469,7 +469,7 @@ public class UnitAddressTests
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
 
         var updateUnitAddressResult = unitAddressAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             accessAddressId: accessAddressId,
             status: status,
             floorName: floorName,
@@ -492,7 +492,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
+        var externalId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var status = UnitAddressStatus.Discontinued;
         string? floorName = null;
@@ -504,7 +504,7 @@ public class UnitAddressTests
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
 
         var updateUnitAddressResult = unitAddressAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             accessAddressId: accessAddressId,
             status: status,
             floorName: floorName,
@@ -578,7 +578,7 @@ public class UnitAddressTests
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
         var id = Guid.Parse("9a171f9b-1d25-458e-b664-627fd15e14f6");
-        var officialId = "d4de2559-066d-4492-8f84-712f4995b7a3";
+        var externalId = "d4de2559-066d-4492-8f84-712f4995b7a3";
         var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
         var status = UnitAddressStatus.Discontinued;
         string? floorName = null;
@@ -590,7 +590,7 @@ public class UnitAddressTests
         var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
 
         var updateUnitAddressResult = unitAddressAR.Update(
-            officialId: officialId,
+            externalId: externalId,
             accessAddressId: accessAddressId,
             status: status,
             floorName: floorName,

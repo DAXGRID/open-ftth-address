@@ -48,10 +48,10 @@ public class AddressProjection : ProjectionBase
 
     private void Handle(AccessAddressCreated accessAddressCreated)
     {
-        if (accessAddressCreated.OfficialId is not null)
+        if (accessAddressCreated.ExternalId is not null)
         {
             AccessAddressOfficialIdToId.Add(
-                accessAddressCreated.OfficialId, accessAddressCreated.Id);
+                accessAddressCreated.ExternalId, accessAddressCreated.Id);
         }
 
         // This is a bit special since we allow access addresses to be created
@@ -64,10 +64,10 @@ public class AddressProjection : ProjectionBase
 
     private void Handle(UnitAddressCreated unitAddressCreated)
     {
-        if (unitAddressCreated.OfficialId is not null)
+        if (unitAddressCreated.ExternalId is not null)
         {
             UnitAddressOfficialIdToId.Add(
-                unitAddressCreated.OfficialId, unitAddressCreated.Id);
+                unitAddressCreated.ExternalId, unitAddressCreated.Id);
         }
     }
 
