@@ -8,21 +8,21 @@ public record CreatePostCodeExampleData
     public Guid Id { get; init; }
     public string Number { get; init; }
     public string Name { get; init; }
-    public DateTime Created { get; init; }
-    public DateTime Updated { get; init; }
+    public DateTime ExternalCreatedDate { get; init; }
+    public DateTime ExternalUpdatedDate { get; init; }
 
     public CreatePostCodeExampleData(
         Guid id,
         string number,
         string name,
-        DateTime created,
-        DateTime updated)
+        DateTime externalCreatedDate,
+        DateTime externalUpdatedDate)
     {
         Id = id;
         Number = number;
         Name = name;
-        Created = created;
-        Updated = updated;
+        ExternalCreatedDate = externalCreatedDate;
+        ExternalUpdatedDate = externalUpdatedDate;
     }
 }
 
@@ -44,8 +44,8 @@ public class PostCodeTests
                 id: Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002"),
                 number: "7000",
                 name: "Fredericia",
-                created: DateTime.UtcNow,
-                updated: DateTime.UtcNow)
+                externalCreatedDate: DateTime.UtcNow,
+                externalUpdatedDate: DateTime.UtcNow)
         };
 
         yield return new object[]
@@ -54,8 +54,8 @@ public class PostCodeTests
                 id: Guid.Parse("7460bb7e-9d72-45f0-a5fa-6a92b7bb30dc"),
                 number: "8660",
                 name: "Skanderborg",
-                created: DateTime.UtcNow,
-                updated: DateTime.UtcNow)
+                externalCreatedDate: DateTime.UtcNow,
+                externalUpdatedDate: DateTime.UtcNow)
         };
     }
 
@@ -74,8 +74,8 @@ public class PostCodeTests
             id: postCodeExampleData.Id,
             number: postCodeExampleData.Number,
             name: postCodeExampleData.Name,
-            externalCreatedDate: postCodeExampleData.Created,
-            externalUpdatedDate: postCodeExampleData.Updated);
+            externalCreatedDate: postCodeExampleData.ExternalCreatedDate,
+            externalUpdatedDate: postCodeExampleData.ExternalUpdatedDate);
 
         _eventStore.Aggregates.Store(postCodeAR);
 
@@ -83,7 +83,7 @@ public class PostCodeTests
         postCodeAR.Id.Should().Be(postCodeExampleData.Id);
         postCodeAR.Number.Should().Be(postCodeExampleData.Number);
         postCodeAR.Name.Should().Be(postCodeExampleData.Name);
-        postCodeAR.ExternalUpdatedDate.Should().Be(postCodeExampleData.Updated);
+        postCodeAR.ExternalUpdatedDate.Should().Be(postCodeExampleData.ExternalUpdatedDate);
     }
 
     [Fact, Order(1)]
