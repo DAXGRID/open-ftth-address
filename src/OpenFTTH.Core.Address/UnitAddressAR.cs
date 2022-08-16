@@ -19,8 +19,8 @@ public class UnitAddressAR : AggregateBase
     public UnitAddressStatus Status { get; private set; }
     public string? FloorName { get; private set; }
     public string? SuitName { get; private set; }
-    public DateTime Created { get; private set; }
-    public DateTime Updated { get; private set; }
+    public DateTime? ExternalCreatedDate { get; private set; }
+    public DateTime? ExternalUpdatedDate { get; private set; }
     public bool Deleted { get; private set; }
     public bool PendingOfficial { get; private set; }
 
@@ -38,8 +38,8 @@ public class UnitAddressAR : AggregateBase
         UnitAddressStatus status,
         string? floorName,
         string? suitName,
-        DateTime created,
-        DateTime updated,
+        DateTime? externalCreatedDate,
+        DateTime? externalUpdatedDate,
         HashSet<Guid> existingAccessAddressIds,
         bool pendingOfficial)
     {
@@ -59,20 +59,20 @@ public class UnitAddressAR : AggregateBase
                     $"{nameof(accessAddressId)} cannot be empty guid."));
         }
 
-        if (created == default)
+        if (externalCreatedDate == new DateTime())
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.CREATED_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(created)} being default date is invalid."));
+                    UnitAddressErrorCodes.EXTERNAL_CREATED_DATE_CANNOT_BE_DEFAULT_DATE,
+                    $"{nameof(externalCreatedDate)} being default datetime is invalid."));
         }
 
-        if (updated == default)
+        if (externalUpdatedDate == new DateTime())
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(updated)} being default date is invalid."));
+                    UnitAddressErrorCodes.EXTERNAL_UPDATED_DATE_CANNOT_BE_DEFAULT_DATE,
+                    $"{nameof(externalUpdatedDate)} being default datetime is invalid."));
         }
 
         if (existingAccessAddressIds is null ||
@@ -92,8 +92,8 @@ that does not exist ('{accessAddressId}')."));
                        status: status,
                        floorName: floorName,
                        suitName: suitName,
-                       created: created,
-                       updated: updated,
+                       externalCreatedDate: externalCreatedDate,
+                       externalUpdatedDate: externalUpdatedDate,
                        pendingOfficial: pendingOfficial));
 
         return Result.Ok();
@@ -105,7 +105,7 @@ that does not exist ('{accessAddressId}')."));
         UnitAddressStatus status,
         string? floorName,
         string? suitName,
-        DateTime updated,
+        DateTime? externalUpdatedDate,
         HashSet<Guid> existingAccessAddressIds,
         bool pendingOfficial)
     {
@@ -134,12 +134,12 @@ that does not exist ('{accessAddressId}')."));
                     $"{nameof(accessAddressId)} cannot be empty guid."));
         }
 
-        if (updated == default)
+        if (externalUpdatedDate == new DateTime())
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(updated)} being default date is invalid."));
+                    UnitAddressErrorCodes.EXTERNAL_UPDATED_DATE_CANNOT_BE_DEFAULT_DATE,
+                    $"{nameof(externalUpdatedDate)} being default date time is invalid."));
         }
 
         if (existingAccessAddressIds is null ||
@@ -198,13 +198,13 @@ that does not exist ('{accessAddressId}')."));
                        status: status,
                        floorName: floorName,
                        suitName: suitName,
-                       updated: updated,
+                       externalUpdatedDate: externalUpdatedDate,
                        pendingOfficial: pendingOfficial));
 
         return Result.Ok();
     }
 
-    public Result Delete(DateTime updated)
+    public Result Delete(DateTime? updated)
     {
         if (Id == Guid.Empty)
         {
@@ -223,11 +223,11 @@ that does not exist ('{accessAddressId}')."));
                     @$"Cannot delete already deleted."));
         }
 
-        if (updated == default)
+        if (updated == new DateTime())
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
+                    UnitAddressErrorCodes.EXTERNAL_UPDATED_DATE_CANNOT_BE_DEFAULT_DATE,
                     $"{nameof(updated)} being default date is invalid."));
         }
 
@@ -244,8 +244,8 @@ that does not exist ('{accessAddressId}')."));
         Status = unitAddressCreated.Status;
         FloorName = unitAddressCreated.FloorName;
         SuitName = unitAddressCreated.SuitName;
-        Created = unitAddressCreated.Created;
-        Updated = unitAddressCreated.Updated;
+        ExternalCreatedDate = unitAddressCreated.ExternalCreatedDate;
+        ExternalUpdatedDate = unitAddressCreated.ExternalUpdatedDate;
         PendingOfficial = unitAddressCreated.PendingOfficial;
     }
 
@@ -256,13 +256,13 @@ that does not exist ('{accessAddressId}')."));
         Status = unitAddressCreated.Status;
         FloorName = unitAddressCreated.FloorName;
         SuitName = unitAddressCreated.SuitName;
-        Updated = unitAddressCreated.Updated;
+        ExternalUpdatedDate = unitAddressCreated.ExternalUpdatedDate;
         PendingOfficial = unitAddressCreated.PendingOfficial;
     }
 
     private void Apply(UnitAddressDeleted unitAddressDeleted)
     {
         Deleted = true;
-        Updated = unitAddressDeleted.Updated;
+        ExternalUpdatedDate = unitAddressDeleted.ExternalUpdatedDate;
     }
 }
