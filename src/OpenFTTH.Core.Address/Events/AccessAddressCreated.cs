@@ -20,7 +20,7 @@ public sealed record AccessAddressCreated
 
     public AccessAddressCreated(
         Guid id,
-        string? officialId,
+        string? externalId,
         DateTime created,
         DateTime updated,
         string municipalCode,
@@ -36,7 +36,7 @@ public sealed record AccessAddressCreated
         bool pendingOfficial)
     {
         Id = id;
-        OfficialId = officialId;
+        OfficialId = externalId;
         Created = created;
         Updated = updated;
         MunicipalCode = municipalCode;

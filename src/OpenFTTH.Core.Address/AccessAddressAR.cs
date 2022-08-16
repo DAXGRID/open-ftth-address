@@ -14,7 +14,7 @@ public enum AccessAddressStatus
 
 public class AccessAddressAR : AggregateBase
 {
-    public string? OfficialId { get; private set; }
+    public string? ExternalId { get; private set; }
     public DateTime Created { get; private set; }
     public DateTime Updated { get; private set; }
     public string MunicipalCode { get; private set; } = string.Empty;
@@ -39,7 +39,7 @@ public class AccessAddressAR : AggregateBase
 
     public Result Create(
         Guid id,
-        string? officialId,
+        string? externalId,
         DateTime created,
         DateTime updated,
         string municipalCode,
@@ -99,7 +99,7 @@ public class AccessAddressAR : AggregateBase
         RaiseEvent(
             new AccessAddressCreated(
                 id: id,
-                officialId: officialId,
+                externalId: externalId,
                 created: created,
                 updated: updated,
                 municipalCode: municipalCode,
@@ -117,7 +117,7 @@ public class AccessAddressAR : AggregateBase
     }
 
     public Result Update(
-        string? officialId,
+        string? externalId,
         DateTime updated,
         string municipalCode,
         AccessAddressStatus status,
@@ -176,7 +176,7 @@ public class AccessAddressAR : AggregateBase
 
         var hasChanges = () =>
         {
-            if (OfficialId != officialId)
+            if (ExternalId != externalId)
             {
                 return true;
             }
@@ -235,7 +235,7 @@ public class AccessAddressAR : AggregateBase
         RaiseEvent(
             new AccessAddressUpdated(
                 id: Id,
-                officialId: officialId,
+                officialId: externalId,
                 updated: updated,
                 municipalCode: municipalCode,
                 status: status,
@@ -287,7 +287,7 @@ public class AccessAddressAR : AggregateBase
     private void Apply(AccessAddressCreated accessAddressCreated)
     {
         Id = accessAddressCreated.Id;
-        OfficialId = accessAddressCreated.OfficialId;
+        ExternalId = accessAddressCreated.OfficialId;
         Created = accessAddressCreated.Created;
         Updated = accessAddressCreated.Updated;
         MunicipalCode = accessAddressCreated.MunicipalCode;
@@ -305,7 +305,7 @@ public class AccessAddressAR : AggregateBase
 
     private void Apply(AccessAddressUpdated accessAddressUpdated)
     {
-        OfficialId = accessAddressUpdated.OfficialId;
+        ExternalId = accessAddressUpdated.OfficialId;
         Updated = accessAddressUpdated.Updated;
         MunicipalCode = accessAddressUpdated.MunicipalCode;
         Status = accessAddressUpdated.Status;
