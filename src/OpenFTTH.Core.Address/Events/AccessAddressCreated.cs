@@ -4,8 +4,8 @@ public sealed record AccessAddressCreated
 {
     public Guid Id { get; init; }
     public string? ExternalId { get; init; }
-    public DateTime Created { get; init; }
-    public DateTime Updated { get; init; }
+    public DateTime? ExternalCreatedDate { get; init; }
+    public DateTime? ExternalUpdatedDate { get; init; }
     public string MunicipalCode { get; init; }
     public AccessAddressStatus Status { get; init; }
     public string RoadCode { get; init; }
@@ -21,8 +21,8 @@ public sealed record AccessAddressCreated
     public AccessAddressCreated(
         Guid id,
         string? externalId,
-        DateTime created,
-        DateTime updated,
+        DateTime? externalCreatedDate,
+        DateTime? externalUpdatedDate,
         string municipalCode,
         AccessAddressStatus status,
         string roadCode,
@@ -37,8 +37,8 @@ public sealed record AccessAddressCreated
     {
         Id = id;
         ExternalId = externalId;
-        Created = created;
-        Updated = updated;
+        ExternalCreatedDate = externalCreatedDate;
+        ExternalUpdatedDate = externalUpdatedDate;
         MunicipalCode = municipalCode;
         Status = status;
         RoadCode = roadCode;
