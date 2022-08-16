@@ -64,22 +64,6 @@ public class AccessAddressAR : AggregateBase
                     $"{nameof(id)} cannot be empty guid."));
         }
 
-        if (externalCreatedDate == new DateTime())
-        {
-            return Result.Fail(
-                new AccessAddressError(
-                    AccessAddressErrorCodes.CREATED_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(externalCreatedDate)}, being default date, is invalid."));
-        }
-
-        if (externalUpdatedDate == new DateTime())
-        {
-            return Result.Fail(
-                new AccessAddressError(
-                    AccessAddressErrorCodes.EXTERNAL_UPDATED_DATE_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(externalUpdatedDate)}, being default date, is invalid."));
-        }
-
         if (existingRoadIds is null || !existingRoadIds.Contains(roadId))
         {
             return Result.Fail(
@@ -148,14 +132,6 @@ public class AccessAddressAR : AggregateBase
                 new AccessAddressError(
                     AccessAddressErrorCodes.CANNOT_UPDATE_DELETED,
                     @$"{nameof(Id)}, is deleted, cannot be updated."));
-        }
-
-        if (externalUpdatedDate == new DateTime())
-        {
-            return Result.Fail(
-                new AccessAddressError(
-                    AccessAddressErrorCodes.EXTERNAL_UPDATED_DATE_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(externalUpdatedDate)}, being default datetime, is invalid."));
         }
 
         if (existingRoadIds is null || !existingRoadIds.Contains(roadId))
@@ -269,14 +245,6 @@ public class AccessAddressAR : AggregateBase
                 new AccessAddressError(
                     AccessAddressErrorCodes.CANNOT_DELETE_ALREADY_DELETED,
                     @$"{nameof(Id)}, is already deleted."));
-        }
-
-        if (externalUpdatedDate == new DateTime())
-        {
-            return Result.Fail(
-                new AccessAddressError(
-                    AccessAddressErrorCodes.EXTERNAL_UPDATED_DATE_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(externalUpdatedDate)}, being default datetime, is invalid."));
         }
 
         RaiseEvent(new AccessAddressDeleted(Id, externalUpdatedDate));
