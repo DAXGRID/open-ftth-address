@@ -202,82 +202,6 @@ public class UnitAddressTests
     }
 
     [Fact, Order(1)]
-    public void Create_default_created_date_is_invalid()
-    {
-        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
-
-        var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var externalId = "d4de2559-066d-4492-8f84-712f4995b7a3";
-        var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var status = UnitAddressStatus.Active;
-        string? floorName = null;
-        string? suitName = null;
-        var created = new DateTime();
-        var externalUpdatedDate = DateTime.UtcNow;
-        var existingAccessAddressIds = addressProjection.AccessAddressIds;
-        var pendingOfficial = false;
-
-        var unitAddressAR = new UnitAddressAR();
-
-        var createUnitAddressResult = unitAddressAR.Create(
-            id: id,
-            externalId: externalId,
-            accessAddressId: accessAddressId,
-            status: status,
-            floorName: floorName,
-            suitName: suitName,
-            externalCreatedDate: created,
-            externalUpdatedDate: externalUpdatedDate,
-            existingAccessAddressIds: existingAccessAddressIds,
-            pendingOfficial: pendingOfficial);
-
-        createUnitAddressResult.IsSuccess.Should().BeFalse();
-        createUnitAddressResult.Errors.Should().HaveCount(1);
-        ((UnitAddressError)createUnitAddressResult.Errors.First())
-            .Code
-            .Should()
-            .Be(UnitAddressErrorCodes.EXTERNAL_CREATED_DATE_CANNOT_BE_DEFAULT_DATE);
-    }
-
-    [Fact, Order(1)]
-    public void Create_default_external_updated_date_is_invalid()
-    {
-        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
-
-        var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var externalId = "d4de2559-066d-4492-8f84-712f4995b7a3";
-        var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var status = UnitAddressStatus.Active;
-        string? floorName = null;
-        string? suitName = null;
-        var externalCreatedDate = DateTime.UtcNow;
-        var externalUpdatedDate = new DateTime();
-        var existingAccessAddressIds = addressProjection.AccessAddressIds;
-        var pendingOfficial = false;
-
-        var unitAddressAR = new UnitAddressAR();
-
-        var createUnitAddressResult = unitAddressAR.Create(
-            id: id,
-            externalId: externalId,
-            accessAddressId: accessAddressId,
-            status: status,
-            floorName: floorName,
-            suitName: suitName,
-            externalCreatedDate: externalCreatedDate,
-            externalUpdatedDate: externalUpdatedDate,
-            existingAccessAddressIds: existingAccessAddressIds,
-            pendingOfficial: pendingOfficial);
-
-        createUnitAddressResult.IsSuccess.Should().BeFalse();
-        createUnitAddressResult.Errors.Should().HaveCount(1);
-        ((UnitAddressError)createUnitAddressResult.Errors.First())
-            .Code
-            .Should()
-            .Be(UnitAddressErrorCodes.EXTERNAL_UPDATED_DATE_CANNOT_BE_DEFAULT_DATE);
-    }
-
-    [Fact, Order(1)]
     public void Create_could_not_find_access_address_on_id()
     {
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
@@ -421,39 +345,6 @@ public class UnitAddressTests
     }
 
     [Fact, Order(2)]
-    public void Update_updated_being_default_is_invalid()
-    {
-        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
-
-        var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var externalId = "89852ac6-254f-4938-aec8-4fac7cb72901";
-        var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var status = UnitAddressStatus.Pending;
-        string? floorName = null;
-        string? suitName = null;
-        var updated = new DateTime();
-        var existingAccessAddressIds = addressProjection.AccessAddressIds;
-        var pendingOfficial = false;
-
-        var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
-
-        var updateUnitAddressResult = unitAddressAR.Update(
-            externalId: externalId,
-            accessAddressId: accessAddressId,
-            status: status,
-            floorName: floorName,
-            suitName: suitName,
-            externalUpdatedDate: updated,
-            existingAccessAddressIds: existingAccessAddressIds,
-            pendingOfficial: pendingOfficial);
-
-        updateUnitAddressResult.IsSuccess.Should().BeFalse();
-        updateUnitAddressResult.Errors.Should().HaveCount(1);
-        ((UnitAddressError)updateUnitAddressResult.Errors.First())
-            .Code.Should().Be(UnitAddressErrorCodes.EXTERNAL_UPDATED_DATE_CANNOT_BE_DEFAULT_DATE);
-    }
-
-    [Fact, Order(2)]
     public void Update_access_address_id_does_not_exist_is_invalid()
     {
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
@@ -538,23 +429,6 @@ public class UnitAddressTests
             .Code
             .Should()
             .Be(UnitAddressErrorCodes.ID_NOT_SET);
-    }
-
-    [Fact, Order(3)]
-    public void Delete_with_default_update_date_is_invalid()
-    {
-        var id = Guid.Parse("9a171f9b-1d25-458e-b664-627fd15e14f6");
-        var updated = new DateTime();
-
-        var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
-
-        var deleteResult = unitAddressAR.Delete(updated);
-
-        deleteResult.Errors.Should().HaveCount(1);
-        ((UnitAddressError)(deleteResult.Errors.First()))
-            .Code
-            .Should()
-            .Be(UnitAddressErrorCodes.EXTERNAL_UPDATED_DATE_CANNOT_BE_DEFAULT_DATE);
     }
 
     [Fact, Order(4)]

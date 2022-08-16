@@ -59,22 +59,6 @@ public class UnitAddressAR : AggregateBase
                     $"{nameof(accessAddressId)} cannot be empty guid."));
         }
 
-        if (externalCreatedDate == new DateTime())
-        {
-            return Result.Fail(
-                new UnitAddressError(
-                    UnitAddressErrorCodes.EXTERNAL_CREATED_DATE_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(externalCreatedDate)} being default datetime is invalid."));
-        }
-
-        if (externalUpdatedDate == new DateTime())
-        {
-            return Result.Fail(
-                new UnitAddressError(
-                    UnitAddressErrorCodes.EXTERNAL_UPDATED_DATE_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(externalUpdatedDate)} being default datetime is invalid."));
-        }
-
         if (existingAccessAddressIds is null ||
             !existingAccessAddressIds.Contains(accessAddressId))
         {
@@ -132,14 +116,6 @@ that does not exist ('{accessAddressId}')."));
                 new UnitAddressError(
                     UnitAddressErrorCodes.ACCESS_ADDRESS_ID_CANNOT_BE_EMPTY_GUID,
                     $"{nameof(accessAddressId)} cannot be empty guid."));
-        }
-
-        if (externalUpdatedDate == new DateTime())
-        {
-            return Result.Fail(
-                new UnitAddressError(
-                    UnitAddressErrorCodes.EXTERNAL_UPDATED_DATE_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(externalUpdatedDate)} being default date time is invalid."));
         }
 
         if (existingAccessAddressIds is null ||
@@ -221,14 +197,6 @@ that does not exist ('{accessAddressId}')."));
                 new UnitAddressError(
                     UnitAddressErrorCodes.CANNOT_DELETE_ALREADY_DELETED,
                     @$"Cannot delete already deleted."));
-        }
-
-        if (updated == new DateTime())
-        {
-            return Result.Fail(
-                new UnitAddressError(
-                    UnitAddressErrorCodes.EXTERNAL_UPDATED_DATE_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(updated)} being default date is invalid."));
         }
 
         RaiseEvent(new UnitAddressDeleted(Id, updated));
