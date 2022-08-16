@@ -6,19 +6,19 @@ public sealed record RoadUpdated
     public string ExternalId { get; init; }
     public string Name { get; init; }
     public RoadStatus Status { get; init; }
-    public DateTime Updated { get; init; }
+    public DateTime? ExternalUpdatedDate { get; init; }
 
     public RoadUpdated(
         Guid id,
         string externalId,
         string name,
         RoadStatus status,
-        DateTime updated)
+        DateTime? externalUpdatedDate)
     {
         Id = id;
         ExternalId = externalId;
         Name = name;
         Status = status;
-        Updated = updated;
+        ExternalUpdatedDate = externalUpdatedDate;
     }
 }

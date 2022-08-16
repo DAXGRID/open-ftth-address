@@ -8,7 +8,7 @@ public sealed record UnitAddressUpdated
     public UnitAddressStatus Status { get; init; }
     public string? FloorName { get; init; }
     public string? SuitName { get; init; }
-    public DateTime Updated { get; init; }
+    public DateTime? ExternalUpdatedDate { get; init; }
     public bool PendingOfficial { get; init; }
 
     public UnitAddressUpdated(
@@ -18,7 +18,7 @@ public sealed record UnitAddressUpdated
         UnitAddressStatus status,
         string? floorName,
         string? suitName,
-        DateTime updated,
+        DateTime? externalUpdatedDate,
         bool pendingOfficial)
     {
         Id = id;
@@ -27,7 +27,7 @@ public sealed record UnitAddressUpdated
         Status = status;
         FloorName = floorName;
         SuitName = suitName;
-        Updated = updated;
+        ExternalUpdatedDate = externalUpdatedDate;
         PendingOfficial = pendingOfficial;
     }
 }

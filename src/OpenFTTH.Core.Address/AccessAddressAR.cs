@@ -15,8 +15,8 @@ public enum AccessAddressStatus
 public class AccessAddressAR : AggregateBase
 {
     public string? ExternalId { get; private set; }
-    public DateTime Created { get; private set; }
-    public DateTime Updated { get; private set; }
+    public DateTime? ExternalCreatedDate { get; private set; }
+    public DateTime? ExternalUpdatedDate { get; private set; }
     public string MunicipalCode { get; private set; } = string.Empty;
     public AccessAddressStatus Status { get; private set; }
     public string RoadCode { get; private set; } = string.Empty;
@@ -40,8 +40,8 @@ public class AccessAddressAR : AggregateBase
     public Result Create(
         Guid id,
         string? externalId,
-        DateTime created,
-        DateTime updated,
+        DateTime? externalCreatedDate,
+        DateTime? externalUpdatedDate,
         string municipalCode,
         AccessAddressStatus status,
         string roadCode,
@@ -64,22 +64,6 @@ public class AccessAddressAR : AggregateBase
                     $"{nameof(id)} cannot be empty guid."));
         }
 
-        if (created == default)
-        {
-            return Result.Fail(
-                new AccessAddressError(
-                    AccessAddressErrorCodes.CREATED_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(created)}, being default date, is invalid."));
-        }
-
-        if (updated == default)
-        {
-            return Result.Fail(
-                new AccessAddressError(
-                    AccessAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(updated)}, being default date, is invalid."));
-        }
-
         if (existingRoadIds is null || !existingRoadIds.Contains(roadId))
         {
             return Result.Fail(
@@ -100,8 +84,8 @@ public class AccessAddressAR : AggregateBase
             new AccessAddressCreated(
                 id: id,
                 externalId: externalId,
-                created: created,
-                updated: updated,
+                externalCreatedDate: externalCreatedDate,
+                externalUpdatedDate: externalUpdatedDate,
                 municipalCode: municipalCode,
                 status: status,
                 roadCode: roadCode,
@@ -118,7 +102,7 @@ public class AccessAddressAR : AggregateBase
 
     public Result Update(
         string? externalId,
-        DateTime updated,
+        DateTime? externalUpdatedDate,
         string municipalCode,
         AccessAddressStatus status,
         string roadCode,
@@ -148,14 +132,6 @@ public class AccessAddressAR : AggregateBase
                 new AccessAddressError(
                     AccessAddressErrorCodes.CANNOT_UPDATE_DELETED,
                     @$"{nameof(Id)}, is deleted, cannot be updated."));
-        }
-
-        if (updated == default)
-        {
-            return Result.Fail(
-                new AccessAddressError(
-                    AccessAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(updated)}, being default date, is invalid."));
         }
 
         if (existingRoadIds is null || !existingRoadIds.Contains(roadId))
@@ -236,7 +212,7 @@ public class AccessAddressAR : AggregateBase
             new AccessAddressUpdated(
                 id: Id,
                 externalId: externalId,
-                updated: updated,
+                externalUpdatedDate: externalUpdatedDate,
                 municipalCode: municipalCode,
                 status: status,
                 roadCode: roadCode,
@@ -252,7 +228,7 @@ public class AccessAddressAR : AggregateBase
         return Result.Ok();
     }
 
-    public Result Delete(DateTime updated)
+    public Result Delete(DateTime externalUpdatedDate)
     {
         if (Id == Guid.Empty)
         {
@@ -271,15 +247,7 @@ public class AccessAddressAR : AggregateBase
                     @$"{nameof(Id)}, is already deleted."));
         }
 
-        if (updated == default)
-        {
-            return Result.Fail(
-                new AccessAddressError(
-                    AccessAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(updated)}, being default date, is invalid."));
-        }
-
-        RaiseEvent(new AccessAddressDeleted(Id, updated));
+        RaiseEvent(new AccessAddressDeleted(Id, externalUpdatedDate));
 
         return Result.Ok();
     }
@@ -288,8 +256,8 @@ public class AccessAddressAR : AggregateBase
     {
         Id = accessAddressCreated.Id;
         ExternalId = accessAddressCreated.ExternalId;
-        Created = accessAddressCreated.Created;
-        Updated = accessAddressCreated.Updated;
+        ExternalCreatedDate = accessAddressCreated.ExternalCreatedDate;
+        ExternalUpdatedDate = accessAddressCreated.ExternalUpdatedDate;
         MunicipalCode = accessAddressCreated.MunicipalCode;
         Status = accessAddressCreated.Status;
         RoadCode = accessAddressCreated.RoadCode;
@@ -306,7 +274,7 @@ public class AccessAddressAR : AggregateBase
     private void Apply(AccessAddressUpdated accessAddressUpdated)
     {
         ExternalId = accessAddressUpdated.ExternalId;
-        Updated = accessAddressUpdated.Updated;
+        ExternalUpdatedDate = accessAddressUpdated.ExternalUpdatedDate;
         MunicipalCode = accessAddressUpdated.MunicipalCode;
         Status = accessAddressUpdated.Status;
         RoadCode = accessAddressUpdated.RoadCode;
@@ -323,6 +291,6 @@ public class AccessAddressAR : AggregateBase
     private void Apply(AccessAddressDeleted accessAddressDeleted)
     {
         Deleted = true;
-        Updated = accessAddressDeleted.Updated;
+        ExternalUpdatedDate = accessAddressDeleted.ExternalUpdatedDate;
     }
 }

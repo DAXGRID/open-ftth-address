@@ -128,8 +128,8 @@ public class AcessAddressTests
         var createAccessAddressResult = accessAddressAR.Create(
             id: createExampleData.Id,
             externalId: createExampleData.ExternalId,
-            created: createExampleData.Created,
-            updated: createExampleData.Updated,
+            externalCreatedDate: createExampleData.Created,
+            externalUpdatedDate: createExampleData.Updated,
             municipalCode: createExampleData.MunicipalCode,
             status: createExampleData.Status,
             roadCode: createExampleData.RoadCode,
@@ -149,8 +149,8 @@ public class AcessAddressTests
         createAccessAddressResult.IsSuccess.Should().BeTrue();
         accessAddressAR.Id.Should().Be(createExampleData.Id);
         accessAddressAR.ExternalId.Should().Be(createExampleData.ExternalId);
-        accessAddressAR.Created.Should().Be(createExampleData.Created);
-        accessAddressAR.Updated.Should().Be(createExampleData.Updated);
+        accessAddressAR.ExternalCreatedDate.Should().Be(createExampleData.Created);
+        accessAddressAR.ExternalUpdatedDate.Should().Be(createExampleData.Updated);
         accessAddressAR.MunicipalCode.Should().Be(createExampleData.MunicipalCode);
         accessAddressAR.Status.Should().Be(createExampleData.Status);
         accessAddressAR.RoadCode.Should().Be(createExampleData.RoadCode);
@@ -194,8 +194,8 @@ public class AcessAddressTests
         var createAccessAddressResult = accessAddressAR.Create(
             id: id,
             externalId: externalId,
-            created: created,
-            updated: updated,
+            externalCreatedDate: created,
+            externalUpdatedDate: updated,
             municipalCode: municipalCode,
             status: status,
             roadCode: roadCode,
@@ -214,106 +214,6 @@ public class AcessAddressTests
         createAccessAddressResult.Errors.Count.Should().Be(1);
         ((AccessAddressError)createAccessAddressResult.Errors.First())
            .Code.Should().Be(AccessAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID);
-    }
-
-    [Fact, Order(1)]
-    public void Create_created_date_is_default_is_invalid()
-    {
-        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
-
-        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
-        var created = new DateTime();
-        var updated = DateTime.UtcNow;
-        var municipalCode = "D1234";
-        var status = AccessAddressStatus.Active;
-        var roadCode = "D12";
-        var houseNumber = "12F";
-        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
-        var eastCoordinate = 10.20;
-        var northCoordinate = 20.10;
-        var supplementaryTownName = "Fredericia";
-        var plotId = "12455F";
-        var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var existingRoadIds = addressProjection.GetRoadIds();
-        var existingPostCodeIds = addressProjection.GetPostCodeIds();
-        var pendingOfficial = false;
-
-        var accessAddressAR = new AccessAddressAR();
-
-        var createAccessAddressResult = accessAddressAR.Create(
-            id: id,
-            externalId: externalId,
-            created: created,
-            updated: updated,
-            municipalCode: municipalCode,
-            status: status,
-            roadCode: roadCode,
-            houseNumber: houseNumber,
-            postCodeId: postCodeId,
-            eastCoordinate: eastCoordinate,
-            northCoordinate: northCoordinate,
-            supplementaryTownName: supplementaryTownName,
-            plotId: plotId,
-            roadId: roadId,
-            existingRoadIds: existingRoadIds,
-            existingPostCodeIds: existingPostCodeIds,
-            pendingOfficial: pendingOfficial);
-
-        createAccessAddressResult.IsSuccess.Should().BeFalse();
-        createAccessAddressResult.Errors.Count.Should().Be(1);
-        ((AccessAddressError)createAccessAddressResult.Errors.First())
-            .Code.Should().Be(AccessAddressErrorCodes.CREATED_CANNOT_BE_DEFAULT_DATE);
-    }
-
-    [Fact, Order(1)]
-    public void Create_updated_date_is_default_is_invalid()
-    {
-        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
-
-        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
-        var created = DateTime.UtcNow;
-        var updated = new DateTime();
-        var municipalCode = "D1234";
-        var status = AccessAddressStatus.Active;
-        var roadCode = "D12";
-        var houseNumber = "12F";
-        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
-        var eastCoordinate = 10.20;
-        var northCoordinate = 20.10;
-        var supplementaryTownName = "Fredericia";
-        var plotId = "12455F";
-        var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var existingRoadIds = addressProjection.GetRoadIds();
-        var existingPostCodeIds = addressProjection.GetPostCodeIds();
-        var pendingOfficial = false;
-
-        var accessAddressAR = new AccessAddressAR();
-
-        var createAccessAddressResult = accessAddressAR.Create(
-            id: id,
-            externalId: externalId,
-            created: created,
-            updated: updated,
-            municipalCode: municipalCode,
-            status: status,
-            roadCode: roadCode,
-            houseNumber: houseNumber,
-            postCodeId: postCodeId,
-            eastCoordinate: eastCoordinate,
-            northCoordinate: northCoordinate,
-            supplementaryTownName: supplementaryTownName,
-            plotId: plotId,
-            roadId: roadId,
-            existingRoadIds: existingRoadIds,
-            existingPostCodeIds: existingPostCodeIds,
-            pendingOfficial: pendingOfficial);
-
-        createAccessAddressResult.IsSuccess.Should().BeFalse();
-        createAccessAddressResult.Errors.Count.Should().Be(1);
-        ((AccessAddressError)createAccessAddressResult.Errors.First())
-            .Code.Should().Be(AccessAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE);
     }
 
     [Fact, Order(1)]
@@ -344,8 +244,8 @@ public class AcessAddressTests
         var createAccessAddressResult = accessAddressAR.Create(
             id: id,
             externalId: externalId,
-            created: created,
-            updated: updated,
+            externalCreatedDate: created,
+            externalUpdatedDate: updated,
             municipalCode: municipalCode,
             status: status,
             roadCode: roadCode,
@@ -394,8 +294,8 @@ public class AcessAddressTests
         var createAccessAddressResult = accessAddressAR.Create(
             id: id,
             externalId: externalId,
-            created: created,
-            updated: updated,
+            externalCreatedDate: created,
+            externalUpdatedDate: updated,
             municipalCode: municipalCode,
             status: status,
             roadCode: roadCode,
@@ -442,7 +342,7 @@ public class AcessAddressTests
 
         var updateAccessAddressResult = accessAddressAR.Update(
             externalId: externalId,
-            updated: updated,
+            externalUpdatedDate: updated,
             municipalCode: municipalCode,
             status: status,
             roadCode: roadCode,
@@ -462,7 +362,7 @@ public class AcessAddressTests
         updateAccessAddressResult.IsSuccess.Should().BeTrue();
         accessAddressAR.Id.Should().Be(id);
         accessAddressAR.ExternalId.Should().Be(externalId);
-        accessAddressAR.Updated.Should().Be(updated);
+        accessAddressAR.ExternalUpdatedDate.Should().Be(updated);
         accessAddressAR.MunicipalCode.Should().Be(municipalCode);
         accessAddressAR.Status.Should().Be(status);
         accessAddressAR.RoadCode.Should().Be(roadCode);
@@ -501,7 +401,7 @@ public class AcessAddressTests
 
         var updateAccessAddressResult = accessAddressAR.Update(
             externalId: externalId,
-            updated: updated,
+            externalUpdatedDate: updated,
             municipalCode: municipalCode,
             status: status,
             roadCode: roadCode,
@@ -520,53 +420,6 @@ public class AcessAddressTests
         updateAccessAddressResult.Errors.Count.Should().Be(1);
         ((AccessAddressError)updateAccessAddressResult.Errors.First())
             .Code.Should().Be(AccessAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID);
-    }
-
-    [Fact, Order(2)]
-    public void Update_updated_being_default_date_is_invalid()
-    {
-        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
-
-        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
-        var updated = new DateTime();
-        var municipalCode = "F1234";
-        var status = AccessAddressStatus.Discontinued;
-        var roadCode = "F12";
-        var houseNumber = "10F";
-        var postCodeId = Guid.Parse("1acef11e-fc4e-11ec-b939-0242ac120002");
-        var eastCoordinate = 50.20;
-        var northCoordinate = 50.10;
-        var supplementaryTownName = "Kolding";
-        var plotId = "12445F";
-        var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
-        var existingRoadIds = addressProjection.GetRoadIds();
-        var existingPostCodeIds = addressProjection.GetPostCodeIds();
-        var pendingOfficial = false;
-
-        var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
-
-        var updateAccessAddressResult = accessAddressAR.Update(
-            externalId: externalId,
-            updated: updated,
-            municipalCode: municipalCode,
-            status: status,
-            roadCode: roadCode,
-            houseNumber: houseNumber,
-            postCodeId: postCodeId,
-            eastCoordinate: eastCoordinate,
-            northCoordinate: northCoordinate,
-            supplementaryTownName: supplementaryTownName,
-            plotId: plotId,
-            roadId: roadId,
-            existingRoadIds: existingRoadIds,
-            existingPostCodeIds: existingPostCodeIds,
-            pendingOfficial: pendingOfficial);
-
-        updateAccessAddressResult.IsSuccess.Should().BeFalse();
-        updateAccessAddressResult.Errors.Count.Should().Be(1);
-        ((AccessAddressError)updateAccessAddressResult.Errors.First())
-            .Code.Should().Be(AccessAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE);
     }
 
     [Fact, Order(2)]
@@ -595,7 +448,7 @@ public class AcessAddressTests
 
         var updateAccessAddressResult = accessAddressAR.Update(
             externalId: externalId,
-            updated: updated,
+            externalUpdatedDate: updated,
             municipalCode: municipalCode,
             status: status,
             roadCode: roadCode,
@@ -642,7 +495,7 @@ public class AcessAddressTests
 
         var updateAccessAddressResult = accessAddressAR.Update(
             externalId: externalId,
-            updated: updated,
+            externalUpdatedDate: updated,
             municipalCode: municipalCode,
             status: status,
             roadCode: roadCode,
@@ -689,7 +542,7 @@ public class AcessAddressTests
 
         var updateAccessAddressResult = accessAddressAR.Update(
             externalId: externalId,
-            updated: updated,
+            externalUpdatedDate: updated,
             municipalCode: municipalCode,
             status: status,
             roadCode: roadCode,
@@ -727,25 +580,6 @@ public class AcessAddressTests
         accessAddressAR.Deleted.Should().BeFalse();
     }
 
-    [Fact, Order(3)]
-    public void Delete_with_default_updated_date_is_invalid()
-    {
-        var id = Guid.Parse("94b1f97d-42df-49b3-90c6-74266a16661d");
-        var updated = new DateTime();
-
-        var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
-
-        var deleteResult = accessAddressAR.Delete(updated);
-
-        _eventStore.Aggregates.Store(accessAddressAR);
-
-        deleteResult.IsSuccess.Should().BeFalse();
-        deleteResult.Errors.Count.Should().Be(1);
-        ((AccessAddressError)deleteResult.Errors.First())
-            .Code.Should().Be(AccessAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE);
-        accessAddressAR.Deleted.Should().BeFalse();
-    }
-
     [Fact, Order(4)]
     public void Delete_is_success()
     {
@@ -760,7 +594,7 @@ public class AcessAddressTests
 
         deleteResult.IsSuccess.Should().BeTrue();
         accessAddressAR.Deleted.Should().BeTrue();
-        accessAddressAR.Updated.Should().Be(updated);
+        accessAddressAR.ExternalUpdatedDate.Should().Be(updated);
     }
 
     [Fact, Order(5)]
@@ -807,7 +641,7 @@ public class AcessAddressTests
 
         var updateAccessAddressResult = accessAddressAR.Update(
             externalId: externalId,
-            updated: updated,
+            externalUpdatedDate: updated,
             municipalCode: municipalCode,
             status: status,
             roadCode: roadCode,

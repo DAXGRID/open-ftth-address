@@ -11,8 +11,8 @@ public record CreateUnitAddressExampleData
     public UnitAddressStatus Status { get; init; }
     public string? FloorName { get; init; }
     public string? SuitName { get; init; }
-    public DateTime Created { get; init; }
-    public DateTime Updated { get; init; }
+    public DateTime ExternalCreatedDate { get; init; }
+    public DateTime ExternalUpdatedDate { get; init; }
     public bool PendingOfficial { get; init; }
 
     public CreateUnitAddressExampleData(
@@ -22,8 +22,8 @@ public record CreateUnitAddressExampleData
         UnitAddressStatus status,
         string? floorName,
         string? suitName,
-        DateTime created,
-        DateTime updated,
+        DateTime externalCreatedDate,
+        DateTime externalUpdatedDate,
         bool pendingOfficial)
     {
         Id = id;
@@ -32,8 +32,8 @@ public record CreateUnitAddressExampleData
         Status = status;
         FloorName = floorName;
         SuitName = suitName;
-        Created = created;
-        Updated = updated;
+        ExternalCreatedDate = externalCreatedDate;
+        ExternalUpdatedDate = externalUpdatedDate;
         PendingOfficial = pendingOfficial;
     }
 }
@@ -59,8 +59,8 @@ public class UnitAddressTests
                 status: UnitAddressStatus.Active,
                 floorName: null,
                 suitName: null,
-                created: DateTime.UtcNow,
-                updated: DateTime.UtcNow,
+                externalCreatedDate: DateTime.UtcNow,
+                externalUpdatedDate: DateTime.UtcNow,
                 pendingOfficial: true)
         };
 
@@ -73,8 +73,8 @@ public class UnitAddressTests
                 status: UnitAddressStatus.Active,
                 floorName: "1 st.",
                 suitName: "mf",
-                created: DateTime.UtcNow,
-                updated: DateTime.UtcNow,
+                externalCreatedDate: DateTime.UtcNow,
+                externalUpdatedDate: DateTime.UtcNow,
                 pendingOfficial: false)
         };
     }
@@ -101,8 +101,8 @@ public class UnitAddressTests
             status: unitAddressExampleData.Status,
             floorName: unitAddressExampleData.FloorName,
             suitName: unitAddressExampleData.SuitName,
-            created: unitAddressExampleData.Created,
-            updated: unitAddressExampleData.Updated,
+            externalCreatedDate: unitAddressExampleData.ExternalCreatedDate,
+            externalUpdatedDate: unitAddressExampleData.ExternalUpdatedDate,
             existingAccessAddressIds: existingAccessAddressIds,
             pendingOfficial: unitAddressExampleData.PendingOfficial);
 
@@ -115,8 +115,10 @@ public class UnitAddressTests
         unitAddressAR.Status.Should().Be(unitAddressExampleData.Status);
         unitAddressAR.FloorName.Should().Be(unitAddressExampleData.FloorName);
         unitAddressAR.SuitName.Should().Be(unitAddressExampleData.SuitName);
-        unitAddressAR.Created.Should().Be(unitAddressExampleData.Created);
-        unitAddressAR.Updated.Should().Be(unitAddressExampleData.Updated);
+        unitAddressAR.ExternalCreatedDate.Should()
+            .Be(unitAddressExampleData.ExternalCreatedDate);
+        unitAddressAR.ExternalUpdatedDate.Should()
+            .Be(unitAddressExampleData.ExternalUpdatedDate);
         unitAddressAR.PendingOfficial.Should().Be(unitAddressExampleData.PendingOfficial);
     }
 
@@ -131,8 +133,8 @@ public class UnitAddressTests
         var status = UnitAddressStatus.Active;
         string? floorName = null;
         string? suitName = null;
-        var created = DateTime.UtcNow;
-        var updated = DateTime.UtcNow;
+        var externalCreatedDate = DateTime.UtcNow;
+        var externalUpdatedDate = DateTime.UtcNow;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
         var pendingOfficial = false;
 
@@ -145,8 +147,8 @@ public class UnitAddressTests
             status: status,
             floorName: floorName,
             suitName: suitName,
-            created: created,
-            updated: updated,
+            externalCreatedDate: externalCreatedDate,
+            externalUpdatedDate: externalUpdatedDate,
             existingAccessAddressIds: existingAccessAddressIds,
             pendingOfficial: pendingOfficial);
 
@@ -172,8 +174,8 @@ public class UnitAddressTests
         var status = UnitAddressStatus.Active;
         string? floorName = null;
         string? suitName = null;
-        var created = DateTime.UtcNow;
-        var updated = DateTime.UtcNow;
+        var externalCreatedDate = DateTime.UtcNow;
+        var externalUpdatedDate = DateTime.UtcNow;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
         var pendingOfficial = false;
 
@@ -186,8 +188,8 @@ public class UnitAddressTests
             status: status,
             floorName: floorName,
             suitName: suitName,
-            created: created,
-            updated: updated,
+            externalCreatedDate: externalCreatedDate,
+            externalUpdatedDate: externalUpdatedDate,
             existingAccessAddressIds: existingAccessAddressIds,
             pendingOfficial: pendingOfficial);
 
@@ -197,82 +199,6 @@ public class UnitAddressTests
             .Code
             .Should()
             .Be(UnitAddressErrorCodes.ACCESS_ADDRESS_ID_CANNOT_BE_EMPTY_GUID);
-    }
-
-    [Fact, Order(1)]
-    public void Create_default_created_date_is_invalid()
-    {
-        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
-
-        var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var externalId = "d4de2559-066d-4492-8f84-712f4995b7a3";
-        var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var status = UnitAddressStatus.Active;
-        string? floorName = null;
-        string? suitName = null;
-        var created = new DateTime();
-        var updated = DateTime.UtcNow;
-        var existingAccessAddressIds = addressProjection.AccessAddressIds;
-        var pendingOfficial = false;
-
-        var unitAddressAR = new UnitAddressAR();
-
-        var createUnitAddressResult = unitAddressAR.Create(
-            id: id,
-            externalId: externalId,
-            accessAddressId: accessAddressId,
-            status: status,
-            floorName: floorName,
-            suitName: suitName,
-            created: created,
-            updated: updated,
-            existingAccessAddressIds: existingAccessAddressIds,
-            pendingOfficial: pendingOfficial);
-
-        createUnitAddressResult.IsSuccess.Should().BeFalse();
-        createUnitAddressResult.Errors.Should().HaveCount(1);
-        ((UnitAddressError)createUnitAddressResult.Errors.First())
-            .Code
-            .Should()
-            .Be(UnitAddressErrorCodes.CREATED_CANNOT_BE_DEFAULT_DATE);
-    }
-
-    [Fact, Order(1)]
-    public void Create_default_updated_date_is_invalid()
-    {
-        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
-
-        var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var externalId = "d4de2559-066d-4492-8f84-712f4995b7a3";
-        var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var status = UnitAddressStatus.Active;
-        string? floorName = null;
-        string? suitName = null;
-        var created = DateTime.UtcNow;
-        var updated = new DateTime();
-        var existingAccessAddressIds = addressProjection.AccessAddressIds;
-        var pendingOfficial = false;
-
-        var unitAddressAR = new UnitAddressAR();
-
-        var createUnitAddressResult = unitAddressAR.Create(
-            id: id,
-            externalId: externalId,
-            accessAddressId: accessAddressId,
-            status: status,
-            floorName: floorName,
-            suitName: suitName,
-            created: created,
-            updated: updated,
-            existingAccessAddressIds: existingAccessAddressIds,
-            pendingOfficial: pendingOfficial);
-
-        createUnitAddressResult.IsSuccess.Should().BeFalse();
-        createUnitAddressResult.Errors.Should().HaveCount(1);
-        ((UnitAddressError)createUnitAddressResult.Errors.First())
-            .Code
-            .Should()
-            .Be(UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE);
     }
 
     [Fact, Order(1)]
@@ -286,8 +212,8 @@ public class UnitAddressTests
         var status = UnitAddressStatus.Active;
         string? floorName = null;
         string? suitName = null;
-        var created = DateTime.UtcNow;
-        var updated = DateTime.UtcNow;
+        var externalCreatedDate = DateTime.UtcNow;
+        var externalUpdatedDate = DateTime.UtcNow;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
         var pendingOfficial = false;
 
@@ -300,8 +226,8 @@ public class UnitAddressTests
             status: status,
             floorName: floorName,
             suitName: suitName,
-            created: created,
-            updated: updated,
+            externalCreatedDate: externalCreatedDate,
+            externalUpdatedDate: externalUpdatedDate,
             existingAccessAddressIds: existingAccessAddressIds,
             pendingOfficial: pendingOfficial);
 
@@ -324,7 +250,7 @@ public class UnitAddressTests
         var status = UnitAddressStatus.Discontinued;
         string? floorName = null;
         string? suitName = null;
-        var updated = DateTime.Today;
+        var externalUpdatedDate = DateTime.Today;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
         var pendingOfficial = false;
 
@@ -336,7 +262,7 @@ public class UnitAddressTests
             status: status,
             floorName: floorName,
             suitName: suitName,
-            updated: updated,
+            externalUpdatedDate: externalUpdatedDate,
             existingAccessAddressIds: existingAccessAddressIds,
             pendingOfficial: pendingOfficial);
 
@@ -349,7 +275,7 @@ public class UnitAddressTests
         unitAddressAR.Status.Should().Be(status);
         unitAddressAR.FloorName.Should().Be(floorName);
         unitAddressAR.SuitName.Should().Be(suitName);
-        unitAddressAR.Updated.Should().Be(updated);
+        unitAddressAR.ExternalUpdatedDate.Should().Be(externalUpdatedDate);
         unitAddressAR.PendingOfficial.Should().Be(pendingOfficial);
     }
 
@@ -363,7 +289,7 @@ public class UnitAddressTests
         var status = UnitAddressStatus.Pending;
         string? floorName = null;
         string? suitName = null;
-        var updated = DateTime.UtcNow;
+        var externalUpdatedDate = DateTime.UtcNow;
         var existingAccessAddressIds = addressProjection.AccessAddressIds;
         var pendingOfficial = false;
 
@@ -375,7 +301,7 @@ public class UnitAddressTests
             status: status,
             floorName: floorName,
             suitName: suitName,
-            updated: updated,
+            externalUpdatedDate: externalUpdatedDate,
             existingAccessAddressIds: existingAccessAddressIds,
             pendingOfficial: pendingOfficial);
 
@@ -408,7 +334,7 @@ public class UnitAddressTests
             status: status,
             floorName: floorName,
             suitName: suitName,
-            updated: updated,
+            externalUpdatedDate: updated,
             existingAccessAddressIds: existingAccessAddressIds,
             pendingOfficial: pendingOfficial);
 
@@ -416,39 +342,6 @@ public class UnitAddressTests
         updateUnitAddressResult.Errors.Should().HaveCount(1);
         ((UnitAddressError)updateUnitAddressResult.Errors.First())
             .Code.Should().Be(UnitAddressErrorCodes.ACCESS_ADDRESS_ID_CANNOT_BE_EMPTY_GUID);
-    }
-
-    [Fact, Order(2)]
-    public void Update_updated_being_default_is_invalid()
-    {
-        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
-
-        var id = Guid.Parse("d4de2559-066d-4492-8f84-712f4995b7a3");
-        var externalId = "89852ac6-254f-4938-aec8-4fac7cb72901";
-        var accessAddressId = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
-        var status = UnitAddressStatus.Pending;
-        string? floorName = null;
-        string? suitName = null;
-        var updated = new DateTime();
-        var existingAccessAddressIds = addressProjection.AccessAddressIds;
-        var pendingOfficial = false;
-
-        var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
-
-        var updateUnitAddressResult = unitAddressAR.Update(
-            externalId: externalId,
-            accessAddressId: accessAddressId,
-            status: status,
-            floorName: floorName,
-            suitName: suitName,
-            updated: updated,
-            existingAccessAddressIds: existingAccessAddressIds,
-            pendingOfficial: pendingOfficial);
-
-        updateUnitAddressResult.IsSuccess.Should().BeFalse();
-        updateUnitAddressResult.Errors.Should().HaveCount(1);
-        ((UnitAddressError)updateUnitAddressResult.Errors.First())
-            .Code.Should().Be(UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE);
     }
 
     [Fact, Order(2)]
@@ -474,7 +367,7 @@ public class UnitAddressTests
             status: status,
             floorName: floorName,
             suitName: suitName,
-            updated: updated,
+            externalUpdatedDate: updated,
             existingAccessAddressIds: existingAccessAddressIds,
             pendingOfficial: pendingOfficial);
 
@@ -509,7 +402,7 @@ public class UnitAddressTests
             status: status,
             floorName: floorName,
             suitName: suitName,
-            updated: updated,
+            externalUpdatedDate: updated,
             existingAccessAddressIds: existingAccessAddressIds,
             pendingOfficial: pendingOfficial);
 
@@ -538,23 +431,6 @@ public class UnitAddressTests
             .Be(UnitAddressErrorCodes.ID_NOT_SET);
     }
 
-    [Fact, Order(3)]
-    public void Delete_with_default_update_date_is_invalid()
-    {
-        var id = Guid.Parse("9a171f9b-1d25-458e-b664-627fd15e14f6");
-        var updated = new DateTime();
-
-        var unitAddressAR = _eventStore.Aggregates.Load<UnitAddressAR>(id);
-
-        var deleteResult = unitAddressAR.Delete(updated);
-
-        deleteResult.Errors.Should().HaveCount(1);
-        ((UnitAddressError)(deleteResult.Errors.First()))
-            .Code
-            .Should()
-            .Be(UnitAddressErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE);
-    }
-
     [Fact, Order(4)]
     public void Delete_is_success()
     {
@@ -569,7 +445,7 @@ public class UnitAddressTests
 
         deleteResult.IsSuccess.Should().BeTrue();
         unitAddressAR.Deleted.Should().BeTrue();
-        unitAddressAR.Updated.Should().Be(updated);
+        unitAddressAR.ExternalUpdatedDate.Should().Be(updated);
     }
 
     [Fact, Order(5)]
@@ -595,7 +471,7 @@ public class UnitAddressTests
             status: status,
             floorName: floorName,
             suitName: suitName,
-            updated: updated,
+            externalUpdatedDate: updated,
             existingAccessAddressIds: existingAccessAddressIds,
             pendingOfficial: pendingOfficial);
 

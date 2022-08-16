@@ -4,12 +4,12 @@ public sealed record PostCodeUpdated
 {
     public Guid Id { get; init; }
     public string Name { get; init; }
-    public DateTime Updated { get; init; }
+    public DateTime? ExternalUpdatedDate { get; init; }
 
-    public PostCodeUpdated(Guid id, string name, DateTime updated)
+    public PostCodeUpdated(Guid id, string name, DateTime? externalUpdatedDate)
     {
         Id = id;
         Name = name;
-        Updated = updated;
+        ExternalUpdatedDate = externalUpdatedDate;
     }
 }

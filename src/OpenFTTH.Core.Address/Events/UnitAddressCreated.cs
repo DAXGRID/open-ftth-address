@@ -8,8 +8,8 @@ public sealed record UnitAddressCreated
     public UnitAddressStatus Status { get; init; }
     public string? FloorName { get; init; }
     public string? SuitName { get; init; }
-    public DateTime Created { get; init; }
-    public DateTime Updated { get; init; }
+    public DateTime? ExternalCreatedDate { get; init; }
+    public DateTime? ExternalUpdatedDate { get; init; }
     public bool PendingOfficial { get; init; }
 
     public UnitAddressCreated(
@@ -19,8 +19,8 @@ public sealed record UnitAddressCreated
         UnitAddressStatus status,
         string? floorName,
         string? suitName,
-        DateTime created,
-        DateTime updated,
+        DateTime? externalCreatedDate,
+        DateTime? externalUpdatedDate,
         bool pendingOfficial)
     {
         Id = id;
@@ -29,8 +29,8 @@ public sealed record UnitAddressCreated
         Status = status;
         FloorName = floorName;
         SuitName = suitName;
-        Created = created;
-        Updated = updated;
+        ExternalCreatedDate = externalCreatedDate;
+        ExternalUpdatedDate = externalUpdatedDate;
         PendingOfficial = pendingOfficial;
     }
 }
