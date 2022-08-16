@@ -16,8 +16,8 @@ public class RoadAR : AggregateBase
     public string Name { get; private set; } = string.Empty;
     public RoadStatus Status { get; private set; }
     public bool Deleted { get; private set; }
-    public DateTime Created { get; private set; }
-    public DateTime Updated { get; private set; }
+    public DateTime? ExternalCreatedDate { get; private set; }
+    public DateTime? ExternalUpdatedDate { get; private set; }
 
     public RoadAR()
     {
@@ -31,8 +31,8 @@ public class RoadAR : AggregateBase
         string? externalId,
         string name,
         RoadStatus status,
-        DateTime created,
-        DateTime updated)
+        DateTime? externalCreatedDate,
+        DateTime? externalUpdatedDate)
     {
         if (id == Guid.Empty)
         {
@@ -50,29 +50,13 @@ public class RoadAR : AggregateBase
                     $"{nameof(externalId)} is not allowed to be whitespace or null."));
         }
 
-        if (created == default)
-        {
-            return Result.Fail(
-                new RoadError(
-                    RoadErrorCode.CREATED_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(created)} being default date is invalid."));
-        }
-
-        if (updated == default)
-        {
-            return Result.Fail(
-                new RoadError(
-                    RoadErrorCode.UPDATED_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(updated)} being default date is invalid."));
-        }
-
         RaiseEvent(new RoadCreated(
             id: id,
             externalId: externalId,
             name: name,
             status: status,
-            created: created,
-            updated: updated));
+            externalCreatedDate: externalCreatedDate,
+            externalUpdatedDate: externalUpdatedDate));
 
         return Result.Ok();
     }
@@ -81,7 +65,7 @@ public class RoadAR : AggregateBase
         string name,
         string externalId,
         RoadStatus status,
-        DateTime updated)
+        DateTime? externalUpdatedDate)
     {
         if (Id == Guid.Empty)
         {
@@ -98,14 +82,6 @@ public class RoadAR : AggregateBase
                 new RoadError(
                     RoadErrorCode.CANNOT_UPDATE_DELETED,
                     @$"Cannot update deleted road with id: '{Id}'."));
-        }
-
-        if (updated == default)
-        {
-            return Result.Fail(
-                new RoadError(
-                    RoadErrorCode.UPDATED_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(updated)} being default date is invalid."));
         }
 
         var hasChanges = () =>
@@ -139,12 +115,12 @@ public class RoadAR : AggregateBase
             externalId: externalId,
             name: name,
             status: status,
-            updated: updated));
+            externalUpdatedDate: externalUpdatedDate));
 
         return Result.Ok();
     }
 
-    public Result Delete(DateTime updated)
+    public Result Delete(DateTime? externalUpdatedDate)
     {
         if (Id == Guid.Empty)
         {
@@ -163,15 +139,7 @@ public class RoadAR : AggregateBase
                     $"Id: '{Id}' is already deleted."));
         }
 
-        if (updated == default)
-        {
-            return Result.Fail(
-                new RoadError(
-                    RoadErrorCode.UPDATED_CANNOT_BE_DEFAULT_DATE,
-                    $"{nameof(updated)} being default date is invalid."));
-        }
-
-        RaiseEvent(new RoadDeleted(Id, updated));
+        RaiseEvent(new RoadDeleted(Id, externalUpdatedDate));
 
         return Result.Ok();
     }
@@ -182,8 +150,8 @@ public class RoadAR : AggregateBase
         ExternalId = roadCreated.ExternalId;
         Name = roadCreated.Name;
         Status = roadCreated.Status;
-        Created = roadCreated.Created;
-        Updated = roadCreated.Updated;
+        ExternalCreatedDate = roadCreated.ExternalCreatedDate;
+        ExternalUpdatedDate = roadCreated.ExternalUpdatedDate;
     }
 
     private void Apply(RoadUpdated roadUpdated)
@@ -191,12 +159,12 @@ public class RoadAR : AggregateBase
         ExternalId = roadUpdated.ExternalId;
         Name = roadUpdated.Name;
         Status = roadUpdated.Status;
-        Updated = roadUpdated.Updated;
+        ExternalUpdatedDate = roadUpdated.ExternalUpdatedDate;
     }
 
     private void Apply(RoadDeleted roadDeleted)
     {
         Deleted = true;
-        Updated = roadDeleted.Updated;
+        ExternalUpdatedDate = roadDeleted.ExternalUpdatedDate;
     }
 }
