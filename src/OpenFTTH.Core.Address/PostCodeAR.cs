@@ -9,8 +9,8 @@ public class PostCodeAR : AggregateBase
     public string Number { get; private set; } = string.Empty;
     public string Name { get; private set; } = string.Empty;
     public bool Deleted { get; private set; }
-    public DateTime Created { get; private set; }
-    public DateTime Updated { get; private set; }
+    public DateTime? ExternalCreatedDate { get; private set; }
+    public DateTime? ExternalUpdatedDate { get; private set; }
 
     public PostCodeAR()
     {
@@ -23,8 +23,8 @@ public class PostCodeAR : AggregateBase
         Guid id,
         string number,
         string name,
-        DateTime created,
-        DateTime updated)
+        DateTime? externalCreatedDate,
+        DateTime? externalUpdatedDate)
     {
         if (id == Guid.Empty)
         {
@@ -50,34 +50,17 @@ public class PostCodeAR : AggregateBase
                     $"{nameof(name)} cannot be null empty or whitespace."));
         }
 
-        if (created == default)
-        {
-            return Result.Fail(
-                new PostCodeError(
-                    PostCodeErrorCodes.CREATED_CANNOT_BE_DEFAULT_DATE,
-                    @$"{nameof(created)} being default date is invalid."));
-        }
-
-
-        if (updated == default)
-        {
-            return Result.Fail(
-                new PostCodeError(
-                    PostCodeErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
-                    @$"{nameof(updated)} being default date is invalid."));
-        }
-
         RaiseEvent(new PostCodeCreated(
                        id: id,
                        number: number,
                        name: name,
-                       created: created,
-                       updated: updated));
+                       externalCreatedDate: externalCreatedDate,
+                       externalUpdatedDate: externalUpdatedDate));
 
         return Result.Ok();
     }
 
-    public Result Update(string name, DateTime updated)
+    public Result Update(string name, DateTime? externalUpdatedDate)
     {
         if (Id == Guid.Empty)
         {
@@ -104,14 +87,6 @@ public class PostCodeAR : AggregateBase
                     $"{nameof(name)} cannot be null empty or whitespace."));
         }
 
-        if (updated == default)
-        {
-            return Result.Fail(
-                new PostCodeError(
-                    PostCodeErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
-                    @$"{nameof(updated)} being default date is invalid."));
-        }
-
         var hasChanges = () =>
         {
             if (Name != name)
@@ -133,12 +108,12 @@ public class PostCodeAR : AggregateBase
         RaiseEvent(new PostCodeUpdated(
                        id: Id,
                        name: name,
-                       updated: updated));
+                       externalUpdatedDate: externalUpdatedDate));
 
         return Result.Ok();
     }
 
-    public Result Delete(DateTime updated)
+    public Result Delete(DateTime? externalUpdatedDate)
     {
         if (Id == Guid.Empty)
         {
@@ -157,15 +132,7 @@ public class PostCodeAR : AggregateBase
                     @$"Id: '{Id}' is already deleted."));
         }
 
-        if (updated == default)
-        {
-            return Result.Fail(
-                new PostCodeError(
-                    PostCodeErrorCodes.UPDATED_CANNOT_BE_DEFAULT_DATE,
-                    @$"{nameof(updated)} being default date is invalid."));
-        }
-
-        RaiseEvent(new PostCodeDeleted(Id, updated));
+        RaiseEvent(new PostCodeDeleted(Id, externalUpdatedDate));
 
         return Result.Ok();
     }
@@ -175,19 +142,19 @@ public class PostCodeAR : AggregateBase
         Id = postCodeCreated.Id;
         Number = postCodeCreated.Number;
         Name = postCodeCreated.Name;
-        Created = postCodeCreated.Created;
-        Updated = postCodeCreated.Updated;
+        ExternalCreatedDate = postCodeCreated.ExternalCreatedDate;
+        ExternalUpdatedDate = postCodeCreated.ExternalUpdatedDate;
     }
 
     private void Apply(PostCodeUpdated postCodeUpdated)
     {
         Name = postCodeUpdated.Name;
-        Updated = postCodeUpdated.Updated;
+        ExternalUpdatedDate = postCodeUpdated.ExternalUpdatedDate;
     }
 
     private void Apply(PostCodeDeleted postCodeDeleted)
     {
         Deleted = true;
-        Updated = postCodeDeleted.Updated;
+        ExternalUpdatedDate = postCodeDeleted.ExternalUpdatedDate;
     }
 }
