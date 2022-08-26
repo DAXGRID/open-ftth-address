@@ -180,7 +180,7 @@ that does not exist ('{accessAddressId}')."));
         return Result.Ok();
     }
 
-    public Result Delete(DateTime? updated)
+    public Result Delete(DateTime? externalUpdatedDate)
     {
         if (Id == Guid.Empty)
         {
@@ -199,7 +199,7 @@ that does not exist ('{accessAddressId}')."));
                     @$"Cannot delete already deleted."));
         }
 
-        RaiseEvent(new UnitAddressDeleted(Id, updated));
+        RaiseEvent(new UnitAddressDeleted(Id, externalUpdatedDate));
 
         return Result.Ok();
     }

@@ -228,7 +228,7 @@ public class AccessAddressAR : AggregateBase
         return Result.Ok();
     }
 
-    public Result Delete(DateTime externalUpdatedDate)
+    public Result Delete(DateTime? externalUpdatedDate)
     {
         if (Id == Guid.Empty)
         {
