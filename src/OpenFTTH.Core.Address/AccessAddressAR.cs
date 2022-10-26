@@ -77,7 +77,7 @@ public class AccessAddressAR : AggregateBase
             return Result.Fail(
                 new AccessAddressError(
                     AccessAddressErrorCodes.POST_CODE_DOES_NOT_EXIST,
-                    $"No postcode wxists with id '{postCodeId}'."));
+                    $"No postcode exists with id '{postCodeId}'."));
         }
 
         RaiseEvent(
