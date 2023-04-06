@@ -151,6 +151,34 @@ public class RoadTests
     }
 
     [Fact, Order(2)]
+    public void Cannot_create_when_it_has_already_been_created()
+    {
+        var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
+        var externalId = "F12345";
+        var name = "Pilevej";
+        var status = RoadStatus.Effective;
+        var externalCreatedDate = DateTime.UtcNow;
+        var externalUpdatedDate = DateTime.UtcNow;
+
+        var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+
+        var createRoadResult = roadAR.Create(
+            id: id,
+            externalId: externalId,
+            name: name,
+            status: status,
+            externalCreatedDate: externalCreatedDate,
+            externalUpdatedDate: externalUpdatedDate);
+
+        createRoadResult.IsFailed.Should().BeTrue();
+        createRoadResult.Errors.Should().HaveCount(1);
+        ((RoadError)createRoadResult.Errors.First())
+            .Code
+            .Should()
+            .Be(RoadErrorCode.ALREADY_CREATED);
+    }
+
+    [Fact, Order(2)]
     public void Update_is_success()
     {
         var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
@@ -199,7 +227,7 @@ public class RoadTests
         ((RoadError)updateRoadResult.Errors.First())
             .Code
             .Should()
-            .Be(RoadErrorCode.ID_CANNOT_BE_EMPTY_GUID);
+            .Be(RoadErrorCode.NOT_INITIALIZED);
     }
 
     [Fact, Order(3)]
@@ -227,7 +255,250 @@ public class RoadTests
             .Be(RoadErrorCode.NO_CHANGES);
     }
 
-    [Fact, Order(3)]
+    [Fact, Order(4)]
+    public void Can_change_name()
+    {
+        var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
+        var name = "Kolding x";
+        var externalUpdatedDate = DateTime.UtcNow;
+
+        var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+
+        var updateRoadResult = roadAR.ChangeName(
+            name: name,
+            externalUpdatedDate: externalUpdatedDate);
+
+        _eventStore.Aggregates.Store(roadAR);
+
+        var reloadedRoadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+
+        updateRoadResult.IsSuccess.Should().BeTrue();
+
+        // It is important that the name is now changed and the external updated date.
+        reloadedRoadAR.Name.Should().Be(name);
+        reloadedRoadAR.ExternalUpdatedDate.Should().Be(externalUpdatedDate);
+
+        // It is important that the function did not change the other fields.
+        reloadedRoadAR.Id.Should().Be(roadAR.Id);
+        reloadedRoadAR.ExternalId.Should().Be(roadAR.ExternalId);
+        reloadedRoadAR.Status.Should().Be(roadAR.Status);
+    }
+
+    [Fact, Order(4)]
+    public void Can_change_external_id()
+    {
+        var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
+        var externalId = "F123456789";
+        var externalUpdatedDate = DateTime.UtcNow;
+
+        var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+
+        var updateRoadResult = roadAR.UpdateExternalId(
+            externalId: externalId,
+            externalUpdatedDate: externalUpdatedDate);
+
+        _eventStore.Aggregates.Store(roadAR);
+
+        var reloadedRoadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+
+        updateRoadResult.IsSuccess.Should().BeTrue();
+
+        // It is important that the external id is now changed and the external updated date.
+        reloadedRoadAR.ExternalId.Should().Be(externalId);
+        reloadedRoadAR.ExternalUpdatedDate.Should().Be(externalUpdatedDate);
+
+        // It is important that the function did not change the other fields.
+        reloadedRoadAR.Id.Should().Be(roadAR.Id);
+        reloadedRoadAR.Name.Should().Be(roadAR.Name);
+        reloadedRoadAR.Status.Should().Be(roadAR.Status);
+    }
+
+    [Fact, Order(4)]
+    public void Can_change_status()
+    {
+        var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
+        var status = RoadStatus.Effective;
+        var externalUpdatedDate = DateTime.UtcNow;
+
+        var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+
+        var updateRoadResult = roadAR.UpdateStatus(
+            status: status,
+            externalUpdatedDate: externalUpdatedDate);
+
+        _eventStore.Aggregates.Store(roadAR);
+
+        var reloadedRoadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+
+        updateRoadResult.IsSuccess.Should().BeTrue();
+
+        // It's important that the status is now changed and the external updated date.
+        reloadedRoadAR.Status.Should().Be(status);
+        reloadedRoadAR.ExternalUpdatedDate.Should().Be(externalUpdatedDate);
+
+        // It is important that the function did not change the other fields.
+        reloadedRoadAR.Id.Should().Be(roadAR.Id);
+        reloadedRoadAR.ExternalId.Should().Be(roadAR.ExternalId);
+        reloadedRoadAR.Name.Should().Be(roadAR.Name);
+    }
+
+    [Fact, Order(4)]
+    public void Cannot_change_name_when_AR_is_not_created()
+    {
+        var id = Guid.Parse("e6768e82-2f1d-4743-93ce-30fa5ebee118");
+        var name = "Kolding x";
+        var externalUpdatedDate = DateTime.UtcNow;
+
+        var roadAR = new RoadAR();
+
+        var updateRoadResult = roadAR.ChangeName(
+            name: name,
+            externalUpdatedDate: externalUpdatedDate);
+
+        updateRoadResult.IsFailed.Should().BeTrue();
+        updateRoadResult.Errors.Should().HaveCount(1);
+        ((RoadError)updateRoadResult.Errors.First())
+            .Code
+            .Should()
+            .Be(RoadErrorCode.NOT_INITIALIZED);
+    }
+
+    [Fact, Order(4)]
+    public void Cannot_change_external_id_when_AR_is_not_created()
+    {
+        var id = Guid.Parse("e6768e82-2f1d-4743-93ce-30fa5ebee118");
+        var externalId = "abc1234";
+        var externalUpdatedDate = DateTime.UtcNow;
+
+        var roadAR = new RoadAR();
+
+        var updateRoadResult = roadAR.UpdateExternalId(
+            externalId: externalId,
+            externalUpdatedDate: externalUpdatedDate);
+
+        updateRoadResult.IsFailed.Should().BeTrue();
+        updateRoadResult.Errors.Should().HaveCount(1);
+        ((RoadError)updateRoadResult.Errors.First())
+            .Code
+            .Should()
+            .Be(RoadErrorCode.NOT_INITIALIZED);
+    }
+
+    [Fact, Order(4)]
+    public void Cannot_change_status_when_AR_is_not_created()
+    {
+        var id = Guid.Parse("e6768e82-2f1d-4743-93ce-30fa5ebee118");
+        var status = RoadStatus.Effective;
+        var externalUpdatedDate = DateTime.UtcNow;
+
+        var roadAR = new RoadAR();
+
+        var updateRoadResult = roadAR.UpdateStatus(
+            status: status,
+            externalUpdatedDate: externalUpdatedDate);
+
+        updateRoadResult.IsFailed.Should().BeTrue();
+        updateRoadResult.Errors.Should().HaveCount(1);
+        ((RoadError)updateRoadResult.Errors.First())
+            .Code
+            .Should()
+            .Be(RoadErrorCode.NOT_INITIALIZED);
+    }
+
+    [Fact, Order(5)]
+    public void No_changes_to_name_returns_no_changes_result()
+    {
+        var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
+        var name = "Kolding x";
+        var externalUpdatedDate = DateTime.UtcNow;
+
+        var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+
+        var updateRoadResult = roadAR.ChangeName(
+            name: name,
+            externalUpdatedDate: externalUpdatedDate);
+
+        _eventStore.Aggregates.Store(roadAR);
+
+        updateRoadResult.IsFailed.Should().BeTrue();
+        updateRoadResult.Errors.Should().HaveCount(1);
+        ((RoadError)updateRoadResult.Errors.First())
+            .Code
+            .Should()
+            .Be(RoadErrorCode.NO_CHANGES);
+
+        // Load AR again to verify that no changes has been made
+        var reloadedRoadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+        reloadedRoadAR.Id.Should().Be(roadAR.Id);
+        reloadedRoadAR.ExternalId.Should().Be(roadAR.ExternalId);
+        reloadedRoadAR.Name.Should().Be(roadAR.Name);
+        reloadedRoadAR.Status.Should().Be(roadAR.Status);
+        reloadedRoadAR.ExternalUpdatedDate.Should().Be(roadAR.ExternalUpdatedDate);
+    }
+
+    [Fact, Order(5)]
+    public void No_changes_to_external_id_returns_no_changes_result()
+    {
+        var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
+        var externalId = "F123456789";
+        var externalUpdatedDate = DateTime.UtcNow;
+
+        var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+
+        var updateRoadResult = roadAR.UpdateExternalId(
+            externalId: externalId,
+            externalUpdatedDate: externalUpdatedDate);
+
+        _eventStore.Aggregates.Store(roadAR);
+
+        updateRoadResult.IsFailed.Should().BeTrue();
+        updateRoadResult.Errors.Should().HaveCount(1);
+        ((RoadError)updateRoadResult.Errors.First())
+            .Code
+            .Should()
+            .Be(RoadErrorCode.NO_CHANGES);
+
+        // Load AR again to verify that no changes has been made
+        var reloadedRoadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+        reloadedRoadAR.Id.Should().Be(roadAR.Id);
+        reloadedRoadAR.ExternalId.Should().Be(roadAR.ExternalId);
+        reloadedRoadAR.Name.Should().Be(roadAR.Name);
+        reloadedRoadAR.Status.Should().Be(roadAR.Status);
+        reloadedRoadAR.ExternalUpdatedDate.Should().Be(roadAR.ExternalUpdatedDate);
+    }
+
+  [Fact, Order(5)]
+    public void No_changes_to_status_returns_no_changes_result()
+    {
+        var id = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
+        var status = RoadStatus.Effective;
+        var externalUpdatedDate = DateTime.UtcNow;
+
+        var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+
+        var updateRoadResult = roadAR.UpdateStatus(
+            status: status,
+            externalUpdatedDate: externalUpdatedDate);
+
+        _eventStore.Aggregates.Store(roadAR);
+
+        updateRoadResult.IsFailed.Should().BeTrue();
+        updateRoadResult.Errors.Should().HaveCount(1);
+        ((RoadError)updateRoadResult.Errors.First())
+            .Code
+            .Should()
+            .Be(RoadErrorCode.NO_CHANGES);
+
+        // Load AR again to verify that no changes has been made
+        var reloadedRoadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+        reloadedRoadAR.Id.Should().Be(roadAR.Id);
+        reloadedRoadAR.ExternalId.Should().Be(roadAR.ExternalId);
+        reloadedRoadAR.Name.Should().Be(roadAR.Name);
+        reloadedRoadAR.Status.Should().Be(roadAR.Status);
+        reloadedRoadAR.ExternalUpdatedDate.Should().Be(roadAR.ExternalUpdatedDate);
+    }
+
+    [Fact, Order(6)]
     public void Delete_is_invalid_not_created()
     {
         var id = Guid.NewGuid();
@@ -242,11 +513,11 @@ public class RoadTests
         ((RoadError)updateRoadResult.Errors.First())
             .Code
             .Should()
-            .Be(RoadErrorCode.ID_CANNOT_BE_EMPTY_GUID);
+            .Be(RoadErrorCode.NOT_INITIALIZED);
         roadAR.Deleted.Should().BeFalse();
     }
 
-    [Fact, Order(3)]
+    [Fact, Order(6)]
     public void Delete_is_success()
     {
         var id = Guid.Parse("40fc2260-870c-413e-953e-5b17daa57073");
@@ -263,7 +534,7 @@ public class RoadTests
         roadAR.ExternalUpdatedDate.Should().Be(externalUpdatedDate);
     }
 
-    [Fact, Order(4)]
+    [Fact, Order(7)]
     public void Cannot_update_deleted()
     {
         var id = Guid.Parse("40fc2260-870c-413e-953e-5b17daa57073");
@@ -289,7 +560,73 @@ public class RoadTests
         roadAR.Deleted.Should().BeTrue();
     }
 
-    [Fact, Order(4)]
+    [Fact, Order(7)]
+    public void Cannot_change_status_when_AR_is_deleted()
+    {
+        var id = Guid.Parse("40fc2260-870c-413e-953e-5b17daa57073");
+        var status = RoadStatus.Effective;
+        var externalUpdatedDate = DateTime.UtcNow;
+
+        var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+
+        var updateRoadResult = roadAR.UpdateStatus(
+            status: status,
+            externalUpdatedDate: externalUpdatedDate);
+
+        updateRoadResult.IsSuccess.Should().BeFalse();
+        updateRoadResult.Errors.Should().HaveCount(1);
+        ((RoadError)updateRoadResult.Errors.First())
+            .Code
+            .Should()
+            .Be(RoadErrorCode.CANNOT_UPDATE_DELETED);
+        roadAR.Deleted.Should().BeTrue();
+    }
+
+    [Fact, Order(7)]
+    public void Cannot_change_external_id_when_AR_is_deleted()
+    {
+        var id = Guid.Parse("40fc2260-870c-413e-953e-5b17daa57073");
+        var externalId = "F12345";
+        var externalUpdatedDate = DateTime.UtcNow;
+
+        var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+
+        var updateRoadResult = roadAR.UpdateExternalId(
+            externalId: externalId,
+            externalUpdatedDate: externalUpdatedDate);
+
+        updateRoadResult.IsSuccess.Should().BeFalse();
+        updateRoadResult.Errors.Should().HaveCount(1);
+        ((RoadError)updateRoadResult.Errors.First())
+            .Code
+            .Should()
+            .Be(RoadErrorCode.CANNOT_UPDATE_DELETED);
+        roadAR.Deleted.Should().BeTrue();
+    }
+
+    [Fact, Order(7)]
+    public void Cannot_change_name_when_AR_is_deleted()
+    {
+        var id = Guid.Parse("40fc2260-870c-413e-953e-5b17daa57073");
+        var name = "Kolding x";
+        var externalUpdatedDate = DateTime.UtcNow;
+
+        var roadAR = _eventStore.Aggregates.Load<RoadAR>(id);
+
+        var updateRoadResult = roadAR.ChangeName(
+            name: name,
+            externalUpdatedDate: externalUpdatedDate);
+
+        updateRoadResult.IsSuccess.Should().BeFalse();
+        updateRoadResult.Errors.Should().HaveCount(1);
+        ((RoadError)updateRoadResult.Errors.First())
+            .Code
+            .Should()
+            .Be(RoadErrorCode.CANNOT_UPDATE_DELETED);
+        roadAR.Deleted.Should().BeTrue();
+    }
+
+    [Fact, Order(7)]
     public void Cannot_delete_already_deleted()
     {
         var id = Guid.Parse("40fc2260-870c-413e-953e-5b17daa57073");

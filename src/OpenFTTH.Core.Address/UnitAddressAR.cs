@@ -18,7 +18,7 @@ public class UnitAddressAR : AggregateBase
     public Guid AccessAddressId { get; private set; }
     public UnitAddressStatus Status { get; private set; }
     public string? FloorName { get; private set; }
-    public string? SuitName { get; private set; }
+    public string? SuiteName { get; private set; }
     public DateTime? ExternalCreatedDate { get; private set; }
     public DateTime? ExternalUpdatedDate { get; private set; }
     public bool Deleted { get; private set; }
@@ -27,7 +27,14 @@ public class UnitAddressAR : AggregateBase
     public UnitAddressAR()
     {
         Register<UnitAddressCreated>(Apply);
-        Register<UnitAddressUpdated>(Apply);
+
+        Register<UnitAddressExternalIdChanged>(Apply);
+        Register<UnitAddressAccessAddressIdChanged>(Apply);
+        Register<UnitAddressStatusChanged>(Apply);
+        Register<UnitAddressFloorNameChanged>(Apply);
+        Register<UnitAddressSuiteNameChanged>(Apply);
+        Register<UnitAddressPendingOfficialChanged>(Apply);
+
         Register<UnitAddressDeleted>(Apply);
     }
 
@@ -37,36 +44,42 @@ public class UnitAddressAR : AggregateBase
         Guid accessAddressId,
         UnitAddressStatus status,
         string? floorName,
-        string? suitName,
+        string? suiteName,
         DateTime? externalCreatedDate,
         DateTime? externalUpdatedDate,
         HashSet<Guid> existingAccessAddressIds,
         bool pendingOfficial)
     {
-        if (id == Guid.Empty)
+        if (IsInitialized(Id))
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID,
+                    UnitAddressErrorCode.ALREADY_CREATED,
+                    $"Cannot create, it has already been created: {nameof(Id)}: '{Id}'."));
+        }
+
+        if (!IsIdValid(id))
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCode.ID_CANNOT_BE_EMPTY_GUID,
                     "{nameof(id)} cannot be empty guid."));
         }
 
-        if (accessAddressId == Guid.Empty)
+        if (!IsAccessAddressIdValid(accessAddressId))
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.ACCESS_ADDRESS_ID_CANNOT_BE_EMPTY_GUID,
+                    UnitAddressErrorCode.ACCESS_ADDRESS_ID_CANNOT_BE_EMPTY_GUID,
                     $"{nameof(accessAddressId)} cannot be empty guid."));
         }
 
-        if (existingAccessAddressIds is null ||
-            !existingAccessAddressIds.Contains(accessAddressId))
+        if (!AccessAddressExist(accessAddressId, existingAccessAddressIds))
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.ACCESS_ADDRESS_DOES_NOT_EXISTS,
-                    @$" Cannot reference to a access-address
-that does not exist ('{accessAddressId}')."));
+                    UnitAddressErrorCode.ACCESS_ADDRESS_DOES_NOT_EXISTS,
+                    $"Cannot reference an access-address that does not exist ('{accessAddressId}')."));
         }
 
         RaiseEvent(new UnitAddressCreated(
@@ -75,7 +88,7 @@ that does not exist ('{accessAddressId}')."));
                        accessAddressId: accessAddressId,
                        status: status,
                        floorName: floorName,
-                       suitName: suitName,
+                       suiteName: suiteName,
                        externalCreatedDate: externalCreatedDate,
                        externalUpdatedDate: externalUpdatedDate,
                        pendingOfficial: pendingOfficial));
@@ -88,114 +101,276 @@ that does not exist ('{accessAddressId}')."));
         Guid accessAddressId,
         UnitAddressStatus status,
         string? floorName,
-        string? suitName,
+        string? suiteName,
         DateTime? externalUpdatedDate,
         HashSet<Guid> existingAccessAddressIds,
         bool pendingOfficial)
     {
-        if (Id == Guid.Empty)
+        var canBeUpdatedResult = CanBeUpdated();
+        if (canBeUpdatedResult.IsFailed)
+        {
+            return canBeUpdatedResult;
+        }
+
+        if (!IsAccessAddressIdValid(accessAddressId))
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.ID_NOT_SET,
-                    @$"{nameof(Id)}, being default guid is not valid,
- the AR has most likely not being created yet."));
+                    UnitAddressErrorCode.ACCESS_ADDRESS_ID_CANNOT_BE_EMPTY_GUID,
+                    $"{nameof(accessAddressId)} cannot be an empty guid."));
         }
 
-        if (Deleted)
+        if (!AccessAddressExist(accessAddressId, existingAccessAddressIds))
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.CANNOT_UPDATE_DELETED,
-                    @$"Cannot update when deleted."));
+                    UnitAddressErrorCode.ACCESS_ADDRESS_DOES_NOT_EXISTS,
+                    "Cannot reference to a access-address that does not exist, {nameof(accessAddressI)}: ('{accessAddressId}')."));
         }
 
-        if (accessAddressId == Guid.Empty)
+        if (!HasChanges(this,
+                        externalId,
+                        accessAddressId,
+                        status,
+                        floorName,
+                        suiteName,
+                        externalUpdatedDate,
+                        pendingOfficial))
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.ACCESS_ADDRESS_ID_CANNOT_BE_EMPTY_GUID,
-                    $"{nameof(accessAddressId)} cannot be empty guid."));
+                    UnitAddressErrorCode.NO_CHANGES,
+                    $"There was no changes, no new events emittet."));
         }
 
-        if (existingAccessAddressIds is null ||
-            !existingAccessAddressIds.Contains(accessAddressId))
+        var updateExternalIdResult = UpdateExternalId(externalId, externalUpdatedDate);
+        if (updateExternalIdResult.Errors.Any())
+        {
+            var error = (UnitAddressError)updateExternalIdResult.Errors.First();
+            if (error.Code != UnitAddressErrorCode.NO_CHANGES)
+            {
+                return updateExternalIdResult;
+            }
+        }
+
+        var updateAccessAddressIdResult = UpdateAccessAddressId(accessAddressId, externalUpdatedDate);
+        if (updateAccessAddressIdResult.Errors.Any())
+        {
+            var error = (UnitAddressError)updateAccessAddressIdResult.Errors.First();
+            if (error.Code != UnitAddressErrorCode.NO_CHANGES)
+            {
+                return updateAccessAddressIdResult;
+            }
+        }
+
+        var updateStatusResult = UpdateStatus(status, externalUpdatedDate);
+        if (updateStatusResult.Errors.Any())
+        {
+            var error = (UnitAddressError)updateStatusResult.Errors.First();
+            if (error.Code != UnitAddressErrorCode.NO_CHANGES)
+            {
+                return updateStatusResult;
+            }
+        }
+
+        var updateFloorNameResult = UpdateFloorName(floorName, externalUpdatedDate);
+        if (updateFloorNameResult.Errors.Any())
+        {
+            var error = (UnitAddressError)updateFloorNameResult.Errors.First();
+            if (error.Code != UnitAddressErrorCode.NO_CHANGES)
+            {
+                return updateFloorNameResult;
+            }
+        }
+
+        var updateSuiteNameResult = UpdateSuiteName(suiteName, externalUpdatedDate);
+        if (updateSuiteNameResult.Errors.Any())
+        {
+            var error = (UnitAddressError)updateSuiteNameResult.Errors.First();
+            if (error.Code != UnitAddressErrorCode.NO_CHANGES)
+            {
+                return updateSuiteNameResult;
+            }
+        }
+
+        var updatePendingOfficialResult = UpdatePendingOfficial(pendingOfficial, externalUpdatedDate);
+        if (updatePendingOfficialResult.Errors.Any())
+        {
+            var error = (UnitAddressError)updatePendingOfficialResult.Errors.First();
+            if (error.Code != UnitAddressErrorCode.NO_CHANGES)
+            {
+                return updatePendingOfficialResult;
+            }
+        }
+
+        return Result.Ok();
+    }
+
+    public Result UpdateExternalId(string? externalId, DateTime? externalUpdatedDate)
+    {
+        var canBeUpdatedResult = CanBeUpdated();
+        if (canBeUpdatedResult.IsFailed)
+        {
+            return canBeUpdatedResult;
+        }
+
+        if (!IsExternalIdChanged(ExternalId, externalId))
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.ACCESS_ADDRESS_DOES_NOT_EXISTS,
-                    @$" Cannot reference to a access-address
-that does not exist ('{accessAddressId}')."));
+                    UnitAddressErrorCode.NO_CHANGES,
+                    $"There was no changes to {nameof(externalId)}."));
         }
 
-        var hasChanges = () =>
+        RaiseEvent(
+            new UnitAddressExternalIdChanged(
+                id: Id,
+                externalId: externalId,
+                externalUpdatedDate: externalUpdatedDate));
+
+        return Result.Ok();
+    }
+
+    public Result UpdateAccessAddressId(Guid accessAddressId, DateTime? externalUpdatedDate)
+    {
+        var canBeUpdatedResult = CanBeUpdated();
+        if (canBeUpdatedResult.IsFailed)
         {
-            if (ExternalId != externalId)
-            {
-                return true;
-            }
-            if (AccessAddressId != accessAddressId)
-            {
-                return true;
-            }
-            if (Status != status)
-            {
-                return true;
-            }
-            if (FloorName != floorName)
-            {
-                return true;
-            }
-            if (SuitName != suitName)
-            {
-                return true;
-            }
-            if (PendingOfficial != pendingOfficial)
-            {
-                return true;
-            }
+            return canBeUpdatedResult;
+        }
 
-            return false;
-        };
-
-        if (!hasChanges())
+        if (!IsAccessAddressIdChanged(AccessAddressId, accessAddressId))
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.NO_CHANGES,
-                    @$" Cannot reference to a access-address
-that does not exist ('{accessAddressId}')."));
+                    UnitAddressErrorCode.NO_CHANGES,
+                    $"There are no changes to the {nameof(accessAddressId)}."));
         }
 
-        RaiseEvent(new UnitAddressUpdated(
-                       id: Id,
-                       officialAddressId: externalId,
-                       accessAddressId: accessAddressId,
-                       status: status,
-                       floorName: floorName,
-                       suitName: suitName,
-                       externalUpdatedDate: externalUpdatedDate,
-                       pendingOfficial: pendingOfficial));
+        RaiseEvent(
+            new UnitAddressAccessAddressIdChanged(
+                id: Id,
+                accessAddressId: accessAddressId,
+                externalUpdatedDate: externalUpdatedDate));
+
+        return Result.Ok();
+    }
+
+    public Result UpdateStatus(UnitAddressStatus status, DateTime? externalUpdatedDate)
+    {
+        var canBeUpdatedResult = CanBeUpdated();
+        if (canBeUpdatedResult.IsFailed)
+        {
+            return canBeUpdatedResult;
+        }
+
+        if (!IsStatusChanged(Status, status))
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCode.NO_CHANGES,
+                    $"There are no changes to the {nameof(status)}."));
+        }
+
+        RaiseEvent(
+            new UnitAddressStatusChanged(
+                id: Id,
+                status: status,
+                externalUpdatedDate: externalUpdatedDate));
+
+        return Result.Ok();
+    }
+
+    public Result UpdateFloorName(string? floorName, DateTime? externalUpdatedDate)
+    {
+        var canBeUpdatedResult = CanBeUpdated();
+        if (canBeUpdatedResult.IsFailed)
+        {
+            return canBeUpdatedResult;
+        }
+
+        if (!IsFloorNameChanged(FloorName, floorName))
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCode.NO_CHANGES,
+                    $"There are no changes to the {nameof(floorName)}."));
+        }
+
+        RaiseEvent(
+            new UnitAddressFloorNameChanged(
+                id: Id,
+                floorName: floorName,
+                externalUpdatedDate: externalUpdatedDate));
+
+        return Result.Ok();
+    }
+
+    public Result UpdateSuiteName(string? suiteName, DateTime? externalUpdatedDate)
+    {
+        var canBeUpdatedResult = CanBeUpdated();
+        if (canBeUpdatedResult.IsFailed)
+        {
+            return canBeUpdatedResult;
+        }
+
+        if (!IsSuiteNameChanged(SuiteName, suiteName))
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCode.NO_CHANGES,
+                    $"There are no changes to the {nameof(suiteName)}."));
+        }
+
+        RaiseEvent(
+            new UnitAddressSuiteNameChanged(
+                id: Id,
+                suiteName: suiteName,
+                externalUpdatedDate: externalUpdatedDate));
+
+        return Result.Ok();
+    }
+
+    public Result UpdatePendingOfficial(bool pendingOfficial, DateTime? externalUpdatedDate)
+    {
+        var canBeUpdatedResult = CanBeUpdated();
+        if (canBeUpdatedResult.IsFailed)
+        {
+            return canBeUpdatedResult;
+        }
+
+        if (!IsPendingOfficialChanged(PendingOfficial, pendingOfficial))
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCode.NO_CHANGES,
+                    $"There are no changes to the {nameof(pendingOfficial)}."));
+        }
+
+        RaiseEvent(
+            new UnitAddressPendingOfficialChanged(
+                id: Id,
+                pendingOfficial: pendingOfficial,
+                externalUpdatedDate: externalUpdatedDate));
 
         return Result.Ok();
     }
 
     public Result Delete(DateTime? externalUpdatedDate)
     {
-        if (Id == Guid.Empty)
+        if (!IsInitialized(Id))
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.ID_NOT_SET,
-                    @$"{nameof(Id)}, being default guid is not valid,
- the AR has most likely not being created yet."));
+                    UnitAddressErrorCode.NOT_INITIALIZED,
+                    "Cannot delete, before it has been initialized."));
         }
 
         if (Deleted)
         {
             return Result.Fail(
                 new UnitAddressError(
-                    UnitAddressErrorCodes.CANNOT_DELETE_ALREADY_DELETED,
+                    UnitAddressErrorCode.CANNOT_DELETE_ALREADY_DELETED,
                     @$"Cannot delete already deleted."));
         }
 
@@ -211,26 +386,155 @@ that does not exist ('{accessAddressId}')."));
         AccessAddressId = unitAddressCreated.AccessAddressId;
         Status = unitAddressCreated.Status;
         FloorName = unitAddressCreated.FloorName;
-        SuitName = unitAddressCreated.SuitName;
+        SuiteName = unitAddressCreated.SuiteName;
         ExternalCreatedDate = unitAddressCreated.ExternalCreatedDate;
         ExternalUpdatedDate = unitAddressCreated.ExternalUpdatedDate;
         PendingOfficial = unitAddressCreated.PendingOfficial;
     }
 
-    private void Apply(UnitAddressUpdated unitAddressCreated)
+    private void Apply(UnitAddressExternalIdChanged unitAddressExternalIdChanged)
     {
-        ExternalId = unitAddressCreated.ExternalId;
-        AccessAddressId = unitAddressCreated.AccessAddressId;
-        Status = unitAddressCreated.Status;
-        FloorName = unitAddressCreated.FloorName;
-        SuitName = unitAddressCreated.SuitName;
-        ExternalUpdatedDate = unitAddressCreated.ExternalUpdatedDate;
-        PendingOfficial = unitAddressCreated.PendingOfficial;
+        ExternalId = unitAddressExternalIdChanged.ExternalId;
+        ExternalUpdatedDate = unitAddressExternalIdChanged.ExternalUpdatedDate;
+    }
+
+    private void Apply(UnitAddressAccessAddressIdChanged unitAddressAccessAddressIdChanged)
+    {
+        AccessAddressId = unitAddressAccessAddressIdChanged.AccessAddressId;
+        ExternalUpdatedDate = unitAddressAccessAddressIdChanged.ExternalUpdatedDate;
+    }
+
+    private void Apply(UnitAddressStatusChanged unitAddressStatusChanged)
+    {
+        Status = unitAddressStatusChanged.Status;
+        ExternalUpdatedDate = unitAddressStatusChanged.ExternalUpdatedDate;
+    }
+
+    private void Apply(UnitAddressFloorNameChanged unitAddressFloorNameChanged)
+    {
+        FloorName = unitAddressFloorNameChanged.FloorName;
+        ExternalUpdatedDate = unitAddressFloorNameChanged.ExternalUpdatedDate;
+    }
+
+    private void Apply(UnitAddressSuiteNameChanged unitAddressSuiteNameChanged)
+    {
+        SuiteName = unitAddressSuiteNameChanged.SuiteName;
+        ExternalUpdatedDate = unitAddressSuiteNameChanged.ExternalUpdatedDate;
+    }
+
+    private void Apply(UnitAddressPendingOfficialChanged unitAddressPendingOfficialChanged)
+    {
+        PendingOfficial = unitAddressPendingOfficialChanged.PendingOfficial;
+        ExternalUpdatedDate = unitAddressPendingOfficialChanged.ExternalUpdatedDate;
     }
 
     private void Apply(UnitAddressDeleted unitAddressDeleted)
     {
         Deleted = true;
         ExternalUpdatedDate = unitAddressDeleted.ExternalUpdatedDate;
+    }
+
+    private Result CanBeUpdated()
+    {
+        if (Id == Guid.Empty)
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCode.NOT_INITIALIZED,
+                    "Cannot update, before it has been initialized."));
+        }
+
+        if (Deleted)
+        {
+            return Result.Fail(
+                new UnitAddressError(
+                    UnitAddressErrorCode.CANNOT_UPDATE_DELETED,
+                    "Cannot update when it has been deleted."));
+        }
+
+        return Result.Ok();
+    }
+
+    private static bool IsInitialized(Guid id)
+    {
+        return id != Guid.Empty;
+    }
+
+    private static bool IsIdValid(Guid id)
+    {
+        return id != Guid.Empty;
+    }
+
+    private static bool IsAccessAddressIdValid(Guid accessAddressId)
+    {
+        return accessAddressId != Guid.Empty;
+    }
+
+    private static bool AccessAddressExist(
+        Guid accessAddressId,
+        HashSet<Guid> existingAccessAddressIds)
+    {
+        return existingAccessAddressIds is not null
+            && existingAccessAddressIds.Contains(accessAddressId);
+    }
+
+    private static bool IsExternalIdChanged(
+        string? oldExternalId,
+        string? newExternalId)
+    {
+        return oldExternalId != newExternalId;
+    }
+
+    private static bool IsAccessAddressIdChanged(
+        Guid oldAccessAddressId,
+        Guid newAccessAddressId)
+    {
+        return oldAccessAddressId != newAccessAddressId;
+    }
+
+    private static bool IsStatusChanged(
+        UnitAddressStatus oldStatus,
+        UnitAddressStatus newStatus)
+    {
+        return oldStatus != newStatus;
+    }
+
+    private static bool IsFloorNameChanged(
+        string? oldFloorName,
+        string? newFloorName)
+    {
+        return oldFloorName != newFloorName;
+    }
+
+    private static bool IsSuiteNameChanged(
+        string? oldSuiteName,
+        string? newSuiteName)
+    {
+        return oldSuiteName != newSuiteName;
+    }
+
+    private static bool IsPendingOfficialChanged(
+        bool oldPendingOfficial,
+        bool newPendingOfficial)
+    {
+        return oldPendingOfficial != newPendingOfficial;
+    }
+
+    private static bool HasChanges(
+        UnitAddressAR current,
+        string? externalId,
+        Guid accessAddressId,
+        UnitAddressStatus status,
+        string? floorName,
+        string? suiteName,
+        DateTime? externalUpdatedDate,
+        bool pendingOfficial)
+    {
+        return IsExternalIdChanged(current.ExternalId, externalId)
+            || IsAccessAddressIdChanged(current.AccessAddressId, accessAddressId)
+            || IsStatusChanged(current.Status, status)
+            || IsFloorNameChanged(current.FloorName, floorName)
+            || IsSuiteNameChanged(current.SuiteName, suiteName)
+            || IsPendingOfficialChanged(current.PendingOfficial, pendingOfficial);
     }
 }

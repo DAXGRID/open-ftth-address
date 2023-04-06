@@ -9,6 +9,8 @@ public enum RoadErrorCode
     CANNOT_UPDATE_DELETED,
     CANNOT_DELETE_ALREADY_DELETED,
     NO_CHANGES,
+    ALREADY_CREATED,
+    NOT_INITIALIZED
 }
 
 public class RoadError : Error

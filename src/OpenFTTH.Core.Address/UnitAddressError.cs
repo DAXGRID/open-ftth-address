@@ -2,22 +2,23 @@ using FluentResults;
 
 namespace OpenFTTH.Core.Address;
 
-public enum UnitAddressErrorCodes
+public enum UnitAddressErrorCode
 {
     ID_CANNOT_BE_EMPTY_GUID,
     ACCESS_ADDRESS_ID_CANNOT_BE_EMPTY_GUID,
-    ID_NOT_SET,
+    NOT_INITIALIZED,
     ACCESS_ADDRESS_DOES_NOT_EXISTS,
     CANNOT_UPDATE_DELETED,
     CANNOT_DELETE_ALREADY_DELETED,
-    NO_CHANGES
+    NO_CHANGES,
+    ALREADY_CREATED
 }
 
 public class UnitAddressError : Error
 {
-    public UnitAddressErrorCodes Code { get; init; }
+    public UnitAddressErrorCode Code { get; init; }
 
-    public UnitAddressError(UnitAddressErrorCodes errorCode, string errorMsg)
+    public UnitAddressError(UnitAddressErrorCode errorCode, string errorMsg)
         : base(errorCode.ToString() + ": " + errorMsg)
     {
         Code = errorCode;
