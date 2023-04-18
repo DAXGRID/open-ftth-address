@@ -33,7 +33,6 @@ public class AccessAddressAR : AggregateBase
     public AccessAddressAR()
     {
         Register<AccessAddressCreated>(Apply);
-
         Register<AccessAddressExternalIdChanged>(Apply);
         Register<AccessAddressMunicipalCodeChanged>(Apply);
         Register<AccessAddressStatusChanged>(Apply);
@@ -44,7 +43,7 @@ public class AccessAddressAR : AggregateBase
         Register<AccessAddressRoadIdChanged>(Apply);
         Register<AccessAddressPendingOfficialChanged>(Apply);
         Register<AccessAddressCoordinateChanged>(Apply);
-
+        Register<AccessAddressPostCodeIdChanged>(Apply);
         Register<AccessAddressDeleted>(Apply);
     }
 
@@ -675,6 +674,12 @@ public class AccessAddressAR : AggregateBase
         EastCoordinate = accessAddressCoordinateChanged.EastCoordinate;
         NorthCoordinate = accessAddressCoordinateChanged.NorthCoordinate;
         ExternalUpdatedDate = accessAddressCoordinateChanged.ExternalUpdatedDate;
+    }
+
+    private void Apply(AccessAddressPostCodeIdChanged accessAddressPostCodeIdChanged)
+    {
+        PostCodeId = accessAddressPostCodeIdChanged.PostCodeId;
+        ExternalUpdatedDate = accessAddressPostCodeIdChanged.ExternalUpdatedDate;
     }
 
     private void Apply(AccessAddressDeleted accessAddressDeleted)
