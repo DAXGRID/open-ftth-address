@@ -213,7 +213,7 @@ public class AcessAddressTests
         createAccessAddressResult.IsSuccess.Should().BeFalse();
         createAccessAddressResult.Errors.Count.Should().Be(1);
         ((AccessAddressError)createAccessAddressResult.Errors.First())
-           .Code.Should().Be(AccessAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID);
+           .Code.Should().Be(AccessAddressErrorCode.ID_CANNOT_BE_EMPTY_GUID);
     }
 
     [Fact, Order(1)]
@@ -263,7 +263,7 @@ public class AcessAddressTests
         createAccessAddressResult.IsSuccess.Should().BeFalse();
         createAccessAddressResult.Errors.Count.Should().Be(1);
         ((AccessAddressError)createAccessAddressResult.Errors.First())
-            .Code.Should().Be(AccessAddressErrorCodes.ROAD_DOES_NOT_EXIST);
+            .Code.Should().Be(AccessAddressErrorCode.ROAD_DOES_NOT_EXIST);
     }
 
     [Fact, Order(1)]
@@ -313,7 +313,57 @@ public class AcessAddressTests
         createAccessAddressResult.IsSuccess.Should().BeFalse();
         createAccessAddressResult.Errors.Count.Should().Be(1);
         ((AccessAddressError)createAccessAddressResult.Errors.First())
-            .Code.Should().Be(AccessAddressErrorCodes.POST_CODE_DOES_NOT_EXIST);
+            .Code.Should().Be(AccessAddressErrorCode.POST_CODE_DOES_NOT_EXIST);
+    }
+
+    [Fact, Order(2)]
+    public void Cannot_create_something_that_has_already_been_created()
+    {
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
+        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var externalId = "5bc2ad5b-8634-4b05-86b2-ea6eb10596dc";
+        var created = DateTime.UtcNow;
+        var updated = DateTime.UtcNow;
+        var municipalCode = "D1234";
+        var status = AccessAddressStatus.Active;
+        var roadCode = "D12";
+        var houseNumber = "12F";
+        var postCodeId = Guid.Parse("082cb73e-caa8-4fff-9374-4f186567f719");
+        var eastCoordinate = 10.20;
+        var northCoordinate = 20.10;
+        var supplementaryTownName = "Fredericia";
+        var plotId = "12455F";
+        var roadId = Guid.Parse("d309aa7b-81a3-4708-b1f5-e8155c29e5b5");
+        var existingRoadIds = addressProjection.GetRoadIds();
+        var existingPostCodeIds = addressProjection.GetPostCodeIds();
+        var pendingOfficial = false;
+
+        var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
+
+        var createAccessAddressResult = accessAddressAR.Create(
+            id: id,
+            externalId: externalId,
+            externalCreatedDate: created,
+            externalUpdatedDate: updated,
+            municipalCode: municipalCode,
+            status: status,
+            roadCode: roadCode,
+            houseNumber: houseNumber,
+            postCodeId: postCodeId,
+            eastCoordinate: eastCoordinate,
+            northCoordinate: northCoordinate,
+            supplementaryTownName: supplementaryTownName,
+            plotId: plotId,
+            roadId: roadId,
+            existingRoadIds: existingRoadIds,
+            existingPostCodeIds: existingPostCodeIds,
+            pendingOfficial: pendingOfficial);
+
+        createAccessAddressResult.IsSuccess.Should().BeFalse();
+        createAccessAddressResult.Errors.Count.Should().Be(1);
+        ((AccessAddressError)createAccessAddressResult.Errors.First())
+            .Code.Should().Be(AccessAddressErrorCode.ALREADY_CREATED);
     }
 
     [Fact, Order(2)]
@@ -377,7 +427,7 @@ public class AcessAddressTests
     }
 
     [Fact, Order(2)]
-    public void Update_id_not_set_invalid()
+    public void Cannot_update_the_AR_before_it_has_been_created()
     {
         var addressProjection = _eventStore.Projections.Get<AddressProjection>();
 
@@ -419,7 +469,7 @@ public class AcessAddressTests
         updateAccessAddressResult.IsSuccess.Should().BeFalse();
         updateAccessAddressResult.Errors.Count.Should().Be(1);
         ((AccessAddressError)updateAccessAddressResult.Errors.First())
-            .Code.Should().Be(AccessAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID);
+            .Code.Should().Be(AccessAddressErrorCode.NOT_INITIALIZED);
     }
 
     [Fact, Order(2)]
@@ -466,7 +516,7 @@ public class AcessAddressTests
         updateAccessAddressResult.IsSuccess.Should().BeFalse();
         updateAccessAddressResult.Errors.Count.Should().Be(1);
         ((AccessAddressError)updateAccessAddressResult.Errors.First())
-            .Code.Should().Be(AccessAddressErrorCodes.ROAD_DOES_NOT_EXIST);
+            .Code.Should().Be(AccessAddressErrorCode.ROAD_DOES_NOT_EXIST);
     }
 
     [Fact, Order(2)]
@@ -513,7 +563,7 @@ public class AcessAddressTests
         updateAccessAddressResult.IsSuccess.Should().BeFalse();
         updateAccessAddressResult.Errors.Count.Should().Be(1);
         ((AccessAddressError)updateAccessAddressResult.Errors.First())
-            .Code.Should().Be(AccessAddressErrorCodes.POST_CODE_DOES_NOT_EXIST);
+            .Code.Should().Be(AccessAddressErrorCode.POST_CODE_DOES_NOT_EXIST);
     }
 
     [Fact, Order(3)]
@@ -560,10 +610,135 @@ public class AcessAddressTests
         updateAccessAddressResult.IsSuccess.Should().BeFalse();
         updateAccessAddressResult.Errors.Count.Should().Be(1);
         ((AccessAddressError)updateAccessAddressResult.Errors.First())
-            .Code.Should().Be(AccessAddressErrorCodes.NO_CHANGES);
+            .Code.Should().Be(AccessAddressErrorCode.NO_CHANGES);
     }
 
-    [Fact, Order(3)]
+    [Fact, Order(4)]
+    public void Update_external_id_is_success()
+    {
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
+        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var externalId = "76a9a3d2-a315-49fc-8714-d817b9f28928";
+        var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
+        var updated = DateTime.Today;
+
+        var updateAccessAddressResult = accessAddressAR.UpdateExternalId(
+            externalId: externalId,
+            externalUpdatedDate: updated);
+
+        _eventStore.Aggregates.Store(accessAddressAR);
+
+        updateAccessAddressResult.IsSuccess.Should().BeTrue();
+    }
+
+    [Fact, Order(4)]
+    public void Update_only_east_coordinate_is_success()
+    {
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
+        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var eastCoordinate = 50.30;
+        var northCoordinate = 50.10;
+
+        var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
+        var updated = DateTime.Today;
+
+        var updateAccessAddressResult = accessAddressAR.UpdateCoordinate(
+            eastCoordinate: eastCoordinate,
+            northCoordinate: northCoordinate,
+            externalUpdatedDate: updated);
+
+        _eventStore.Aggregates.Store(accessAddressAR);
+
+        updateAccessAddressResult.IsSuccess.Should().BeTrue();
+
+        var reloadedAccessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
+
+        reloadedAccessAddressAR.EastCoordinate.Should().Be(eastCoordinate);
+        reloadedAccessAddressAR.NorthCoordinate.Should().Be(northCoordinate);
+    }
+
+    [Fact, Order(4)]
+    public void Update_only_north_coordinate_is_success()
+    {
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
+        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var eastCoordinate = 50.30;
+        var northCoordinate = 50.50;
+
+        var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
+        var updated = DateTime.Today;
+
+        var updateAccessAddressResult = accessAddressAR.UpdateCoordinate(
+            eastCoordinate: eastCoordinate,
+            northCoordinate: northCoordinate,
+            externalUpdatedDate: updated);
+
+        _eventStore.Aggregates.Store(accessAddressAR);
+
+        updateAccessAddressResult.IsSuccess.Should().BeTrue();
+
+        var reloadedAccessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
+
+        reloadedAccessAddressAR.EastCoordinate.Should().Be(eastCoordinate);
+        reloadedAccessAddressAR.NorthCoordinate.Should().Be(northCoordinate);
+    }
+
+    [Fact, Order(4)]
+    public void Update_both_coordinates_at_the_same_time_is_success()
+    {
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
+        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var eastCoordinate = 60.50;
+        var northCoordinate = 55.50;
+
+        var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
+        var updated = DateTime.Today;
+
+        var updateAccessAddressResult = accessAddressAR.UpdateCoordinate(
+            eastCoordinate: eastCoordinate,
+            northCoordinate: northCoordinate,
+            externalUpdatedDate: updated);
+
+        _eventStore.Aggregates.Store(accessAddressAR);
+
+        updateAccessAddressResult.IsSuccess.Should().BeTrue();
+
+        var reloadedAccessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
+
+        reloadedAccessAddressAR.EastCoordinate.Should().Be(eastCoordinate);
+        reloadedAccessAddressAR.NorthCoordinate.Should().Be(northCoordinate);
+    }
+
+    [Fact, Order(4)]
+    public void Updating_coordinates_with_no_changes_to_coordinates_is_invalid()
+    {
+        var addressProjection = _eventStore.Projections.Get<AddressProjection>();
+
+        var id = Guid.Parse("5bc2ad5b-8634-4b05-86b2-ea6eb10596dc");
+        var eastCoordinate = 60.50;
+        var northCoordinate = 55.50;
+
+        var accessAddressAR = _eventStore.Aggregates.Load<AccessAddressAR>(id);
+        var updated = DateTime.Today;
+
+        var updateAccessAddressResult = accessAddressAR.UpdateCoordinate(
+            eastCoordinate: eastCoordinate,
+            northCoordinate: northCoordinate,
+            externalUpdatedDate: updated);
+
+        _eventStore.Aggregates.Store(accessAddressAR);
+
+        updateAccessAddressResult.IsSuccess.Should().BeFalse();
+        updateAccessAddressResult.Errors.Count.Should().Be(1);
+        ((AccessAddressError)updateAccessAddressResult.Errors.First())
+            .Code.Should().Be(AccessAddressErrorCode.NO_CHANGES);
+    }
+
+    [Fact, Order(5)]
     public void Cannot_delete_accesss_address_that_has_not_been_created()
     {
         var id = Guid.NewGuid();
@@ -576,11 +751,11 @@ public class AcessAddressTests
         deleteResult.IsSuccess.Should().BeFalse();
         deleteResult.Errors.Count.Should().Be(1);
         ((AccessAddressError)deleteResult.Errors.First())
-            .Code.Should().Be(AccessAddressErrorCodes.ID_CANNOT_BE_EMPTY_GUID);
+            .Code.Should().Be(AccessAddressErrorCode.NOT_INITIALIZED);
         accessAddressAR.Deleted.Should().BeFalse();
     }
 
-    [Fact, Order(4)]
+    [Fact, Order(6)]
     public void Delete_is_success()
     {
         var id = Guid.Parse("94b1f97d-42df-49b3-90c6-74266a16661d");
@@ -597,7 +772,7 @@ public class AcessAddressTests
         accessAddressAR.ExternalUpdatedDate.Should().Be(updated);
     }
 
-    [Fact, Order(5)]
+    [Fact, Order(7)]
     public void Cannot_delete_already_deleted()
     {
         var id = Guid.Parse("94b1f97d-42df-49b3-90c6-74266a16661d");
@@ -610,11 +785,11 @@ public class AcessAddressTests
         deleteResult.IsSuccess.Should().BeFalse();
         deleteResult.Errors.Count.Should().Be(1);
         ((AccessAddressError)deleteResult.Errors.First())
-            .Code.Should().Be(AccessAddressErrorCodes.CANNOT_DELETE_ALREADY_DELETED);
+            .Code.Should().Be(AccessAddressErrorCode.CANNOT_DELETE_ALREADY_DELETED);
         accessAddressAR.Deleted.Should().BeTrue();
     }
 
-    [Fact, Order(5)]
+    [Fact, Order(7)]
     public void Cannot_update_when_deleted()
     {
         var id = Guid.Parse("94b1f97d-42df-49b3-90c6-74266a16661d");
@@ -659,6 +834,6 @@ public class AcessAddressTests
         updateAccessAddressResult.IsSuccess.Should().BeFalse();
         updateAccessAddressResult.Errors.Count.Should().Be(1);
         ((AccessAddressError)updateAccessAddressResult.Errors.First())
-            .Code.Should().Be(AccessAddressErrorCodes.CANNOT_UPDATE_DELETED);
+            .Code.Should().Be(AccessAddressErrorCode.CANNOT_UPDATE_DELETED);
     }
 }

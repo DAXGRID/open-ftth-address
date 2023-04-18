@@ -16,6 +16,7 @@ public class AddressProjection : ProjectionBase
 
     public AddressProjection()
     {
+        // Only interested in `Created` events, because the projection only cares about values that never changes.
         ProjectEventAsync<AccessAddressCreated>(ProjectAsync);
         ProjectEventAsync<UnitAddressCreated>(ProjectAsync);
         ProjectEventAsync<RoadCreated>(ProjectAsync);

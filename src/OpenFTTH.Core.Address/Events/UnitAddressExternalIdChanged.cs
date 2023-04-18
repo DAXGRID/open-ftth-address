@@ -1,24 +1,18 @@
 namespace OpenFTTH.Core.Address.Events;
 
-public sealed record RoadUpdated
+public sealed record UnitAddressExternalIdChanged
 {
     public Guid Id { get; init; }
-    public string ExternalId { get; init; }
-    public string Name { get; init; }
-    public RoadStatus Status { get; init; }
+    public string? ExternalId { get; init; }
     public DateTime? ExternalUpdatedDate { get; init; }
 
-    public RoadUpdated(
+    public UnitAddressExternalIdChanged(
         Guid id,
-        string externalId,
-        string name,
-        RoadStatus status,
+        string? externalId,
         DateTime? externalUpdatedDate)
     {
         Id = id;
         ExternalId = externalId;
-        Name = name;
-        Status = status;
         ExternalUpdatedDate = externalUpdatedDate;
     }
 }

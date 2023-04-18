@@ -10,6 +10,7 @@ public enum PostCodeErrorCodes
     CANNOT_UPDATE_DELETED,
     CANNOT_DELETE_ALREADY_DELETED,
     NO_CHANGES,
+    NOT_INITIALIZED
 }
 
 public class PostCodeError : Error
