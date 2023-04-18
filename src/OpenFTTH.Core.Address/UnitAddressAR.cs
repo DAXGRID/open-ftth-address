@@ -27,14 +27,12 @@ public class UnitAddressAR : AggregateBase
     public UnitAddressAR()
     {
         Register<UnitAddressCreated>(Apply);
-
         Register<UnitAddressExternalIdChanged>(Apply);
         Register<UnitAddressAccessAddressIdChanged>(Apply);
         Register<UnitAddressStatusChanged>(Apply);
         Register<UnitAddressFloorNameChanged>(Apply);
         Register<UnitAddressSuiteNameChanged>(Apply);
         Register<UnitAddressPendingOfficialChanged>(Apply);
-
         Register<UnitAddressDeleted>(Apply);
     }
 
