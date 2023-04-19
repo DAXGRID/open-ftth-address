@@ -38,12 +38,12 @@ public class AccessAddressAR : AggregateBase
         Register<AccessAddressStatusChanged>(Apply);
         Register<AccessAddressRoadCodeChanged>(Apply);
         Register<AccessAddressHouseNumberChanged>(Apply);
+        Register<AccessAddressPostCodeIdChanged>(Apply);
         Register<AccessAddressSupplementaryTownNameChanged>(Apply);
         Register<AccessAddressPlotIdChanged>(Apply);
         Register<AccessAddressRoadIdChanged>(Apply);
         Register<AccessAddressPendingOfficialChanged>(Apply);
         Register<AccessAddressCoordinateChanged>(Apply);
-        Register<AccessAddressPostCodeIdChanged>(Apply);
         Register<AccessAddressDeleted>(Apply);
     }
 
@@ -142,7 +142,6 @@ public class AccessAddressAR : AggregateBase
             return canBeUpdatedResult;
         }
 
-
         if (!IsRoadIdValid(existingRoadIds, roadId))
         {
             return Result.Fail(
@@ -231,7 +230,7 @@ public class AccessAddressAR : AggregateBase
         }
 
         var updatePostCodeIdResult = UpdatePostCodeId(postCodeId, externalUpdatedDate);
-        if (updateHouseNumberResult.Errors.Any())
+        if (updatePostCodeIdResult.Errors.Any())
         {
             var error = (AccessAddressError)updatePostCodeIdResult.Errors.First();
             if (error.Code != AccessAddressErrorCode.NO_CHANGES)
@@ -241,7 +240,7 @@ public class AccessAddressAR : AggregateBase
         }
 
         var updateSupplementaryTownNameResult = UpdateSupplementaryTownName(supplementaryTownName, externalUpdatedDate);
-        if (updateHouseNumberResult.Errors.Any())
+        if (updateSupplementaryTownNameResult.Errors.Any())
         {
             var error = (AccessAddressError)updateSupplementaryTownNameResult.Errors.First();
             if (error.Code != AccessAddressErrorCode.NO_CHANGES)
