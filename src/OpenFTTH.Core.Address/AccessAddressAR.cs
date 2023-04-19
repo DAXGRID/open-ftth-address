@@ -500,7 +500,7 @@ public class AccessAddressAR : AggregateBase
             return canBeUpdatedResult;
         }
 
-        if (!IsRoadIdChanged(oldRoadId: roadId, newRoadId: roadId))
+        if (!IsRoadIdChanged(oldRoadId: RoadId, newRoadId: roadId))
         {
             return Result.Fail(
                 new AccessAddressError(
